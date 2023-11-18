@@ -1,0 +1,93 @@
+  import alpha.h
+
+
+  //CHEKCING OUTPUT
+  print(`hello. I am {echo}`);
+  print(`hello. I am me`);
+
+
+  //CHECKING INPUT
+  a =>> ("Enter Value of a");
+
+  //VARIABLE DECLARATION
+  var myvar : int = 50;
+  var x:int=10, y:float=20, z:double=30;
+  var echo;
+  var price=30;
+
+  //VRIABLE ASSIGNMENT
+  echo = 40;
+
+  //ARRAY DECLARATION
+  var myArray : int[10];
+
+  //FUNCTION DECLARATOIN
+  function name:int(name:string, size:float, weight:double){@
+    name = "wow";
+    size = price * 3.50;
+
+    return size;
+  @}
+  function name:int(distance:float, price:int = 98){@
+    //Commenting line
+    time = distance * price;
+    return time;
+  @}
+
+  //CONDITIONAL STATEMENT
+  if (x > 0) {
+    // do something
+    BMI = weight * size;
+  } else {
+    BMI = 0;
+  }
+
+  if (x > 5) {
+    //do something extraordinary
+    print("Too big to measure");
+  } else {
+    print(x);
+  }
+
+  //LOOP STATEMENT
+  //FOR LOOP COMPLETE
+  for(float i = 109; i < 90; i = i + 1) {
+    print(i);
+  }@
+
+  //FOR LOOP WIHOUT INCREMENTOR
+  for(float i = 100; i < 90;) {
+    print(i);
+    i++;
+  }@
+
+  //FOR LOOP WITHOUT CONDTION AND INCREMENTOR
+  for(float i = 100;;) {
+    print({i});
+    i++;
+    if(i>50){
+      break;
+    }
+  }@
+
+  //WHILE LOOP
+  While <i=10> {
+    pre {
+      a = a - 1;
+    }
+    body {
+      b = b+1;
+    }
+    post {
+      c = c + 1;
+    }
+    always {
+      f = f + 1;
+    }
+  }@
+
+main function : int(){@
+
+@}
+
+<-<-<>->->

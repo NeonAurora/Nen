@@ -1,0 +1,77 @@
+import alpha.h
+
+
+//CHEKCING OUTPUT
+print(`hello. I am {echo}`);
+print(`hello. I am me`);
+
+
+//CHECKING INPUT
+a =>> ("Enter Value of a");
+
+//VARIABLE DECLARATION
+var myvar : int = 50;
+var x:int=10, y:float=20, z:double=30;
+var echo;
+var price=30;
+
+//VRIABLE ASSIGNMENT
+echo = 40;
+
+//ARRAY DECLARATION
+var myArray : int[10];
+
+//FUNCTION DECLARATOIN
+function name:int(name:string, size:float, weight:double){
+  name = "wow";
+  size = price * 3.50;
+
+  return size;
+  // commented ASSIGNMENT
+}@
+function name:int(distance:float, price:int = 98){@
+  //Commenting line
+@}
+
+//CONDITIONAL STATEMENT
+if (x > 0) {
+  // do something
+} else {
+
+}
+if (x > 5) {
+  //do something extraordinary
+} else {
+
+}
+
+//LOOP STATEMENT
+//FOR LOOP COMPLETE
+for(float i = 109; i < 90; i = i + 1) {
+  //adadadad
+}@
+//FOR LOOP WIHOUT INCREMENTOR
+for(float i = 100; i < 90;) {
+  //adadad
+}@
+//FOR LOOP WITHOUT CONDTION AND INCREMENTOR
+for(float i = 100;;) {
+  //adadad
+}@
+//WHILE LOOP
+While <i=10> {
+  pre {
+    dadadadad
+  }
+  body {
+    dadadad
+  }
+  post {
+    dada
+  }
+  always {
+    dadad
+  }
+}@
+
+return size;

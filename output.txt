@@ -1,0 +1,130 @@
+		Package import detected import alpha.h
+
+
+
+		Single-line comment detected: //CHEKCING OUTPUT
+
+		Output Statement Detected print(`hello. I am {echo}`);
+
+		Output Statement Detected print(`hello. I am me`);
+
+
+
+		Single-line comment detected: //CHECKING INPUT
+
+		Input Statement detected: a =>> ("Enter Value of a");
+
+
+		Single-line comment detected: //VARIABLE DECLARATION
+
+		Complex variable declaration detected: var myvar : int = 50;
+
+		Complex multiple variable declaration detected: var x:int=10, y:float=20, z:double=30;
+
+		Variable declaration without assignment detected: var echo;
+
+		Variable declaration with assignment detected: var price=30;
+
+
+		Single-line comment detected: //VRIABLE ASSIGNMENT
+
+		Variable assignment detected: echo = 40;
+Variable echo has been previously declared .
+
+
+		Single-line comment detected: //ARRAY DECLARATION
+
+		Array declared var myArray : int[10];
+
+
+		Single-line comment detected: //FUNCTION DECLARATOIN
+
+		Entire function declaration and body detected: function name:int(name:string, size:float, weight:double){@
+    name = "wow";
+    size = price * 3.50;
+
+    return size;
+  @}
+
+		Entire function declaration with optional default values and body detected: function name:int(distance:float, price:int = 98){@
+    //Commenting line
+    time = distance * price;
+    return time;
+  @}
+
+
+		Single-line comment detected: //CONDITIONAL STATEMENT
+
+		If-else block detected: if (x > 0) {
+    // do something
+    BMI = weight * size;
+  } else {
+    BMI = 0;
+  }
+
+
+		If-else block detected: if (x > 5) {
+    //do something extraordinary
+    print("Too big to measure");
+  } else {
+    print(x);
+  }
+
+
+		Single-line comment detected: //LOOP STATEMENT
+
+		Single-line comment detected: //FOR LOOP COMPLETE
+
+		For loop detected: for(float i = 109; i < 90; i = i + 1) {
+    print(i);
+  }@
+
+
+		Single-line comment detected: //FOR LOOP WIHOUT INCREMENTOR
+
+		For loop detected without incrementing: for(float i = 100; i < 90;) {
+    print(i);
+    i++;
+  }@
+
+
+		Single-line comment detected: //FOR LOOP WITHOUT CONDTION AND INCREMENTOR
+
+		For loop detected without condition and incrementing: for(float i = 100;;) {
+    print({i});
+    i++;
+    if(i>50){
+      break;
+    }
+  }@
+
+
+		Single-line comment detected: //WHILE LOOP
+
+		While loop detected While <i=10> {
+    pre {
+      a = a - 1;
+    }
+    body {
+      b = b+1;
+    }
+    post {
+      c = c + 1;
+    }
+    always {
+      f = f + 1;
+    }
+  }@
+
+
+Main Function detected main function : int(){@
+
+@}
+
+
+End of the program <-<-<>->->
+
+Total number of variables declared: 6
+Total number of Statements announced: 9
+Total number of Functions Declared: 2
+Total number of Array declared 1
