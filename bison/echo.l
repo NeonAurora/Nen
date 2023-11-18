@@ -5,6 +5,7 @@
 #include <string>
 #include "echo.tab.h"
 std::map<std::string, std::string> varMap;
+#include "counters.h"
 int varCount = 0;
 int smtCount = 0;
 int functionCount = 0;
@@ -16,206 +17,55 @@ int arrCount = 0;
 
 %%
 
-import[ \t]+([a-zA-Z0-9_\/\.\-]+) { printf("Package import detected  FROM FLEX %s\n", yytext); return IMPORT; }
-"//"[^"\n"]*               { printf("Single-line comment detected:  FROM FLEX %s\n", yytext); }
-"<<"[^">"]*">>"            { printf("Multi-line comment detected:  FROM FLEX %s\n", yytext); }
-print\(`([^`$]+|\$[a-zA-Z_][a-zA-Z_0-9]*)*`\); { printf("Output Statement Detected  FROM FLEX %s\n", yytext); smtCount++; }
-
-([a-zA-Z_][a-zA-Z_0-9]*)[ \t]*=>>[ \t]*\(\"([^"]*)\"\); { printf("Input Statement detected:  FROM FLEX %s\n", yytext); smtCount++; }
-
-var[ \t]+([a-zA-Z_][a-zA-Z_0-9]*)[ \t]*:[ \t]*(int|float|char|double|string)[ \t]*=[ \t]*[0-9]+; {
-  printf("Complex variable declaration detected:  FROM FLEX %s\n", yytext);
-  
-  smtCount++;
-  char* start = yytext + 3; 
-  char* colon = strchr(start, ':');
-  char* equal = strchr(start, '=');
-
-  if (colon && equal) {
-    std::string varNameStr(start, colon - start);
-    std::string varTypeStr(colon + 1, equal - colon - 1);
-
-    // Trim whitespaces from both the variable name and the type
-    varNameStr.erase(0, varNameStr.find_first_not_of(" \t"));
-    varNameStr.erase(varNameStr.find_last_not_of(" \t") + 1);
-
-    varTypeStr.erase(0, varTypeStr.find_first_not_of(" \t"));
-    varTypeStr.erase(varTypeStr.find_last_not_of(" \t") + 1);
-
-    if (varMap.find(varNameStr) != varMap.end()) {
-      printf("Variable collision detected for variable:  FROM FLEX %s\n", varNameStr.c_str());
-    } else {
-      varMap[varNameStr] = varTypeStr;
-      varCount++;
-    }
-  }
-}
-
-var[ \t]+([a-zA-Z_][a-zA-Z_0-9]*)[ \t]*:[ \t]*(int|float|char|double|string)([ \t]*=[ \t]*[0-9]+)?(,[ \t]*[a-zA-Z_]+[ \t]*:[ \t]*(int|float|char|double)([ \t]*=[ \t]*[0-9]+)?)*; {
-  printf("Complex multiple variable declaration detected:  FROM FLEX %s\n", yytext);
-  
-  smtCount++;
-  char* start = yytext + 3; // Skip 'var'
-  char* ptr = start;
-  char* end = yytext + yyleng;
-  
-  while (ptr < end) {
-    char* colon = strchr(ptr, ':');
-    char* comma_or_semicolon = strpbrk(ptr, ",;");
-    
-    if (colon && comma_or_semicolon) {
-      std::string varNameStr(ptr, colon - ptr);  // Extract from ptr to ':'
-      std::string varTypeStr(colon + 1, comma_or_semicolon - colon - 1);  // Extract from ':' to ',' or ';'
-      
-      // Trim whitespaces from both ends of variable name and type
-      varNameStr.erase(0, varNameStr.find_first_not_of(" \t"));
-      varNameStr.erase(varNameStr.find_last_not_of(" \t") + 1);
-      
-      varTypeStr.erase(0, varTypeStr.find_first_not_of(" \t"));
-      varTypeStr.erase(varTypeStr.find_last_not_of(" \t") + 1);
-      
-      if (varMap.find(varNameStr) != varMap.end()) {
-        printf("Variable collision detected for variable:  FROM FLEX %s\n", varNameStr.c_str());
-      } else {
-        varMap[varNameStr] = varTypeStr;
-        varCount++;
-      }
-      
-      ptr = comma_or_semicolon + 1;
-    } else {
-      break;
-    }
-  }
-}
 
 
-var[ \t]+([a-zA-Z_][a-zA-Z_0-9]*)[ \t]*; {
-  printf("Variable declaration without assignment detected:  FROM FLEX %s\n", yytext);
-  
-  smtCount++;
-  char* start = yytext + 3;
-  char* end = yytext + yyleng - 1; 
-  
-  std::string varNameStr(start, end - start);
-  
-  varNameStr.erase(0, varNameStr.find_first_not_of(" \t"));
-  varNameStr.erase(varNameStr.find_last_not_of(" \t") + 1);
-  
-  if (varMap.find(varNameStr) != varMap.end()) {
-    printf("Variable collision detected for variable:  FROM FLEX %s\n", varNameStr.c_str());
-  } else {
-    varMap[varNameStr] = "";
-    varCount++; 
-  }
-}
-
-var[ \t]+([a-zA-Z_][a-zA-Z_0-9]*)[ \t]*=[ \t]*[0-9]+; {
-  printf("Variable declaration with assignment detected:  FROM FLEX %s\n", yytext);
-  
-  smtCount++;
-  char* start = yytext + 3;
-  char* equal = strchr(start, '=');
-  
-  if (equal) {
-    std::string varNameStr(start, equal - start);
-    
-    varNameStr.erase(0, varNameStr.find_first_not_of(" \t"));
-    varNameStr.erase(varNameStr.find_last_not_of(" \t") + 1);
-    
-    if (varMap.find(varNameStr) != varMap.end()) {
-      printf("Variable collision detected for variable:  FROM FLEX %s\n", varNameStr.c_str());
-    } else {
-      varMap[varNameStr] = ""; 
-      varCount++;
-    }
-  }
-}
-
-[a-zA-Z_][a-zA-Z_0-9]*[ \t]*=[ \t]*[0-9]+; {
-  printf("Variable assignment detected:  FROM FLEX %s\n", yytext);
-  
-  smtCount++;
-  char* start = yytext;
-  char* equal = strchr(start, '=');
-  
-  if (equal) {
-    std::string varNameStr(start, equal - start);
-    
-    varNameStr.erase(0, varNameStr.find_first_not_of(" \t"));
-    varNameStr.erase(varNameStr.find_last_not_of(" \t") + 1);
-    
-    if (varMap.find(varNameStr) == varMap.end()) {
-      printf("Cannot match anything with the variable name:  FROM FLEX %s\n", varNameStr.c_str());
-    } else {
-      printf("Variable %s has been previously declared  FROM FLEX %s.\n", varNameStr.c_str(), varMap[varNameStr].c_str());
-    }
-  }
-}
-
-var[ \t]+([a-zA-Z_][a-zA-Z_0-9]*)[ \t]*:[ \t]*(int|float|char|double|string)\[[0-9]+\](\s*=\s*\{([0-9]+(\.[0-9]+)?,?\s*)*\})?; {
-  printf("Array declared  FROM FLEX %s\n", yytext);
-  arrCount++;
-  smtCount++;
-}
-
-"return"[ \t]+([a-zA-Z_][a-zA-Z_0-9]*)\; { printf("Return Statement Detected:  FROM FLEX %s\n", yytext); smtCount++; }
-
-"function"[ \t]+[a-zA-Z_][a-zA-Z_0-9]*[ \t]*":"[ \t]*("int"|"float"|"char"|"double"|"string")[ \t]*"("[a-zA-Z_][a-zA-Z_0-9]*[ \t]*":"[ \t]*("int"|"float"|"char"|"double"|"string")([ \t]*","[ \t]*[a-zA-Z_][a-zA-Z_0-9]*[ \t]*":"[ \t]*("int"|"float"|"char"|"double"|"string"))*[ \t]*")"[ \t]*"{@"[^@]*"@}" { printf("Entire function declaration and body detected:  FROM FLEX %s\n", yytext); functionCount++;}
-"function"[ \t]+[a-zA-Z_][a-zA-Z_0-9]*[ \t]*":"[ \t]*("int"|"float"|"char"|"double"|"string")[ \t]*"("[ \t]*[a-zA-Z_][a-zA-Z_0-9]*[ \t]*":"[ \t]*("int"|"float"|"char"|"double"|"string")([ \t]*"="[ \t]*[a-zA-Z_0-9]+)?([ \t]*","[ \t]*[a-zA-Z_][a-zA-Z_0-9]*[ \t]*":"[ \t]*("int"|"float"|"char"|"double"|"string")([ \t]*"="[ \t]*[a-zA-Z_0-9]+)?)?[ \t]*")"[ \t]*"{@"[^@]*"@}" {
-  printf("Entire function declaration with optional default values and body detected:  FROM FLEX %s\n", yytext);
-  functionCount++;
-  
-}
-"main"[ \t]+"function"[ \t]*":"[ \t]*("int"|"void")[ \t]*\(\)[ \t]*"{@"[^@]*"@}" {printf("Main Function detected  FROM FLEX %s\n", yytext); }
-
-"if"[ \t]*"("[^)]*")"[ \t]*"{"[^}]*"}" { 
-  printf("If block detected:  FROM FLEX %s\n", yytext);
-}
-"else"[ \t]*"if"[ \t]*"("[^)]*")"[ \t]*"{"[^}]*"}"[ \t]*"else"[ \t]*"{"[^}]*"}" { 
-  printf("else-if-else block detected:  FROM FLEX %s\n", yytext); 
-}
-"else"[ \t]*"if"[ \t]*"("[^)]*")"[ \t]*"{"[^}]*"}" { 
-  printf("else-if block detected:  FROM FLEX %s\n", yytext);
-}
-"if"[ \t]*"("[^)]*")"[ \t]*"{"[^}]*"}"[ \t]*("else"[ \t]*"{"[^}]*"}")? { 
-  printf("If-else block detected:  FROM FLEX %s\n", yytext); 
-}
-"for"[ \t]*"\("[ \t]*("int"|"float"|"char"|"double"|"string")[ \t]+[a-zA-Z_][a-zA-Z_0-9]*[ \t]*"="[ \t]*[0-9]+[ \t]*";"[ \t]*[a-zA-Z_][a-zA-Z_0-9]*[ \t]*("<"|"<="|">"|">="|"=="|"!=")[ \t]*[0-9]+[ \t]*";"[ \t]*[a-zA-Z_][a-zA-Z_0-9]*[ \t]*"="[ \t]*[a-zA-Z_][a-zA-Z_0-9]*[ \t]*("+"|"-"|"*"|"/")[ \t]*[0-9]+[ \t]*"\)"[ \t]*("{"[^@]*"}")@ { 
-  printf("For loop detected:  FROM FLEX %s\n", yytext); 
-}
-"for"[ \t]*"\("[ \t]*("int"|"float"|"char"|"double"|"string")[ \t]+[a-zA-Z_][a-zA-Z_0-9]*[ \t]*"="[ \t]*[0-9]+[ \t]*";"[ \t]*[a-zA-Z_][a-zA-Z_0-9]*[ \t]*("<"|"<="|">"|">="|"=="|"!=")[ \t]*[0-9]+[ \t]*";\)"[ \t]*("{"[^@]*"}")@ { 
-  printf("For loop detected without incrementing:  FROM FLEX %s\n", yytext);
-}
-"for"[ \t]*"\("[ \t]*("int"|"float"|"char"|"double"|"string")[ \t]+[a-zA-Z_][a-zA-Z_0-9]*[ \t]*"="[ \t]*[0-9]+[ \t]*";;\)"[ \t]*("{"[^@]*"}")@ { 
-  printf("For loop detected without condition and incrementing:  FROM FLEX %s\n", yytext); 
-}
-"While"[ \t]+<[^>]+>[ \t]*\{[ \n]*[ \t]*("pre"[ \t]*"\{"[^\}]*"\}")?[ \n]*("body"[ \t]*"\{"[^\}]*"\}")?[ \n]*("post"[ \t]*"\{"[^\}]*"\}")?[ \n]*("always"[ \t]*"\{"[^\}]*"\}")?[ \n]*[ \n]*\}@ { 
-  printf("While loop detected  FROM FLEX %s\n", yytext);
-}
-
-
-
-[a-zA-Z_][a-zA-Z_0-9]*    { printf("Identifier detected:  FROM FLEX %s\n", yytext); }
-":"                       { printf("Type separator detected:  FROM FLEX %s\n", yytext); }
-[0-9]+                    { printf("Integer literal detected:  FROM FLEX %s\n", yytext); }
-[0-9]+"."[0-9]+           { printf("Floating-point literal detected:  FROM FLEX %s\n", yytext); }
-"\"[^\"]*\""              { printf("String literal detected:  FROM FLEX %s\n", yytext); }
-"\'[^\']*\'"              { printf("Character literal detected:  FROM FLEX %s\n", yytext); }
-";"                       { printf("Statement end detected:  FROM FLEX %s\n", yytext); }
-"="                       { printf("Assignment operator detected:  FROM FLEX %s\n", yytext); }
-"+"|"-"|"*"|"/"|"%"       { printf("Arithmetic operator detected:  FROM FLEX %s\n", yytext); }
-"<"|"<="|">"|">="|"=="|"!=" { printf("Relational operator detected:  FROM FLEX %s\n", yytext); }
-"&&"|"||"|"!"             { printf("Logical operator detected:  FROM FLEX %s\n", yytext); }
-"("|")"                   { printf("Round parenthesis detected:  FROM FLEX %s\n", yytext); }
-"{"|"}"                   { printf("Curly braces detected:  FROM FLEX %s\n", yytext); }
-"["|"]"                   { printf("Square parenthesis detected:  FROM FLEX %s\n", yytext); }
-
-
-\n { printf("\n"); }
-[ \t] { printf("\t"); }
-.                         { printf("Unrecognized character:  FROM FLEX %s\n", yytext); }
-
-"<-<-<>->->" { printf("End of the program  FROM FLEX %s\n", yytext); }
+"import"     { return IMPORT; }
+"print"      { return PRINT; }
+"var"        { return VAR; }
+"return"     { return RETURN; }
+"function"   { return FUNCTION; }
+"main"       { return MAIN; }
+"if"         { return IF; }
+"else"       { return ELSE; }
+"while"      { return WHILE; }
+"pre"        { return PRE; }
+"post"       { return POST; }
+"always"     { return ALWAYS; }
+"int"        { return TYPE; }
+"float"      { return TYPE; }
+"char"       { return TYPE; }
+"double"     { return TYPE; }
+"string"     { return TYPE; }
+"{"          { return LBRACE; }  // Added LBRACE
+"}"          { return RBRACE; }  // Added RBRACE
+"("          { return OPEN_PAREN; }
+")"          { return CLOSE_PAREN; }
+"["          { return LBRACKET; }
+"]"          { return RBRACKET; }
+";"          { return SEMICOLON; }
+","          { return COMMA; }
+"'"          { return INVERTED_COMMA; }
+"\""         { return DOUBLE_QUOTE; }
+"<"          { return LESS_THAN; }
+"<="         { return LESS_THAN_EQUAL; }
+">"          { return GREATER_THAN; }
+">="         { return GREATER_THAN_EQUAL; }
+"=="         { return EQUALS_EQUALS; }
+"!="         { return NOT_EQUAL; }
+"+"          { return PLUS; }
+"-"          { return MINUS; }
+"*"          { return MULT; }
+"/"          { return DIV; }
+"%"          { return MOD; }
+"=>>"        { return INPUT_OP; }
+"//"         { return SINGLE_LINE_COMMENT_START; }
+"<<"         { return MULTI_LINE_COMMENT_START; }
+">>"         { return MULTI_LINE_COMMENT_END; }
+"<-<-<>->->" { return END_PROGRAM; }
+[0-9]+      { yylval.num = atoi(yytext); return NUMBER; }
+[a-zA-Z_][a-zA-Z_0-9]* {  yylval.str = strdup(yytext); return IDENTIFIER; }
+\"[^\"]*\" { yylval.str = strdup(yytext); return STRING_LITERAL; }
+[a-zA-Z0-9_\/\.\-]+ { yylval.str = strdup(yytext); return PATH; }
 
 %%
 

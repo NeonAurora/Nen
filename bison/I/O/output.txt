@@ -1,4 +1,6 @@
 Starting the parser.
-		Package import detected  FROM FLEX import alpha.h
-Import detected FROM BISON
+ Import detected FROM BISON with path: alpha.h
 
+Print detected FROM BISON with message: "HELLO world"
+
+  Input detected FROM BISON for variable a with message: "Enter Value of a"

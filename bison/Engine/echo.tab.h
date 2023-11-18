@@ -39,14 +39,80 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     IMPORT = 258
+     IMPORT = 258,
+     PRINT = 259,
+     VAR = 260,
+     RETURN = 261,
+     FUNCTION = 262,
+     IF = 263,
+     ELSE = 264,
+     WHILE = 265,
+     MAIN = 266,
+     END_PROGRAM = 267,
+     FOR = 268,
+     PRE = 269,
+     POST = 270,
+     BODY = 271,
+     ALWAYS = 272,
+     INPUT_OP = 273,
+     EQUALS = 274,
+     LESS_THAN = 275,
+     LESS_THAN_EQUAL = 276,
+     GREATER_THAN = 277,
+     GREATER_THAN_EQUAL = 278,
+     EQUALS_EQUALS = 279,
+     NOT_EQUAL = 280,
+     PLUS = 281,
+     MINUS = 282,
+     MULT = 283,
+     DIV = 284,
+     MOD = 285,
+     AND_OP = 286,
+     OR_OP = 287,
+     NOT_OP = 288,
+     OPEN_PAREN = 289,
+     CLOSE_PAREN = 290,
+     LBRACKET = 291,
+     RBRACKET = 292,
+     LBRACE = 293,
+     RBRACE = 294,
+     SEMICOLON = 295,
+     COMMA = 296,
+     INVERTED_COMMA = 297,
+     DOUBLE_QUOTE = 298,
+     COLON = 299,
+     BODY_START = 300,
+     BODY_END = 301,
+     STRING_LITERAL = 302,
+     IDENTIFIER = 303,
+     PATH = 304,
+     NUMBER = 305,
+     SINGLE_LINE_COMMENT_START = 306,
+     MULTI_LINE_COMMENT_START = 307,
+     MULTI_LINE_COMMENT_END = 308,
+     ARRAY_INIT = 309,
+     TYPE = 310
    };
 #endif
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+{
+
+/* Line 1676 of yacc.c  */
+#line 8 "echo.y"
+
+    char *str;
+    int num;
+    // Other types as needed
+
+
+
+/* Line 1676 of yacc.c  */
+#line 115 "echo.tab.h"
+} YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
