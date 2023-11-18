@@ -1,7 +1,7 @@
 @echo off
 :: Set directories
 set ENGINE_DIR=Engine
-set IO_DIR=I/O
+set IO_DIR=IO
 
 :: Create directories if they don't exist
 if not exist "%ENGINE_DIR%" mkdir "%ENGINE_DIR%"
@@ -13,9 +13,10 @@ del "%ENGINE_DIR%\lex.yy.c"
 del "%ENGINE_DIR%\echo.tab.c"
 del "%ENGINE_DIR%\echo.tab.h"
 del "%IO_DIR%\output.txt"
+del echo.output
 
 :: Run Bison and Flex
-bison -d echo.y
+bison -d -v echo.y
 flex echo.l
 
 :: Move generated files to Engine directory

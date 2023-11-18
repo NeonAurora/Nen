@@ -1,0 +1,143 @@
+Starting the parser.
+ Import detected FROM BISON with path: alpha.h
+
+Print detected FROM BISON with message: "HELLO world"
+
+  Input detected FROM BISON for variable a with message: "Enter Value of a"
+
+     Variable declaration detected FROM BISON, Type: int Value: 50
+
+   Variable declaration detected FROM BISON, Type: int
+
+ Variable declaration detected FROM BISON, Type: int Value: 10
+ Variable declaration detected FROM BISON, Type: float Value: 20
+ Variable declaration detected FROM BISON, Type: double Value: 30
+
+ Variable declaration detected FROM BISON: echo
+
+ Variable assignment detected FROM BISON: price = 30
+
+  Assignment detected FROM BISON: echo = <expression>
+
+   Array declaration detected FROM BISON: myArray of type int with size 10
+
+ Variable declaration detected FROM BISON, Type: int Value: 10
+ Variable declaration detected FROM BISON, Type: float Value: 20
+ Variable declaration detected FROM BISON, Type: double Value: 30
+ Array declaration detected FROM BISON: myArray of type int with size 10
+
+    Multiplication
+Assignment detected FROM BISON: time = <expression>
+
+    Multiplication
+Assignment detected FROM BISON: time = <expression>
+
+    Multiplication
+Assignment detected FROM BISON: time = <expression>
+
+ Parameter: name, Type: string
+ Parameter: size, Type: float
+ Parameter: weight, Type: double
+
+      Assignment detected FROM BISON: x = <expression>
+
+      Assignment detected FROM BISON: name = <expression>
+
+        Multiplication
+Assignment detected FROM BISON: time = <expression>
+
+     Multiplication
+Return statement detected FROM BISON.
+
+      Greater than operator
+ Condition detected FROM BISON.
+ 
+      Greater than operator
+ Condition detected FROM BISON.
+ 
+        Print detected FROM BISON with message: "Too big to measure"
+
+      
+        Print detected FROM BISON with IDENTIFIER: x
+
+    If with Else-If(s) and Else statement detected FROM BISON.
+
+    Less than operator
+ Condition detected FROM BISON.
+ 
+    Print detected FROM BISON with IDENTIFIER: x
+
+Else-If clause detected FROM BISON.
+
+If with Else-If(s) statement detected FROM BISON.
+Function name with return type int declared.
+
+
+  Greater than operator
+ Condition detected FROM BISON.
+ 
+        Multiplication
+Assignment detected FROM BISON: BMI = <expression>
+
+    
+      Assignment detected FROM BISON: BMI = <expression>
+
+If with Else-If(s) and Else statement detected FROM BISON.
+
+
+  Greater than operator
+ Condition detected FROM BISON.
+ 
+    Print detected FROM BISON with message: "Too big to measure"
+
+  
+    Print detected FROM BISON with IDENTIFIER: x
+
+If with Else-If(s) and Else statement detected FROM BISON.
+
+
+  Greater than operator
+ Condition detected FROM BISON.
+ 
+      Greater than operator
+ Condition detected FROM BISON.
+ 
+        Print detected FROM BISON with message: "Too big to measure"
+
+      
+        Print detected FROM BISON with IDENTIFIER: x
+
+    If with Else-If(s) and Else statement detected FROM BISON.
+
+    Less than operator
+ Condition detected FROM BISON.
+ 
+    Print detected FROM BISON with IDENTIFIER: x
+
+Else-If clause detected FROM BISON.
+
+
+If with Else-If(s) statement detected FROM BISON.
+    Less than operator
+ Condition detected FROM BISON.
+  
+    Print detected FROM BISON with IDENTIFIER: x
+
+For loop detected FROM BISON.
+
+
+
+   Variable assignment detected FROM BISON: i = 100
+ 
+    Print detected FROM BISON with IDENTIFIER: i
+
+    Decrement detected FROM BISON: i--
+
+    Greater than operator
+Condition detected FROM BISON.
+
+      Break Statement Detected. 
+
+    
+If with Else-If(s) statement detected FROM BISON.
+For loop detected FROM BISON.

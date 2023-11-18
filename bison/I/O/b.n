@@ -1,3 +1,0 @@
-import alpha.h
-print("HELLO world");
-a =>> ("Enter Value of a");

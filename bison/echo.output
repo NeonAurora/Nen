@@ -1,0 +1,1795 @@
+Terminals unused in grammar
+
+   WHILE
+   MAIN
+   END_PROGRAM
+   PRE
+   POST
+   BODY
+   ALWAYS
+   MOD
+   AND_OP
+   OR_OP
+   NOT_OP
+   INVERTED_COMMA
+   DOUBLE_QUOTE
+   BODY_START
+   BODY_END
+   SINGLE_LINE_COMMENT_START
+   MULTI_LINE_COMMENT_START
+   MULTI_LINE_COMMENT_END
+   ARRAY_INIT
+
+
+State 98 conflicts: 9 shift/reduce
+State 125 conflicts: 9 shift/reduce
+State 127 conflicts: 9 shift/reduce
+State 136 conflicts: 9 shift/reduce
+State 142 conflicts: 9 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: /* empty */
+    2        | program statement
+
+    3 statement: import_statement
+    4          | print_statement
+    5          | input_statement
+    6          | var_declaration
+    7          | assignment_statement
+    8          | function_declaration
+    9          | return_statement
+   10          | conditional_statement
+   11          | for_statement
+   12          | break_statement
+   13          | increment_statement
+   14          | decrement_statement
+
+   15 import_statement: IMPORT PATH
+
+   16 print_statement: PRINT OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON
+   17                | PRINT OPEN_PAREN IDENTIFIER CLOSE_PAREN SEMICOLON
+
+   18 input_statement: IDENTIFIER INPUT_OP OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON
+
+   19 var_declaration: VAR var_declaration_list SEMICOLON
+
+   20 var_declaration_list: var_decl
+   21                     | var_declaration_list COMMA var_decl
+
+   22 var_decl: IDENTIFIER
+   23         | IDENTIFIER COLON TYPE
+   24         | IDENTIFIER COLON TYPE EQUALS NUMBER
+   25         | IDENTIFIER COLON TYPE LBRACKET NUMBER RBRACKET
+   26         | IDENTIFIER EQUALS NUMBER
+
+   27 assignment_statement: IDENTIFIER EQUALS expression SEMICOLON
+
+   28 return_statement: RETURN expression SEMICOLON
+
+   29 conditional_statement: IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses
+   30                      | IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses ELSE LBRACE function_body RBRACE
+
+   31 else_if_clauses: /* empty */
+   32                | else_if_clauses ELSE IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE
+
+   33 condition: expression relational_op expression
+
+   34 relational_op: LESS_THAN
+   35              | LESS_THAN_EQUAL
+   36              | GREATER_THAN
+   37              | GREATER_THAN_EQUAL
+   38              | EQUALS_EQUALS
+   39              | NOT_EQUAL
+
+   40 expression: term
+   41           | expression PLUS term
+   42           | expression MINUS term
+
+   43 term: factor
+   44     | term MULT factor
+   45     | term DIV factor
+
+   46 factor: NUMBER
+   47       | STRING_LITERAL
+   48       | IDENTIFIER
+   49       | OPEN_PAREN expression CLOSE_PAREN
+
+   50 function_declaration: FUNCTION IDENTIFIER COLON TYPE OPEN_PAREN param_list CLOSE_PAREN LBRACE function_body RBRACE
+
+   51 param_list: /* empty */
+   52           | param_list COMMA param
+   53           | param
+
+   54 param: IDENTIFIER COLON TYPE
+
+   55 function_body: /* empty */
+   56              | function_body statement
+   57              | statement
+
+   58 for_statement: FOR OPEN_PAREN for_init for_condition for_increment CLOSE_PAREN LBRACE function_body RBRACE
+
+   59 for_init: var_declaration
+   60         | IDENTIFIER EQUALS expression SEMICOLON
+   61         | SEMICOLON
+
+   62 for_condition: condition SEMICOLON
+   63              | SEMICOLON
+
+   64 for_increment: IDENTIFIER EQUALS expression
+   65              | IDENTIFIER INCREMENT
+   66              | IDENTIFIER DECREMENT
+   67              | /* empty */
+
+   68 increment_statement: IDENTIFIER INCREMENT SEMICOLON
+
+   69 decrement_statement: IDENTIFIER DECREMENT SEMICOLON
+
+   70 break_statement: BREAK SEMICOLON
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+IMPORT (258) 15
+PRINT (259) 16 17
+VAR (260) 19
+RETURN (261) 28
+FUNCTION (262) 50
+IF (263) 29 30 32
+ELSE (264) 30 32
+WHILE (265)
+MAIN (266)
+END_PROGRAM (267)
+FOR (268) 58
+PRE (269)
+POST (270)
+BODY (271)
+ALWAYS (272)
+BREAK (273) 70
+INPUT_OP (274) 18
+EQUALS (275) 24 26 27 60 64
+LESS_THAN (276) 34
+LESS_THAN_EQUAL (277) 35
+GREATER_THAN (278) 36
+GREATER_THAN_EQUAL (279) 37
+EQUALS_EQUALS (280) 38
+NOT_EQUAL (281) 39
+PLUS (282) 41
+MINUS (283) 42
+MULT (284) 44
+DIV (285) 45
+MOD (286)
+AND_OP (287)
+OR_OP (288)
+NOT_OP (289)
+INCREMENT (290) 65 68
+DECREMENT (291) 66 69
+OPEN_PAREN (292) 16 17 18 29 30 32 49 50 58
+CLOSE_PAREN (293) 16 17 18 29 30 32 49 50 58
+LBRACKET (294) 25
+RBRACKET (295) 25
+LBRACE (296) 29 30 32 50 58
+RBRACE (297) 29 30 32 50 58
+SEMICOLON (298) 16 17 18 19 27 28 60 61 62 63 68 69 70
+COMMA (299) 21 52
+INVERTED_COMMA (300)
+DOUBLE_QUOTE (301)
+COLON (302) 23 24 25 50 54
+BODY_START (303)
+BODY_END (304)
+STRING_LITERAL (305) 16 18 47
+IDENTIFIER (306) 17 18 22 23 24 25 26 27 48 50 54 60 64 65 66 68 69
+PATH (307) 15
+TYPE (308) 23 24 25 50 54
+NUMBER (309) 24 25 26 46
+SINGLE_LINE_COMMENT_START (310)
+MULTI_LINE_COMMENT_START (311)
+MULTI_LINE_COMMENT_END (312)
+ARRAY_INIT (313)
+
+
+Nonterminals, with rules where they appear
+
+$accept (59)
+    on left: 0
+program (60)
+    on left: 1 2, on right: 0 2
+statement (61)
+    on left: 3 4 5 6 7 8 9 10 11 12 13 14, on right: 2 56 57
+import_statement (62)
+    on left: 15, on right: 3
+print_statement (63)
+    on left: 16 17, on right: 4
+input_statement (64)
+    on left: 18, on right: 5
+var_declaration (65)
+    on left: 19, on right: 6 59
+var_declaration_list (66)
+    on left: 20 21, on right: 19 21
+var_decl (67)
+    on left: 22 23 24 25 26, on right: 20 21
+assignment_statement (68)
+    on left: 27, on right: 7
+return_statement (69)
+    on left: 28, on right: 9
+conditional_statement (70)
+    on left: 29 30, on right: 10
+else_if_clauses (71)
+    on left: 31 32, on right: 29 30 32
+condition (72)
+    on left: 33, on right: 29 30 32 62
+relational_op (73)
+    on left: 34 35 36 37 38 39, on right: 33
+expression (74)
+    on left: 40 41 42, on right: 27 28 33 41 42 49 60 64
+term (75)
+    on left: 43 44 45, on right: 40 41 42 44 45
+factor (76)
+    on left: 46 47 48 49, on right: 43 44 45
+function_declaration (77)
+    on left: 50, on right: 8
+param_list (78)
+    on left: 51 52 53, on right: 50 52
+param (79)
+    on left: 54, on right: 52 53
+function_body (80)
+    on left: 55 56 57, on right: 29 30 32 50 56 58
+for_statement (81)
+    on left: 58, on right: 11
+for_init (82)
+    on left: 59 60 61, on right: 58
+for_condition (83)
+    on left: 62 63, on right: 58
+for_increment (84)
+    on left: 64 65 66 67, on right: 58
+increment_statement (85)
+    on left: 68, on right: 13
+decrement_statement (86)
+    on left: 69, on right: 14
+break_statement (87)
+    on left: 70, on right: 12
+
+
+state 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 1 (program)
+
+    program  go to state 1
+
+
+state 1
+
+    0 $accept: program . $end
+    2 program: program . statement
+
+    $end        shift, and go to state 2
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    IDENTIFIER  shift, and go to state 11
+
+    statement              go to state 12
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 3
+
+   15 import_statement: IMPORT . PATH
+
+    PATH  shift, and go to state 25
+
+
+state 4
+
+   16 print_statement: PRINT . OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON
+   17                | PRINT . OPEN_PAREN IDENTIFIER CLOSE_PAREN SEMICOLON
+
+    OPEN_PAREN  shift, and go to state 26
+
+
+state 5
+
+   19 var_declaration: VAR . var_declaration_list SEMICOLON
+
+    IDENTIFIER  shift, and go to state 27
+
+    var_declaration_list  go to state 28
+    var_decl              go to state 29
+
+
+state 6
+
+   28 return_statement: RETURN . expression SEMICOLON
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    expression  go to state 34
+    term        go to state 35
+    factor      go to state 36
+
+
+state 7
+
+   50 function_declaration: FUNCTION . IDENTIFIER COLON TYPE OPEN_PAREN param_list CLOSE_PAREN LBRACE function_body RBRACE
+
+    IDENTIFIER  shift, and go to state 37
+
+
+state 8
+
+   29 conditional_statement: IF . OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses
+   30                      | IF . OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses ELSE LBRACE function_body RBRACE
+
+    OPEN_PAREN  shift, and go to state 38
+
+
+state 9
+
+   58 for_statement: FOR . OPEN_PAREN for_init for_condition for_increment CLOSE_PAREN LBRACE function_body RBRACE
+
+    OPEN_PAREN  shift, and go to state 39
+
+
+state 10
+
+   70 break_statement: BREAK . SEMICOLON
+
+    SEMICOLON  shift, and go to state 40
+
+
+state 11
+
+   18 input_statement: IDENTIFIER . INPUT_OP OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON
+   27 assignment_statement: IDENTIFIER . EQUALS expression SEMICOLON
+   68 increment_statement: IDENTIFIER . INCREMENT SEMICOLON
+   69 decrement_statement: IDENTIFIER . DECREMENT SEMICOLON
+
+    INPUT_OP   shift, and go to state 41
+    EQUALS     shift, and go to state 42
+    INCREMENT  shift, and go to state 43
+    DECREMENT  shift, and go to state 44
+
+
+state 12
+
+    2 program: program statement .
+
+    $default  reduce using rule 2 (program)
+
+
+state 13
+
+    3 statement: import_statement .
+
+    $default  reduce using rule 3 (statement)
+
+
+state 14
+
+    4 statement: print_statement .
+
+    $default  reduce using rule 4 (statement)
+
+
+state 15
+
+    5 statement: input_statement .
+
+    $default  reduce using rule 5 (statement)
+
+
+state 16
+
+    6 statement: var_declaration .
+
+    $default  reduce using rule 6 (statement)
+
+
+state 17
+
+    7 statement: assignment_statement .
+
+    $default  reduce using rule 7 (statement)
+
+
+state 18
+
+    9 statement: return_statement .
+
+    $default  reduce using rule 9 (statement)
+
+
+state 19
+
+   10 statement: conditional_statement .
+
+    $default  reduce using rule 10 (statement)
+
+
+state 20
+
+    8 statement: function_declaration .
+
+    $default  reduce using rule 8 (statement)
+
+
+state 21
+
+   11 statement: for_statement .
+
+    $default  reduce using rule 11 (statement)
+
+
+state 22
+
+   13 statement: increment_statement .
+
+    $default  reduce using rule 13 (statement)
+
+
+state 23
+
+   14 statement: decrement_statement .
+
+    $default  reduce using rule 14 (statement)
+
+
+state 24
+
+   12 statement: break_statement .
+
+    $default  reduce using rule 12 (statement)
+
+
+state 25
+
+   15 import_statement: IMPORT PATH .
+
+    $default  reduce using rule 15 (import_statement)
+
+
+state 26
+
+   16 print_statement: PRINT OPEN_PAREN . STRING_LITERAL CLOSE_PAREN SEMICOLON
+   17                | PRINT OPEN_PAREN . IDENTIFIER CLOSE_PAREN SEMICOLON
+
+    STRING_LITERAL  shift, and go to state 45
+    IDENTIFIER      shift, and go to state 46
+
+
+state 27
+
+   22 var_decl: IDENTIFIER .
+   23         | IDENTIFIER . COLON TYPE
+   24         | IDENTIFIER . COLON TYPE EQUALS NUMBER
+   25         | IDENTIFIER . COLON TYPE LBRACKET NUMBER RBRACKET
+   26         | IDENTIFIER . EQUALS NUMBER
+
+    EQUALS  shift, and go to state 47
+    COLON   shift, and go to state 48
+
+    $default  reduce using rule 22 (var_decl)
+
+
+state 28
+
+   19 var_declaration: VAR var_declaration_list . SEMICOLON
+   21 var_declaration_list: var_declaration_list . COMMA var_decl
+
+    SEMICOLON  shift, and go to state 49
+    COMMA      shift, and go to state 50
+
+
+state 29
+
+   20 var_declaration_list: var_decl .
+
+    $default  reduce using rule 20 (var_declaration_list)
+
+
+state 30
+
+   49 factor: OPEN_PAREN . expression CLOSE_PAREN
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    expression  go to state 51
+    term        go to state 35
+    factor      go to state 36
+
+
+state 31
+
+   47 factor: STRING_LITERAL .
+
+    $default  reduce using rule 47 (factor)
+
+
+state 32
+
+   48 factor: IDENTIFIER .
+
+    $default  reduce using rule 48 (factor)
+
+
+state 33
+
+   46 factor: NUMBER .
+
+    $default  reduce using rule 46 (factor)
+
+
+state 34
+
+   28 return_statement: RETURN expression . SEMICOLON
+   41 expression: expression . PLUS term
+   42           | expression . MINUS term
+
+    PLUS       shift, and go to state 52
+    MINUS      shift, and go to state 53
+    SEMICOLON  shift, and go to state 54
+
+
+state 35
+
+   40 expression: term .
+   44 term: term . MULT factor
+   45     | term . DIV factor
+
+    MULT  shift, and go to state 55
+    DIV   shift, and go to state 56
+
+    $default  reduce using rule 40 (expression)
+
+
+state 36
+
+   43 term: factor .
+
+    $default  reduce using rule 43 (term)
+
+
+state 37
+
+   50 function_declaration: FUNCTION IDENTIFIER . COLON TYPE OPEN_PAREN param_list CLOSE_PAREN LBRACE function_body RBRACE
+
+    COLON  shift, and go to state 57
+
+
+state 38
+
+   29 conditional_statement: IF OPEN_PAREN . condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses
+   30                      | IF OPEN_PAREN . condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses ELSE LBRACE function_body RBRACE
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    condition   go to state 58
+    expression  go to state 59
+    term        go to state 35
+    factor      go to state 36
+
+
+state 39
+
+   58 for_statement: FOR OPEN_PAREN . for_init for_condition for_increment CLOSE_PAREN LBRACE function_body RBRACE
+
+    VAR         shift, and go to state 5
+    SEMICOLON   shift, and go to state 60
+    IDENTIFIER  shift, and go to state 61
+
+    var_declaration  go to state 62
+    for_init         go to state 63
+
+
+state 40
+
+   70 break_statement: BREAK SEMICOLON .
+
+    $default  reduce using rule 70 (break_statement)
+
+
+state 41
+
+   18 input_statement: IDENTIFIER INPUT_OP . OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON
+
+    OPEN_PAREN  shift, and go to state 64
+
+
+state 42
+
+   27 assignment_statement: IDENTIFIER EQUALS . expression SEMICOLON
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    expression  go to state 65
+    term        go to state 35
+    factor      go to state 36
+
+
+state 43
+
+   68 increment_statement: IDENTIFIER INCREMENT . SEMICOLON
+
+    SEMICOLON  shift, and go to state 66
+
+
+state 44
+
+   69 decrement_statement: IDENTIFIER DECREMENT . SEMICOLON
+
+    SEMICOLON  shift, and go to state 67
+
+
+state 45
+
+   16 print_statement: PRINT OPEN_PAREN STRING_LITERAL . CLOSE_PAREN SEMICOLON
+
+    CLOSE_PAREN  shift, and go to state 68
+
+
+state 46
+
+   17 print_statement: PRINT OPEN_PAREN IDENTIFIER . CLOSE_PAREN SEMICOLON
+
+    CLOSE_PAREN  shift, and go to state 69
+
+
+state 47
+
+   26 var_decl: IDENTIFIER EQUALS . NUMBER
+
+    NUMBER  shift, and go to state 70
+
+
+state 48
+
+   23 var_decl: IDENTIFIER COLON . TYPE
+   24         | IDENTIFIER COLON . TYPE EQUALS NUMBER
+   25         | IDENTIFIER COLON . TYPE LBRACKET NUMBER RBRACKET
+
+    TYPE  shift, and go to state 71
+
+
+state 49
+
+   19 var_declaration: VAR var_declaration_list SEMICOLON .
+
+    $default  reduce using rule 19 (var_declaration)
+
+
+state 50
+
+   21 var_declaration_list: var_declaration_list COMMA . var_decl
+
+    IDENTIFIER  shift, and go to state 27
+
+    var_decl  go to state 72
+
+
+state 51
+
+   41 expression: expression . PLUS term
+   42           | expression . MINUS term
+   49 factor: OPEN_PAREN expression . CLOSE_PAREN
+
+    PLUS         shift, and go to state 52
+    MINUS        shift, and go to state 53
+    CLOSE_PAREN  shift, and go to state 73
+
+
+state 52
+
+   41 expression: expression PLUS . term
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    term    go to state 74
+    factor  go to state 36
+
+
+state 53
+
+   42 expression: expression MINUS . term
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    term    go to state 75
+    factor  go to state 36
+
+
+state 54
+
+   28 return_statement: RETURN expression SEMICOLON .
+
+    $default  reduce using rule 28 (return_statement)
+
+
+state 55
+
+   44 term: term MULT . factor
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    factor  go to state 76
+
+
+state 56
+
+   45 term: term DIV . factor
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    factor  go to state 77
+
+
+state 57
+
+   50 function_declaration: FUNCTION IDENTIFIER COLON . TYPE OPEN_PAREN param_list CLOSE_PAREN LBRACE function_body RBRACE
+
+    TYPE  shift, and go to state 78
+
+
+state 58
+
+   29 conditional_statement: IF OPEN_PAREN condition . CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses
+   30                      | IF OPEN_PAREN condition . CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses ELSE LBRACE function_body RBRACE
+
+    CLOSE_PAREN  shift, and go to state 79
+
+
+state 59
+
+   33 condition: expression . relational_op expression
+   41 expression: expression . PLUS term
+   42           | expression . MINUS term
+
+    LESS_THAN           shift, and go to state 80
+    LESS_THAN_EQUAL     shift, and go to state 81
+    GREATER_THAN        shift, and go to state 82
+    GREATER_THAN_EQUAL  shift, and go to state 83
+    EQUALS_EQUALS       shift, and go to state 84
+    NOT_EQUAL           shift, and go to state 85
+    PLUS                shift, and go to state 52
+    MINUS               shift, and go to state 53
+
+    relational_op  go to state 86
+
+
+state 60
+
+   61 for_init: SEMICOLON .
+
+    $default  reduce using rule 61 (for_init)
+
+
+state 61
+
+   60 for_init: IDENTIFIER . EQUALS expression SEMICOLON
+
+    EQUALS  shift, and go to state 87
+
+
+state 62
+
+   59 for_init: var_declaration .
+
+    $default  reduce using rule 59 (for_init)
+
+
+state 63
+
+   58 for_statement: FOR OPEN_PAREN for_init . for_condition for_increment CLOSE_PAREN LBRACE function_body RBRACE
+
+    OPEN_PAREN      shift, and go to state 30
+    SEMICOLON       shift, and go to state 88
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    condition      go to state 89
+    expression     go to state 59
+    term           go to state 35
+    factor         go to state 36
+    for_condition  go to state 90
+
+
+state 64
+
+   18 input_statement: IDENTIFIER INPUT_OP OPEN_PAREN . STRING_LITERAL CLOSE_PAREN SEMICOLON
+
+    STRING_LITERAL  shift, and go to state 91
+
+
+state 65
+
+   27 assignment_statement: IDENTIFIER EQUALS expression . SEMICOLON
+   41 expression: expression . PLUS term
+   42           | expression . MINUS term
+
+    PLUS       shift, and go to state 52
+    MINUS      shift, and go to state 53
+    SEMICOLON  shift, and go to state 92
+
+
+state 66
+
+   68 increment_statement: IDENTIFIER INCREMENT SEMICOLON .
+
+    $default  reduce using rule 68 (increment_statement)
+
+
+state 67
+
+   69 decrement_statement: IDENTIFIER DECREMENT SEMICOLON .
+
+    $default  reduce using rule 69 (decrement_statement)
+
+
+state 68
+
+   16 print_statement: PRINT OPEN_PAREN STRING_LITERAL CLOSE_PAREN . SEMICOLON
+
+    SEMICOLON  shift, and go to state 93
+
+
+state 69
+
+   17 print_statement: PRINT OPEN_PAREN IDENTIFIER CLOSE_PAREN . SEMICOLON
+
+    SEMICOLON  shift, and go to state 94
+
+
+state 70
+
+   26 var_decl: IDENTIFIER EQUALS NUMBER .
+
+    $default  reduce using rule 26 (var_decl)
+
+
+state 71
+
+   23 var_decl: IDENTIFIER COLON TYPE .
+   24         | IDENTIFIER COLON TYPE . EQUALS NUMBER
+   25         | IDENTIFIER COLON TYPE . LBRACKET NUMBER RBRACKET
+
+    EQUALS    shift, and go to state 95
+    LBRACKET  shift, and go to state 96
+
+    $default  reduce using rule 23 (var_decl)
+
+
+state 72
+
+   21 var_declaration_list: var_declaration_list COMMA var_decl .
+
+    $default  reduce using rule 21 (var_declaration_list)
+
+
+state 73
+
+   49 factor: OPEN_PAREN expression CLOSE_PAREN .
+
+    $default  reduce using rule 49 (factor)
+
+
+state 74
+
+   41 expression: expression PLUS term .
+   44 term: term . MULT factor
+   45     | term . DIV factor
+
+    MULT  shift, and go to state 55
+    DIV   shift, and go to state 56
+
+    $default  reduce using rule 41 (expression)
+
+
+state 75
+
+   42 expression: expression MINUS term .
+   44 term: term . MULT factor
+   45     | term . DIV factor
+
+    MULT  shift, and go to state 55
+    DIV   shift, and go to state 56
+
+    $default  reduce using rule 42 (expression)
+
+
+state 76
+
+   44 term: term MULT factor .
+
+    $default  reduce using rule 44 (term)
+
+
+state 77
+
+   45 term: term DIV factor .
+
+    $default  reduce using rule 45 (term)
+
+
+state 78
+
+   50 function_declaration: FUNCTION IDENTIFIER COLON TYPE . OPEN_PAREN param_list CLOSE_PAREN LBRACE function_body RBRACE
+
+    OPEN_PAREN  shift, and go to state 97
+
+
+state 79
+
+   29 conditional_statement: IF OPEN_PAREN condition CLOSE_PAREN . LBRACE function_body RBRACE else_if_clauses
+   30                      | IF OPEN_PAREN condition CLOSE_PAREN . LBRACE function_body RBRACE else_if_clauses ELSE LBRACE function_body RBRACE
+
+    LBRACE  shift, and go to state 98
+
+
+state 80
+
+   34 relational_op: LESS_THAN .
+
+    $default  reduce using rule 34 (relational_op)
+
+
+state 81
+
+   35 relational_op: LESS_THAN_EQUAL .
+
+    $default  reduce using rule 35 (relational_op)
+
+
+state 82
+
+   36 relational_op: GREATER_THAN .
+
+    $default  reduce using rule 36 (relational_op)
+
+
+state 83
+
+   37 relational_op: GREATER_THAN_EQUAL .
+
+    $default  reduce using rule 37 (relational_op)
+
+
+state 84
+
+   38 relational_op: EQUALS_EQUALS .
+
+    $default  reduce using rule 38 (relational_op)
+
+
+state 85
+
+   39 relational_op: NOT_EQUAL .
+
+    $default  reduce using rule 39 (relational_op)
+
+
+state 86
+
+   33 condition: expression relational_op . expression
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    expression  go to state 99
+    term        go to state 35
+    factor      go to state 36
+
+
+state 87
+
+   60 for_init: IDENTIFIER EQUALS . expression SEMICOLON
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    expression  go to state 100
+    term        go to state 35
+    factor      go to state 36
+
+
+state 88
+
+   63 for_condition: SEMICOLON .
+
+    $default  reduce using rule 63 (for_condition)
+
+
+state 89
+
+   62 for_condition: condition . SEMICOLON
+
+    SEMICOLON  shift, and go to state 101
+
+
+state 90
+
+   58 for_statement: FOR OPEN_PAREN for_init for_condition . for_increment CLOSE_PAREN LBRACE function_body RBRACE
+
+    IDENTIFIER  shift, and go to state 102
+
+    $default  reduce using rule 67 (for_increment)
+
+    for_increment  go to state 103
+
+
+state 91
+
+   18 input_statement: IDENTIFIER INPUT_OP OPEN_PAREN STRING_LITERAL . CLOSE_PAREN SEMICOLON
+
+    CLOSE_PAREN  shift, and go to state 104
+
+
+state 92
+
+   27 assignment_statement: IDENTIFIER EQUALS expression SEMICOLON .
+
+    $default  reduce using rule 27 (assignment_statement)
+
+
+state 93
+
+   16 print_statement: PRINT OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON .
+
+    $default  reduce using rule 16 (print_statement)
+
+
+state 94
+
+   17 print_statement: PRINT OPEN_PAREN IDENTIFIER CLOSE_PAREN SEMICOLON .
+
+    $default  reduce using rule 17 (print_statement)
+
+
+state 95
+
+   24 var_decl: IDENTIFIER COLON TYPE EQUALS . NUMBER
+
+    NUMBER  shift, and go to state 105
+
+
+state 96
+
+   25 var_decl: IDENTIFIER COLON TYPE LBRACKET . NUMBER RBRACKET
+
+    NUMBER  shift, and go to state 106
+
+
+state 97
+
+   50 function_declaration: FUNCTION IDENTIFIER COLON TYPE OPEN_PAREN . param_list CLOSE_PAREN LBRACE function_body RBRACE
+
+    IDENTIFIER  shift, and go to state 107
+
+    $default  reduce using rule 51 (param_list)
+
+    param_list  go to state 108
+    param       go to state 109
+
+
+state 98
+
+   29 conditional_statement: IF OPEN_PAREN condition CLOSE_PAREN LBRACE . function_body RBRACE else_if_clauses
+   30                      | IF OPEN_PAREN condition CLOSE_PAREN LBRACE . function_body RBRACE else_if_clauses ELSE LBRACE function_body RBRACE
+
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    IDENTIFIER  shift, and go to state 11
+
+    IMPORT      [reduce using rule 55 (function_body)]
+    PRINT       [reduce using rule 55 (function_body)]
+    VAR         [reduce using rule 55 (function_body)]
+    RETURN      [reduce using rule 55 (function_body)]
+    FUNCTION    [reduce using rule 55 (function_body)]
+    IF          [reduce using rule 55 (function_body)]
+    FOR         [reduce using rule 55 (function_body)]
+    BREAK       [reduce using rule 55 (function_body)]
+    IDENTIFIER  [reduce using rule 55 (function_body)]
+    $default    reduce using rule 55 (function_body)
+
+    statement              go to state 110
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    function_body          go to state 111
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 99
+
+   33 condition: expression relational_op expression .
+   41 expression: expression . PLUS term
+   42           | expression . MINUS term
+
+    PLUS   shift, and go to state 52
+    MINUS  shift, and go to state 53
+
+    $default  reduce using rule 33 (condition)
+
+
+state 100
+
+   41 expression: expression . PLUS term
+   42           | expression . MINUS term
+   60 for_init: IDENTIFIER EQUALS expression . SEMICOLON
+
+    PLUS       shift, and go to state 52
+    MINUS      shift, and go to state 53
+    SEMICOLON  shift, and go to state 112
+
+
+state 101
+
+   62 for_condition: condition SEMICOLON .
+
+    $default  reduce using rule 62 (for_condition)
+
+
+state 102
+
+   64 for_increment: IDENTIFIER . EQUALS expression
+   65              | IDENTIFIER . INCREMENT
+   66              | IDENTIFIER . DECREMENT
+
+    EQUALS     shift, and go to state 113
+    INCREMENT  shift, and go to state 114
+    DECREMENT  shift, and go to state 115
+
+
+state 103
+
+   58 for_statement: FOR OPEN_PAREN for_init for_condition for_increment . CLOSE_PAREN LBRACE function_body RBRACE
+
+    CLOSE_PAREN  shift, and go to state 116
+
+
+state 104
+
+   18 input_statement: IDENTIFIER INPUT_OP OPEN_PAREN STRING_LITERAL CLOSE_PAREN . SEMICOLON
+
+    SEMICOLON  shift, and go to state 117
+
+
+state 105
+
+   24 var_decl: IDENTIFIER COLON TYPE EQUALS NUMBER .
+
+    $default  reduce using rule 24 (var_decl)
+
+
+state 106
+
+   25 var_decl: IDENTIFIER COLON TYPE LBRACKET NUMBER . RBRACKET
+
+    RBRACKET  shift, and go to state 118
+
+
+state 107
+
+   54 param: IDENTIFIER . COLON TYPE
+
+    COLON  shift, and go to state 119
+
+
+state 108
+
+   50 function_declaration: FUNCTION IDENTIFIER COLON TYPE OPEN_PAREN param_list . CLOSE_PAREN LBRACE function_body RBRACE
+   52 param_list: param_list . COMMA param
+
+    CLOSE_PAREN  shift, and go to state 120
+    COMMA        shift, and go to state 121
+
+
+state 109
+
+   53 param_list: param .
+
+    $default  reduce using rule 53 (param_list)
+
+
+state 110
+
+   57 function_body: statement .
+
+    $default  reduce using rule 57 (function_body)
+
+
+state 111
+
+   29 conditional_statement: IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body . RBRACE else_if_clauses
+   30                      | IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body . RBRACE else_if_clauses ELSE LBRACE function_body RBRACE
+   56 function_body: function_body . statement
+
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    RBRACE      shift, and go to state 122
+    IDENTIFIER  shift, and go to state 11
+
+    statement              go to state 123
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 112
+
+   60 for_init: IDENTIFIER EQUALS expression SEMICOLON .
+
+    $default  reduce using rule 60 (for_init)
+
+
+state 113
+
+   64 for_increment: IDENTIFIER EQUALS . expression
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    expression  go to state 124
+    term        go to state 35
+    factor      go to state 36
+
+
+state 114
+
+   65 for_increment: IDENTIFIER INCREMENT .
+
+    $default  reduce using rule 65 (for_increment)
+
+
+state 115
+
+   66 for_increment: IDENTIFIER DECREMENT .
+
+    $default  reduce using rule 66 (for_increment)
+
+
+state 116
+
+   58 for_statement: FOR OPEN_PAREN for_init for_condition for_increment CLOSE_PAREN . LBRACE function_body RBRACE
+
+    LBRACE  shift, and go to state 125
+
+
+state 117
+
+   18 input_statement: IDENTIFIER INPUT_OP OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON .
+
+    $default  reduce using rule 18 (input_statement)
+
+
+state 118
+
+   25 var_decl: IDENTIFIER COLON TYPE LBRACKET NUMBER RBRACKET .
+
+    $default  reduce using rule 25 (var_decl)
+
+
+state 119
+
+   54 param: IDENTIFIER COLON . TYPE
+
+    TYPE  shift, and go to state 126
+
+
+state 120
+
+   50 function_declaration: FUNCTION IDENTIFIER COLON TYPE OPEN_PAREN param_list CLOSE_PAREN . LBRACE function_body RBRACE
+
+    LBRACE  shift, and go to state 127
+
+
+state 121
+
+   52 param_list: param_list COMMA . param
+
+    IDENTIFIER  shift, and go to state 107
+
+    param  go to state 128
+
+
+state 122
+
+   29 conditional_statement: IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE . else_if_clauses
+   30                      | IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE . else_if_clauses ELSE LBRACE function_body RBRACE
+
+    $default  reduce using rule 31 (else_if_clauses)
+
+    else_if_clauses  go to state 129
+
+
+state 123
+
+   56 function_body: function_body statement .
+
+    $default  reduce using rule 56 (function_body)
+
+
+state 124
+
+   41 expression: expression . PLUS term
+   42           | expression . MINUS term
+   64 for_increment: IDENTIFIER EQUALS expression .
+
+    PLUS   shift, and go to state 52
+    MINUS  shift, and go to state 53
+
+    $default  reduce using rule 64 (for_increment)
+
+
+state 125
+
+   58 for_statement: FOR OPEN_PAREN for_init for_condition for_increment CLOSE_PAREN LBRACE . function_body RBRACE
+
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    IDENTIFIER  shift, and go to state 11
+
+    IMPORT      [reduce using rule 55 (function_body)]
+    PRINT       [reduce using rule 55 (function_body)]
+    VAR         [reduce using rule 55 (function_body)]
+    RETURN      [reduce using rule 55 (function_body)]
+    FUNCTION    [reduce using rule 55 (function_body)]
+    IF          [reduce using rule 55 (function_body)]
+    FOR         [reduce using rule 55 (function_body)]
+    BREAK       [reduce using rule 55 (function_body)]
+    IDENTIFIER  [reduce using rule 55 (function_body)]
+    $default    reduce using rule 55 (function_body)
+
+    statement              go to state 110
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    function_body          go to state 130
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 126
+
+   54 param: IDENTIFIER COLON TYPE .
+
+    $default  reduce using rule 54 (param)
+
+
+state 127
+
+   50 function_declaration: FUNCTION IDENTIFIER COLON TYPE OPEN_PAREN param_list CLOSE_PAREN LBRACE . function_body RBRACE
+
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    IDENTIFIER  shift, and go to state 11
+
+    IMPORT      [reduce using rule 55 (function_body)]
+    PRINT       [reduce using rule 55 (function_body)]
+    VAR         [reduce using rule 55 (function_body)]
+    RETURN      [reduce using rule 55 (function_body)]
+    FUNCTION    [reduce using rule 55 (function_body)]
+    IF          [reduce using rule 55 (function_body)]
+    FOR         [reduce using rule 55 (function_body)]
+    BREAK       [reduce using rule 55 (function_body)]
+    IDENTIFIER  [reduce using rule 55 (function_body)]
+    $default    reduce using rule 55 (function_body)
+
+    statement              go to state 110
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    function_body          go to state 131
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 128
+
+   52 param_list: param_list COMMA param .
+
+    $default  reduce using rule 52 (param_list)
+
+
+state 129
+
+   29 conditional_statement: IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses .
+   30                      | IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses . ELSE LBRACE function_body RBRACE
+   32 else_if_clauses: else_if_clauses . ELSE IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE
+
+    ELSE  shift, and go to state 132
+
+    $default  reduce using rule 29 (conditional_statement)
+
+
+state 130
+
+   56 function_body: function_body . statement
+   58 for_statement: FOR OPEN_PAREN for_init for_condition for_increment CLOSE_PAREN LBRACE function_body . RBRACE
+
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    RBRACE      shift, and go to state 133
+    IDENTIFIER  shift, and go to state 11
+
+    statement              go to state 123
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 131
+
+   50 function_declaration: FUNCTION IDENTIFIER COLON TYPE OPEN_PAREN param_list CLOSE_PAREN LBRACE function_body . RBRACE
+   56 function_body: function_body . statement
+
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    RBRACE      shift, and go to state 134
+    IDENTIFIER  shift, and go to state 11
+
+    statement              go to state 123
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 132
+
+   30 conditional_statement: IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses ELSE . LBRACE function_body RBRACE
+   32 else_if_clauses: else_if_clauses ELSE . IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE
+
+    IF      shift, and go to state 135
+    LBRACE  shift, and go to state 136
+
+
+state 133
+
+   58 for_statement: FOR OPEN_PAREN for_init for_condition for_increment CLOSE_PAREN LBRACE function_body RBRACE .
+
+    $default  reduce using rule 58 (for_statement)
+
+
+state 134
+
+   50 function_declaration: FUNCTION IDENTIFIER COLON TYPE OPEN_PAREN param_list CLOSE_PAREN LBRACE function_body RBRACE .
+
+    $default  reduce using rule 50 (function_declaration)
+
+
+state 135
+
+   32 else_if_clauses: else_if_clauses ELSE IF . OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE
+
+    OPEN_PAREN  shift, and go to state 137
+
+
+state 136
+
+   30 conditional_statement: IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses ELSE LBRACE . function_body RBRACE
+
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    IDENTIFIER  shift, and go to state 11
+
+    IMPORT      [reduce using rule 55 (function_body)]
+    PRINT       [reduce using rule 55 (function_body)]
+    VAR         [reduce using rule 55 (function_body)]
+    RETURN      [reduce using rule 55 (function_body)]
+    FUNCTION    [reduce using rule 55 (function_body)]
+    IF          [reduce using rule 55 (function_body)]
+    FOR         [reduce using rule 55 (function_body)]
+    BREAK       [reduce using rule 55 (function_body)]
+    IDENTIFIER  [reduce using rule 55 (function_body)]
+    $default    reduce using rule 55 (function_body)
+
+    statement              go to state 110
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    function_body          go to state 138
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 137
+
+   32 else_if_clauses: else_if_clauses ELSE IF OPEN_PAREN . condition CLOSE_PAREN LBRACE function_body RBRACE
+
+    OPEN_PAREN      shift, and go to state 30
+    STRING_LITERAL  shift, and go to state 31
+    IDENTIFIER      shift, and go to state 32
+    NUMBER          shift, and go to state 33
+
+    condition   go to state 139
+    expression  go to state 59
+    term        go to state 35
+    factor      go to state 36
+
+
+state 138
+
+   30 conditional_statement: IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses ELSE LBRACE function_body . RBRACE
+   56 function_body: function_body . statement
+
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    RBRACE      shift, and go to state 140
+    IDENTIFIER  shift, and go to state 11
+
+    statement              go to state 123
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 139
+
+   32 else_if_clauses: else_if_clauses ELSE IF OPEN_PAREN condition . CLOSE_PAREN LBRACE function_body RBRACE
+
+    CLOSE_PAREN  shift, and go to state 141
+
+
+state 140
+
+   30 conditional_statement: IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses ELSE LBRACE function_body RBRACE .
+
+    $default  reduce using rule 30 (conditional_statement)
+
+
+state 141
+
+   32 else_if_clauses: else_if_clauses ELSE IF OPEN_PAREN condition CLOSE_PAREN . LBRACE function_body RBRACE
+
+    LBRACE  shift, and go to state 142
+
+
+state 142
+
+   32 else_if_clauses: else_if_clauses ELSE IF OPEN_PAREN condition CLOSE_PAREN LBRACE . function_body RBRACE
+
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    IDENTIFIER  shift, and go to state 11
+
+    IMPORT      [reduce using rule 55 (function_body)]
+    PRINT       [reduce using rule 55 (function_body)]
+    VAR         [reduce using rule 55 (function_body)]
+    RETURN      [reduce using rule 55 (function_body)]
+    FUNCTION    [reduce using rule 55 (function_body)]
+    IF          [reduce using rule 55 (function_body)]
+    FOR         [reduce using rule 55 (function_body)]
+    BREAK       [reduce using rule 55 (function_body)]
+    IDENTIFIER  [reduce using rule 55 (function_body)]
+    $default    reduce using rule 55 (function_body)
+
+    statement              go to state 110
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    function_body          go to state 143
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 143
+
+   32 else_if_clauses: else_if_clauses ELSE IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body . RBRACE
+   56 function_body: function_body . statement
+
+    IMPORT      shift, and go to state 3
+    PRINT       shift, and go to state 4
+    VAR         shift, and go to state 5
+    RETURN      shift, and go to state 6
+    FUNCTION    shift, and go to state 7
+    IF          shift, and go to state 8
+    FOR         shift, and go to state 9
+    BREAK       shift, and go to state 10
+    RBRACE      shift, and go to state 144
+    IDENTIFIER  shift, and go to state 11
+
+    statement              go to state 123
+    import_statement       go to state 13
+    print_statement        go to state 14
+    input_statement        go to state 15
+    var_declaration        go to state 16
+    assignment_statement   go to state 17
+    return_statement       go to state 18
+    conditional_statement  go to state 19
+    function_declaration   go to state 20
+    for_statement          go to state 21
+    increment_statement    go to state 22
+    decrement_statement    go to state 23
+    break_statement        go to state 24
+
+
+state 144
+
+   32 else_if_clauses: else_if_clauses ELSE IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE .
+
+    $default  reduce using rule 32 (else_if_clauses)

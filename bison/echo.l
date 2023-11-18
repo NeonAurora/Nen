@@ -18,7 +18,6 @@ int arrCount = 0;
 %%
 
 
-
 "import"     { return IMPORT; }
 "print"      { return PRINT; }
 "var"        { return VAR; }
@@ -28,24 +27,29 @@ int arrCount = 0;
 "if"         { return IF; }
 "else"       { return ELSE; }
 "while"      { return WHILE; }
+"for"        { return FOR;}
 "pre"        { return PRE; }
+"body"       { return BODY; }
 "post"       { return POST; }
 "always"     { return ALWAYS; }
-"int"        { return TYPE; }
-"float"      { return TYPE; }
-"char"       { return TYPE; }
-"double"     { return TYPE; }
-"string"     { return TYPE; }
-"{"          { return LBRACE; }  // Added LBRACE
-"}"          { return RBRACE; }  // Added RBRACE
+"int"        { yylval.str = strdup("int"); return TYPE; }
+"float"      { yylval.str = strdup("float"); return TYPE; }
+"char"       { yylval.str = strdup("char"); return TYPE; }
+"double"     { yylval.str = strdup("double"); return TYPE; }
+"string"     { yylval.str = strdup("string"); return TYPE; }
+"break"      { return BREAK; }
+"{"          { return LBRACE; }  
+"}"          { return RBRACE; } 
 "("          { return OPEN_PAREN; }
 ")"          { return CLOSE_PAREN; }
 "["          { return LBRACKET; }
 "]"          { return RBRACKET; }
 ";"          { return SEMICOLON; }
+":"          { return COLON; }
 ","          { return COMMA; }
 "'"          { return INVERTED_COMMA; }
 "\""         { return DOUBLE_QUOTE; }
+"="          { return EQUALS; }
 "<"          { return LESS_THAN; }
 "<="         { return LESS_THAN_EQUAL; }
 ">"          { return GREATER_THAN; }
@@ -57,6 +61,8 @@ int arrCount = 0;
 "*"          { return MULT; }
 "/"          { return DIV; }
 "%"          { return MOD; }
+"++"         { return INCREMENT; }
+"--"         { return DECREMENT; }
 "=>>"        { return INPUT_OP; }
 "//"         { return SINGLE_LINE_COMMENT_START; }
 "<<"         { return MULTI_LINE_COMMENT_START; }
@@ -65,7 +71,7 @@ int arrCount = 0;
 [0-9]+      { yylval.num = atoi(yytext); return NUMBER; }
 [a-zA-Z_][a-zA-Z_0-9]* {  yylval.str = strdup(yytext); return IDENTIFIER; }
 \"[^\"]*\" { yylval.str = strdup(yytext); return STRING_LITERAL; }
-[a-zA-Z0-9_\/\.\-]+ { yylval.str = strdup(yytext); return PATH; }
+[a-zA-Z0-9_\/\.]+ { yylval.str = strdup(yytext); return PATH; }
 
 %%
 
