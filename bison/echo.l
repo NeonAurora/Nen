@@ -69,7 +69,7 @@ int arrCount = 0;
 ">>"         { return MULTI_LINE_COMMENT_END; }
 "<-<-<>->->" { return END_PROGRAM; }
 [0-9]+      { yylval.num = atoi(yytext); return NUMBER; }
-[a-zA-Z_][a-zA-Z_0-9]* {  yylval.str = strdup(yytext); return IDENTIFIER; }
+[a-zA-Z_][a-zA-Z_0-9]* { yylval.str = strdup(yytext); return IDENTIFIER; }
 \"[^\"]*\" { yylval.str = strdup(yytext); return STRING_LITERAL; }
 [a-zA-Z0-9_\/\.]+ { yylval.str = strdup(yytext); return PATH; }
 

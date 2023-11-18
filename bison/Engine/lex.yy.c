@@ -998,7 +998,7 @@ YY_RULE_SETUP
 case 52:
 YY_RULE_SETUP
 #line 72 "echo.l"
-{  yylval.str = strdup(yytext); return IDENTIFIER; }
+{ yylval.str = strdup(yytext); return IDENTIFIER; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP

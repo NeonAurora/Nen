@@ -11,13 +11,22 @@ void yyerror(char *s);
     // Other types as needed
 }
 
+%right EQUALS
+%left OR_OP
+%left AND_OP
+%left EQUALS_EQUALS NOT_EQUAL
+%left LESS_THAN LESS_THAN_EQUAL GREATER_THAN GREATER_THAN_EQUAL
+%left PLUS MINUS
+%left MULT DIV MOD
+
 %token IMPORT PRINT VAR RETURN FUNCTION IF ELSE WHILE MAIN END_PROGRAM FOR PRE POST BODY ALWAYS BREAK
-%token INPUT_OP EQUALS LESS_THAN LESS_THAN_EQUAL GREATER_THAN GREATER_THAN_EQUAL EQUALS_EQUALS NOT_EQUAL
-%token PLUS MINUS MULT DIV MOD AND_OP OR_OP NOT_OP INCREMENT DECREMENT
+%token INPUT_OP
+%token NOT_OP INCREMENT DECREMENT
 %token OPEN_PAREN CLOSE_PAREN LBRACKET RBRACKET LBRACE RBRACE SEMICOLON COMMA INVERTED_COMMA DOUBLE_QUOTE COLON BODY_START BODY_END
 %token <str> STRING_LITERAL IDENTIFIER PATH TYPE
 %token <num> NUMBER
 %token SINGLE_LINE_COMMENT_START MULTI_LINE_COMMENT_START MULTI_LINE_COMMENT_END ARRAY_INIT
+
 
 
 
@@ -37,9 +46,11 @@ statement:
 	| return_statement
 	| conditional_statement
 	| for_statement
+	| while_statement
 	| break_statement
 	| increment_statement
 	| decrement_statement
+	| function_call_statement
     ;
 
 import_statement:
@@ -80,7 +91,7 @@ assignment_statement:
 
 return_statement:
     RETURN expression SEMICOLON {
-        printf("Return statement detected FROM BISON.\n");
+        printf("Return statement detected FROM BISON with <expression>\n");
     }
     ;
 
@@ -100,36 +111,36 @@ else_if_clauses:
     ;
 
 condition:
-    expression relational_op expression {
-        printf("Condition detected FROM BISON.\n");
-    }
-    ;
-
-relational_op:
-    LESS_THAN { printf("Less than operator\n"); }
-    | LESS_THAN_EQUAL { printf("Less than or equal operator\n"); }
-    | GREATER_THAN { printf("Greater than operator\n"); }
-    | GREATER_THAN_EQUAL { printf("Greater than or equal operator\n"); }
-    | EQUALS_EQUALS { printf("Equals operator\n"); }
-    | NOT_EQUAL { printf("Not equal operator\n"); }
+    expression EQUALS_EQUALS expression   
+    | expression NOT_EQUAL expression              
+    | expression LESS_THAN expression                
+    | expression LESS_THAN_EQUAL expression          
+    | expression GREATER_THAN expression              
+    | expression GREATER_THAN_EQUAL expression
 
 expression:
-    term
-    | expression PLUS term   { printf("Addition\n"); }
-    | expression MINUS term  { printf("Subtraction\n"); }
-    ;
-
-term:
-    factor
-    | term MULT factor   { printf("Multiplication\n"); }
-    | term DIV factor    { printf("Division\n"); }
-    ;
-
-factor:
-    NUMBER
+      NUMBER { printf("%d", $1); }
     | STRING_LITERAL
-	| IDENTIFIER
-    | OPEN_PAREN expression CLOSE_PAREN
+    | IDENTIFIER
+    | IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN  // Function call
+    | expression EQUALS expression    %prec EQUALS    // Assignment
+    | expression OR_OP expression                     // Logical OR
+    | expression AND_OP expression                    // Logical AND
+    | expression EQUALS_EQUALS expression             // Equality
+    | expression NOT_EQUAL expression                 // Inequality
+    | expression LESS_THAN expression                 // Less than
+    | expression LESS_THAN_EQUAL expression           // Less than or equal
+    | expression GREATER_THAN expression              // Greater than
+    | expression GREATER_THAN_EQUAL expression        // Greater than or equal
+    | expression PLUS expression                      // Addition
+    | expression MINUS expression                     // Subtraction
+    | expression MULT expression                      // Multiplication
+    | expression DIV expression                       // Division
+    | expression MOD expression                       // Modulus
+    | NOT_OP expression                               // Logical NOT
+    | OPEN_PAREN expression CLOSE_PAREN               // Parenthesized expression
+    | IDENTIFIER INCREMENT                            // Post-increment
+    | IDENTIFIER DECREMENT                            // Post-decrement
     ;
 
 function_declaration:
@@ -137,6 +148,9 @@ function_declaration:
         printf("Function %s with return type %s declared.\n", $2, $4);
         free($2); free($4);
     }
+	| MAIN FUNCTION COLON TYPE OPEN_PAREN CLOSE_PAREN LBRACE function_body RBRACE {
+		printf("Main Function detected \n");
+	}
     ;
 
 param_list:
@@ -151,6 +165,18 @@ param:
 function_body:
     | function_body statement
     | statement
+    ;
+
+function_call_statement:
+    IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN SEMICOLON {
+        printf("Function call detected FROM BISON: %s\n", $1);
+    }
+    ;
+
+argument_list:
+      /* empty */                                    // No arguments
+    | expression                                     // Single argument
+    | argument_list COMMA expression                 // Multiple arguments
     ;
 
 for_statement:
@@ -174,6 +200,39 @@ for_increment:
     IDENTIFIER EQUALS expression
     | IDENTIFIER INCREMENT
     | IDENTIFIER DECREMENT
+    | /* empty */
+    ;
+
+while_statement:
+    WHILE LESS_THAN condition GREATER_THAN LBRACE while_body RBRACE {
+        printf("While loop detected FROM BISON.\n");
+    }
+    ;
+
+while_body:
+    pre_block
+    body_block
+    post_block
+    always_block
+    ;
+
+pre_block:
+    | PRE LBRACE function_body RBRACE { printf("Pre block detected FROM BISON.\n"); }
+    | /* empty */
+    ;
+
+body_block:
+    | BODY LBRACE function_body RBRACE { printf("Body block detected FROM BISON.\n"); }
+    | /* empty */
+    ;
+
+post_block:
+    | POST LBRACE function_body RBRACE { printf("Post block detected FROM BISON.\n"); }
+    | /* empty */
+    ;
+
+always_block:
+    | ALWAYS LBRACE function_body RBRACE { printf("Always block detected FROM BISON.\n"); }
     | /* empty */
     ;
 

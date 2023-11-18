@@ -57,8 +57,28 @@ for(i = 109; i < 90; i++) {
 
 for(var i = 100;;) {
     print(i);
-    i--;
+    i++;
     if(i>50){
       break;
     }
+}
+
+while < i<x > {
+    pre {
+      a = a - 1;
+    }
+    body {
+      b = b+1;
+    }
+    post {
+      c = c + 1;
+    }
+    always {
+      f = f + 1;
+    }
+}
+
+main function : int(var i = 10,var j = 9){
+    i++;
+    name(name,size);
 }

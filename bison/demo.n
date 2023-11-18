@@ -87,8 +87,8 @@
     }
   }
 
-main function : int(){@
-
-@}
+main function : int(){
+    name(a,b,c);
+}
 
 <-<-<>->->
