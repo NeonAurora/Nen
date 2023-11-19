@@ -37,6 +37,8 @@ VarType determineType(const char* typeStr);
 VarValue getVarValue(const char* name);
 void printVarValue(const char* name);
 VarNode* findVarNode(const char* name);
+VarType mapIntToVarType(int typeInt);
+
 
 int variable_count = 0;
 int statement_count = 0;
@@ -232,9 +234,60 @@ value:
 
 assignment_statement:
     IDENTIFIER EQUALS expression SEMICOLON {
-        printf("Assignment detected FROM BISON: %s = <expression>\n", $1);
+        if (varExists($1)) {
+            VarNode* var = findVarNode($1);
+            if (var) {
+                switch (var->type) {
+                    case INT_TYPE:
+                        if ($3.type == INT_TYPE) {
+                            var->value.intValue = $3.value.intValue;
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-integer to integer variable '%s'.\n", var->name);
+                        }
+                        break;
+
+                    case FLOAT_TYPE:
+                        if ($3.type == FLOAT_TYPE) {
+                            var->value.floatValue = $3.value.floatValue;
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-float to float variable '%s'.\n", var->name);
+                        }
+                        break;
+
+                    case CHAR_TYPE:
+                        if ($3.type == CHAR_TYPE) {
+                            var->value.charValue = $3.value.charValue;
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-char to char variable '%s'.\n", var->name);
+                        }
+                        break;
+
+                    case DOUBLE_TYPE:
+                        if ($3.type == DOUBLE_TYPE) {
+                            var->value.doubleValue = $3.value.doubleValue;
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-double to double variable '%s'.\n", var->name);
+                        }
+                        break;
+
+                    case STRING_TYPE:
+                        if ($3.type == STRING_TYPE) {
+                            free(var->value.stringValue); // Free existing string
+                            var->value.stringValue = strdup($3.value.stringValue);
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-string to string variable '%s'.\n", var->name);
+                        }
+                        break;
+
+                    default:
+                        fprintf(stderr, "Unsupported variable type for variable '%s'.\n", var->name);
+                }
+            }
+        } else {
+            printf("Variable not declared: %s\n", $1);
+        }
     }
-    ;
+	;
 
 return_statement:
     RETURN expression SEMICOLON {
@@ -266,12 +319,58 @@ condition:
     | expression GREATER_THAN_EQUAL expression
 
 expression:
-      INTEGER { printf("%d", $1); }
-    | STRING_LITERAL
-	| CHAR_LITERAL
-	| FLOAT
-	| DOUBLE 
-    | IDENTIFIER
+     INTEGER { 
+		$$.value.intValue = $1;
+		$$.type = INT_TYPE;
+	}
+	| FLOAT {
+        $$.value.floatValue = $1; 
+        $$.type = FLOAT_TYPE;
+    }
+    | STRING_LITERAL {
+        $$.value.stringValue = strdup($1); 
+        $$.type = STRING_TYPE;
+    }
+    | CHAR_LITERAL {
+        $$.value.charValue = $1; 
+        $$.type = CHAR_TYPE;
+    }
+    | DOUBLE {
+        $$.value.doubleValue = $1; 
+        $$.type = DOUBLE_TYPE;
+    }
+    | IDENTIFIER {
+    	VarNode* var = findVarNode($1);
+    	if (var) {
+    	    switch(var->type) {
+    	        case INT_TYPE:
+    	            $$.value.intValue = var->value.intValue;
+    	            $$.type = INT_TYPE;
+    	            break;
+    	        case FLOAT_TYPE:
+    	            $$.value.floatValue = var->value.floatValue;
+    	            $$.type = FLOAT_TYPE;
+    	            break;
+    	        case CHAR_TYPE:
+    	            $$.value.charValue = var->value.charValue;
+    	            $$.type = CHAR_TYPE;
+    	            break;
+    	        case DOUBLE_TYPE:
+    	            $$.value.doubleValue = var->value.doubleValue;
+    	            $$.type = DOUBLE_TYPE;
+    	            break;
+    	        case STRING_TYPE:
+    	            $$.value.stringValue = strdup(var->value.stringValue);
+    	            $$.type = STRING_TYPE;
+    	            break;
+    	        default:
+    	            yyerror("Unsupported variable type");
+    	            break;
+    	    }
+    	} else {
+    	    yyerror("Undefined variable");
+    	}
+	}
     | IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN 
     | expression EQUALS expression    %prec EQUALS   
     | expression OR_OP expression                    
@@ -485,7 +584,16 @@ VarType determineType(const char* typeStr) {
     return INT_TYPE; // Default case, or you could handle error here
 }
 
-
+VarType mapIntToVarType(int typeInt) {
+    switch (typeInt) {
+        case 0: return INT_TYPE;
+        case 1: return FLOAT_TYPE;
+        case 2: return CHAR_TYPE;
+        case 3: return DOUBLE_TYPE;
+        case 4: return STRING_TYPE;
+        default: return INT_TYPE;
+    }
+}
 
 void yyerror(char *s) {
     fprintf(stderr, "error: %s\n", s);

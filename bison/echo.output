@@ -108,9 +108,9 @@ Grammar
    46          | expression GREATER_THAN_EQUAL expression
 
    47 expression: INTEGER
-   48           | STRING_LITERAL
-   49           | CHAR_LITERAL
-   50           | FLOAT
+   48           | FLOAT
+   49           | STRING_LITERAL
+   50           | CHAR_LITERAL
    51           | DOUBLE
    52           | IDENTIFIER
    53           | IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN
@@ -247,10 +247,10 @@ COLON (302) 26 27 28 72 73 77
 BODY_START (303)
 BODY_END (304)
 DOUBLE (305) 34 51
-FLOAT (306) 31 50
+FLOAT (306) 31 48
 INTEGER (307) 28 29 30 47
-CHAR_LITERAL (308) 33 49
-STRING_LITERAL (309) 19 21 32 48
+CHAR_LITERAL (308) 33 50
+STRING_LITERAL (309) 19 21 32 49
 IDENTIFIER (310) 20 21 25 26 27 28 29 35 52 53 70 71 72 77 81 87 91
     92 93 109 110
 PATH (311) 18
@@ -699,9 +699,9 @@ state 38
 
 state 39
 
-   50 expression: FLOAT .
+   48 expression: FLOAT .
 
-    $default  reduce using rule 50 (expression)
+    $default  reduce using rule 48 (expression)
 
 
 state 40
@@ -713,16 +713,16 @@ state 40
 
 state 41
 
-   49 expression: CHAR_LITERAL .
+   50 expression: CHAR_LITERAL .
 
-    $default  reduce using rule 49 (expression)
+    $default  reduce using rule 50 (expression)
 
 
 state 42
 
-   48 expression: STRING_LITERAL .
+   49 expression: STRING_LITERAL .
 
-    $default  reduce using rule 48 (expression)
+    $default  reduce using rule 49 (expression)
 
 
 state 43

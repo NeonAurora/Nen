@@ -108,6 +108,8 @@ VarType determineType(const char* typeStr);
 VarValue getVarValue(const char* name);
 void printVarValue(const char* name);
 VarNode* findVarNode(const char* name);
+VarType mapIntToVarType(int typeInt);
+
 
 int variable_count = 0;
 int statement_count = 0;
@@ -118,7 +120,7 @@ int array_count = 0;
 
 
 /* Line 189 of yacc.c  */
-#line 122 "echo.tab.c"
+#line 124 "echo.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -215,7 +217,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 49 "echo.y"
+#line 51 "echo.y"
 
     char *str;
     int num;
@@ -245,7 +247,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 249 "echo.tab.c"
+#line 251 "echo.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -257,7 +259,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 261 "echo.tab.c"
+#line 263 "echo.tab.c"
 
 #ifdef short
 # undef short
@@ -566,7 +568,7 @@ static const yytype_int8 yyrhs[] =
       41,    82,    42,    -1,    78,     7,    78,    -1,    78,     6,
       78,    -1,    78,    11,    78,    -1,    78,    10,    78,    -1,
       78,     9,    78,    -1,    78,     8,    78,    -1,    52,    -1,
-      54,    -1,    53,    -1,    51,    -1,    50,    -1,    55,    -1,
+      51,    -1,    54,    -1,    53,    -1,    50,    -1,    55,    -1,
       55,    37,    84,    38,    -1,    78,     3,    78,    -1,    78,
        4,    78,    -1,    78,     5,    78,    -1,    78,     7,    78,
       -1,    78,     6,    78,    -1,    78,    11,    78,    -1,    78,
@@ -594,18 +596,18 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   103,   103,   104,   105,   109,   110,   111,   112,   113,
-     114,   115,   116,   117,   118,   119,   120,   121,   122,   126,
-     130,   131,   135,   139,   143,   144,   148,   157,   166,   195,
-     204,   216,   219,   222,   225,   228,   234,   240,   246,   249,
-     254,   255,   261,   262,   263,   264,   265,   266,   269,   270,
-     271,   272,   273,   274,   275,   276,   277,   278,   279,   280,
-     281,   282,   283,   284,   285,   286,   287,   288,   289,   290,
-     291,   292,   293,   297,   301,   306,   307,   308,   312,   315,
-     316,   317,   321,   326,   328,   329,   333,   339,   340,   341,
-     345,   346,   350,   351,   352,   353,   357,   363,   369,   370,
-     371,   374,   375,   376,   379,   380,   381,   384,   385,   386,
-     390,   393,   396,   399
+       0,   105,   105,   106,   107,   111,   112,   113,   114,   115,
+     116,   117,   118,   119,   120,   121,   122,   123,   124,   128,
+     132,   133,   137,   141,   145,   146,   150,   159,   168,   197,
+     206,   218,   221,   224,   227,   230,   236,   293,   299,   302,
+     307,   308,   314,   315,   316,   317,   318,   319,   322,   326,
+     330,   334,   338,   342,   374,   375,   376,   377,   378,   379,
+     380,   381,   382,   383,   384,   385,   386,   387,   388,   389,
+     390,   391,   392,   396,   400,   405,   406,   407,   411,   414,
+     415,   416,   420,   425,   427,   428,   432,   438,   439,   440,
+     444,   445,   449,   450,   451,   452,   456,   462,   468,   469,
+     470,   473,   474,   475,   478,   479,   480,   483,   484,   485,
+     489,   492,   495,   498
 };
 #endif
 
@@ -695,8 +697,8 @@ static const yytype_uint8 yydefact[] =
        2,   113,     0,     4,     1,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     3,     5,     6,     7,
        8,     9,    11,    12,    10,    18,    13,    14,    16,    17,
-      15,    19,     0,    26,     0,    24,     0,     0,    52,    51,
-      48,    50,    49,    53,     0,     0,     0,     0,     0,     0,
+      15,    19,     0,    26,     0,    24,     0,     0,    52,    49,
+      48,    51,    50,    53,     0,     0,     0,     0,     0,     0,
      112,     0,     0,     0,     0,    83,     0,     0,     0,     0,
       23,     0,    69,     0,    71,    72,    83,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
@@ -1732,133 +1734,133 @@ yyreduce:
         case 5:
 
 /* Line 1455 of yacc.c  */
-#line 109 "echo.y"
+#line 111 "echo.y"
     { statement_count++; ;}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 110 "echo.y"
+#line 112 "echo.y"
     { statement_count++; ;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 111 "echo.y"
+#line 113 "echo.y"
     { statement_count++; ;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 112 "echo.y"
+#line 114 "echo.y"
     { statement_count++; ;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 113 "echo.y"
+#line 115 "echo.y"
     { statement_count++; ;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 114 "echo.y"
+#line 116 "echo.y"
     { statement_count++; ;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 115 "echo.y"
+#line 117 "echo.y"
     { statement_count++; ;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 116 "echo.y"
+#line 118 "echo.y"
     { statement_count++; ;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 117 "echo.y"
+#line 119 "echo.y"
     { statement_count++; ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 118 "echo.y"
+#line 120 "echo.y"
     { statement_count++; ;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 119 "echo.y"
+#line 121 "echo.y"
     { statement_count++; ;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 120 "echo.y"
+#line 122 "echo.y"
     { statement_count++; ;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 121 "echo.y"
+#line 123 "echo.y"
     { statement_count++; ;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 122 "echo.y"
+#line 124 "echo.y"
     { statement_count++; ;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 126 "echo.y"
+#line 128 "echo.y"
     { printf("Import detected FROM BISON with path: %s\n", (yyvsp[(2) - (2)].str)); ;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 130 "echo.y"
+#line 132 "echo.y"
     { printf("Print detected FROM BISON with message: %s\n", (yyvsp[(3) - (5)].str)); ;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 131 "echo.y"
+#line 133 "echo.y"
     { printf("Print detected FROM BISON with IDENTIFIER: %s\n", (yyvsp[(3) - (5)].str)); printVarValue((yyvsp[(3) - (5)].str)); ;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 135 "echo.y"
+#line 137 "echo.y"
     { printf("Input detected FROM BISON for variable %s with message: %s\n", (yyvsp[(1) - (6)].str), (yyvsp[(4) - (6)].str)); ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 148 "echo.y"
+#line 150 "echo.y"
     { 
         if (varExists((yyvsp[(1) - (1)].str))) {
             printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (1)].str));
@@ -1873,7 +1875,7 @@ yyreduce:
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 157 "echo.y"
+#line 159 "echo.y"
     { 
         if (varExists((yyvsp[(1) - (3)].str))) {
             printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (3)].str));
@@ -1888,7 +1890,7 @@ yyreduce:
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 166 "echo.y"
+#line 168 "echo.y"
     { 
         if (varExists((yyvsp[(1) - (5)].str))) {
             printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (5)].str));
@@ -1923,7 +1925,7 @@ yyreduce:
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 195 "echo.y"
+#line 197 "echo.y"
     { 
         if (varExists((yyvsp[(1) - (6)].str))) {
             printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (6)].str));
@@ -1938,7 +1940,7 @@ yyreduce:
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 204 "echo.y"
+#line 206 "echo.y"
     { 
         if (varExists((yyvsp[(1) - (3)].str))) {
             printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (3)].str));
@@ -1953,7 +1955,7 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 216 "echo.y"
+#line 218 "echo.y"
     { 
         (yyval.varValue).intValue = (yyvsp[(1) - (1)].num);
     ;}
@@ -1962,7 +1964,7 @@ yyreduce:
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 219 "echo.y"
+#line 221 "echo.y"
     {
         (yyval.varValue).floatValue = (yyvsp[(1) - (1)].floatValue);
     ;}
@@ -1971,7 +1973,7 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 222 "echo.y"
+#line 224 "echo.y"
     {
         (yyval.varValue).stringValue = (yyvsp[(1) - (1)].str);
     ;}
@@ -1980,7 +1982,7 @@ yyreduce:
   case 34:
 
 /* Line 1455 of yacc.c  */
-#line 225 "echo.y"
+#line 227 "echo.y"
     {
 		(yyval.varValue).charValue = (yyvsp[(1) - (1)].charValue);
 	;}
@@ -1989,7 +1991,7 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 228 "echo.y"
+#line 230 "echo.y"
     {
 		(yyval.varValue).doubleValue = (yyvsp[(1) - (1)].doubleValue);
 	;}
@@ -1998,16 +2000,67 @@ yyreduce:
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 234 "echo.y"
+#line 236 "echo.y"
     {
-        printf("Assignment detected FROM BISON: %s = <expression>\n", (yyvsp[(1) - (4)].str));
+        if (varExists((yyvsp[(1) - (4)].str))) {
+            VarNode* var = findVarNode((yyvsp[(1) - (4)].str));
+            if (var) {
+                switch (var->type) {
+                    case INT_TYPE:
+                        if ((yyvsp[(3) - (4)].exprValue).type == INT_TYPE) {
+                            var->value.intValue = (yyvsp[(3) - (4)].exprValue).value.intValue;
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-integer to integer variable '%s'.\n", var->name);
+                        }
+                        break;
+
+                    case FLOAT_TYPE:
+                        if ((yyvsp[(3) - (4)].exprValue).type == FLOAT_TYPE) {
+                            var->value.floatValue = (yyvsp[(3) - (4)].exprValue).value.floatValue;
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-float to float variable '%s'.\n", var->name);
+                        }
+                        break;
+
+                    case CHAR_TYPE:
+                        if ((yyvsp[(3) - (4)].exprValue).type == CHAR_TYPE) {
+                            var->value.charValue = (yyvsp[(3) - (4)].exprValue).value.charValue;
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-char to char variable '%s'.\n", var->name);
+                        }
+                        break;
+
+                    case DOUBLE_TYPE:
+                        if ((yyvsp[(3) - (4)].exprValue).type == DOUBLE_TYPE) {
+                            var->value.doubleValue = (yyvsp[(3) - (4)].exprValue).value.doubleValue;
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-double to double variable '%s'.\n", var->name);
+                        }
+                        break;
+
+                    case STRING_TYPE:
+                        if ((yyvsp[(3) - (4)].exprValue).type == STRING_TYPE) {
+                            free(var->value.stringValue); // Free existing string
+                            var->value.stringValue = strdup((yyvsp[(3) - (4)].exprValue).value.stringValue);
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-string to string variable '%s'.\n", var->name);
+                        }
+                        break;
+
+                    default:
+                        fprintf(stderr, "Unsupported variable type for variable '%s'.\n", var->name);
+                }
+            }
+        } else {
+            printf("Variable not declared: %s\n", (yyvsp[(1) - (4)].str));
+        }
     ;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 240 "echo.y"
+#line 293 "echo.y"
     {
         printf("Return statement detected FROM BISON with <expression>\n");
     ;}
@@ -2016,7 +2069,7 @@ yyreduce:
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 246 "echo.y"
+#line 299 "echo.y"
     {
         printf("If with Else-If(s) statement detected FROM BISON.\n");
     ;}
@@ -2025,7 +2078,7 @@ yyreduce:
   case 39:
 
 /* Line 1455 of yacc.c  */
-#line 249 "echo.y"
+#line 302 "echo.y"
     {
         printf("If with Else-If(s) and Else statement detected FROM BISON.\n");
     ;}
@@ -2034,7 +2087,7 @@ yyreduce:
   case 41:
 
 /* Line 1455 of yacc.c  */
-#line 255 "echo.y"
+#line 308 "echo.y"
     {
         printf("Else-If clause detected FROM BISON.\n");
     ;}
@@ -2043,14 +2096,95 @@ yyreduce:
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 269 "echo.y"
-    { printf("%d", (yyvsp[(1) - (1)].num)); ;}
+#line 322 "echo.y"
+    { 
+		(yyval.exprValue).value.intValue = (yyvsp[(1) - (1)].num);
+		(yyval.exprValue).type = INT_TYPE;
+	;}
+    break;
+
+  case 49:
+
+/* Line 1455 of yacc.c  */
+#line 326 "echo.y"
+    {
+        (yyval.exprValue).value.floatValue = (yyvsp[(1) - (1)].floatValue); 
+        (yyval.exprValue).type = FLOAT_TYPE;
+    ;}
+    break;
+
+  case 50:
+
+/* Line 1455 of yacc.c  */
+#line 330 "echo.y"
+    {
+        (yyval.exprValue).value.stringValue = strdup((yyvsp[(1) - (1)].str)); 
+        (yyval.exprValue).type = STRING_TYPE;
+    ;}
+    break;
+
+  case 51:
+
+/* Line 1455 of yacc.c  */
+#line 334 "echo.y"
+    {
+        (yyval.exprValue).value.charValue = (yyvsp[(1) - (1)].charValue); 
+        (yyval.exprValue).type = CHAR_TYPE;
+    ;}
+    break;
+
+  case 52:
+
+/* Line 1455 of yacc.c  */
+#line 338 "echo.y"
+    {
+        (yyval.exprValue).value.doubleValue = (yyvsp[(1) - (1)].doubleValue); 
+        (yyval.exprValue).type = DOUBLE_TYPE;
+    ;}
+    break;
+
+  case 53:
+
+/* Line 1455 of yacc.c  */
+#line 342 "echo.y"
+    {
+    	VarNode* var = findVarNode((yyvsp[(1) - (1)].str));
+    	if (var) {
+    	    switch(var->type) {
+    	        case INT_TYPE:
+    	            (yyval.exprValue).value.intValue = var->value.intValue;
+    	            (yyval.exprValue).type = INT_TYPE;
+    	            break;
+    	        case FLOAT_TYPE:
+    	            (yyval.exprValue).value.floatValue = var->value.floatValue;
+    	            (yyval.exprValue).type = FLOAT_TYPE;
+    	            break;
+    	        case CHAR_TYPE:
+    	            (yyval.exprValue).value.charValue = var->value.charValue;
+    	            (yyval.exprValue).type = CHAR_TYPE;
+    	            break;
+    	        case DOUBLE_TYPE:
+    	            (yyval.exprValue).value.doubleValue = var->value.doubleValue;
+    	            (yyval.exprValue).type = DOUBLE_TYPE;
+    	            break;
+    	        case STRING_TYPE:
+    	            (yyval.exprValue).value.stringValue = strdup(var->value.stringValue);
+    	            (yyval.exprValue).type = STRING_TYPE;
+    	            break;
+    	        default:
+    	            yyerror("Unsupported variable type");
+    	            break;
+    	    }
+    	} else {
+    	    yyerror("Undefined variable");
+    	}
+	;}
     break;
 
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 297 "echo.y"
+#line 396 "echo.y"
     {
         printf("Function %s with return type %s declared.\n", (yyvsp[(2) - (10)].str), (yyvsp[(4) - (10)].str));
         free((yyvsp[(2) - (10)].str)); free((yyvsp[(4) - (10)].str)); function_count++;
@@ -2060,7 +2194,7 @@ yyreduce:
   case 74:
 
 /* Line 1455 of yacc.c  */
-#line 301 "echo.y"
+#line 400 "echo.y"
     {
 		printf("Main Function detected \n"); function_count++;
 	;}
@@ -2069,14 +2203,14 @@ yyreduce:
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 312 "echo.y"
+#line 411 "echo.y"
     { printf("Parameter: %s, Type: %s\n", (yyvsp[(1) - (3)].str), (yyvsp[(3) - (3)].str)); free((yyvsp[(1) - (3)].str)); free((yyvsp[(3) - (3)].str)); ;}
     break;
 
   case 82:
 
 /* Line 1455 of yacc.c  */
-#line 321 "echo.y"
+#line 420 "echo.y"
     {
         printf("Function call detected FROM BISON: %s\n", (yyvsp[(1) - (5)].str));
     ;}
@@ -2085,7 +2219,7 @@ yyreduce:
   case 86:
 
 /* Line 1455 of yacc.c  */
-#line 333 "echo.y"
+#line 432 "echo.y"
     {
         printf("For loop detected FROM BISON.\n");
     ;}
@@ -2094,7 +2228,7 @@ yyreduce:
   case 96:
 
 /* Line 1455 of yacc.c  */
-#line 357 "echo.y"
+#line 456 "echo.y"
     {
         printf("While loop detected FROM BISON.\n");
     ;}
@@ -2103,63 +2237,63 @@ yyreduce:
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 370 "echo.y"
+#line 469 "echo.y"
     { printf("Pre block detected FROM BISON.\n"); ;}
     break;
 
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 375 "echo.y"
+#line 474 "echo.y"
     { printf("Body block detected FROM BISON.\n"); ;}
     break;
 
   case 105:
 
 /* Line 1455 of yacc.c  */
-#line 380 "echo.y"
+#line 479 "echo.y"
     { printf("Post block detected FROM BISON.\n"); ;}
     break;
 
   case 108:
 
 /* Line 1455 of yacc.c  */
-#line 385 "echo.y"
+#line 484 "echo.y"
     { printf("Always block detected FROM BISON.\n"); ;}
     break;
 
   case 110:
 
 /* Line 1455 of yacc.c  */
-#line 390 "echo.y"
+#line 489 "echo.y"
     { printf("Increment detected FROM BISON: %s++\n", (yyvsp[(1) - (3)].str)); ;}
     break;
 
   case 111:
 
 /* Line 1455 of yacc.c  */
-#line 393 "echo.y"
+#line 492 "echo.y"
     { printf("Decrement detected FROM BISON: %s--\n", (yyvsp[(1) - (3)].str)); ;}
     break;
 
   case 112:
 
 /* Line 1455 of yacc.c  */
-#line 396 "echo.y"
+#line 495 "echo.y"
     { printf("Break Statement Detected. \n"); ;}
     break;
 
   case 113:
 
 /* Line 1455 of yacc.c  */
-#line 399 "echo.y"
+#line 498 "echo.y"
     { printf("program terminates here"); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2163 "echo.tab.c"
+#line 2297 "echo.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2371,7 +2505,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 401 "echo.y"
+#line 500 "echo.y"
 
 
 void addVar(const char* name, VarValue value, VarType type) {
@@ -2459,7 +2593,16 @@ VarType determineType(const char* typeStr) {
     return INT_TYPE; // Default case, or you could handle error here
 }
 
-
+VarType mapIntToVarType(int typeInt) {
+    switch (typeInt) {
+        case 0: return INT_TYPE;
+        case 1: return FLOAT_TYPE;
+        case 2: return CHAR_TYPE;
+        case 3: return DOUBLE_TYPE;
+        case 4: return STRING_TYPE;
+        default: return INT_TYPE;
+    }
+}
 
 void yyerror(char *s) {
     fprintf(stderr, "error: %s\n", s);
