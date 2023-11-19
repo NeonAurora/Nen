@@ -105,11 +105,11 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 28 "echo.y"
+#line 41 "echo.y"
 
     char *str;
     int num;
-    // Other types as needed
+	VarValue varValue;
 
 
 

@@ -7,29 +7,44 @@ extern int yylex();
 void yyerror(char *s);
 
 
+typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, DOUBLE_TYPE, STRING_TYPE } VarType;
+
+typedef union {
+    int intValue;
+    float floatValue;
+    char charValue;
+    double doubleValue;
+    char* stringValue;
+} VarValue;
+
 typedef struct VarNode {
     char* name;
+    VarValue value;
+    VarType type;
     struct VarNode* next;
 } VarNode;
 
 VarNode* varList = NULL;
 
-
 int varExists(const char* name); // Function prototype
-void addVar(const char* name);   // Function prototype
+void addVar(const char* name, VarValue value, VarType type);   // Function prototype
+VarType determineType(const char* typeStr);
 
 int variable_count = 0;
 int statement_count = 0;
 int function_count = 0;
 int array_count = 0;
 
+
 %}
 
 %union {
     char *str;
     int num;
-    // Other types as needed
+	VarValue varValue;
 }
+
+%type <varValue> value
 
 %right EQUALS
 %left OR_OP
@@ -100,7 +115,6 @@ var_decl:
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
-            addVar($1);
             printf("Variable declaration detected FROM BISON: %s\n", $1); 
             variable_count++; 
         }
@@ -110,27 +124,26 @@ var_decl:
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
-            addVar($1);
             printf("Variable declaration detected FROM BISON, Type: %s\n", $3); free($3);
             variable_count++; 
         }
         free($1);
     }
-    | IDENTIFIER COLON TYPE EQUALS NUMBER { 
-        if (varExists($1)) {
-            printf("Variable collision detected for variable: %s\n", $1);
-        } else {
-            addVar($1);
-            printf("Variable declaration detected FROM BISON, Type: %s Value: %d\n", $3, $5); 
-            variable_count++; 
-        }
-        free($1);
+    | IDENTIFIER COLON TYPE EQUALS value { 
+    if (varExists($1)) {
+        printf("Variable collision detected for variable: %s\n", $1);
+    } else {
+        VarValue val = $5; // Assuming $5 is of type VarValue
+        addVar($1, val, determineType($3)); // determineType is a function you need to write
+        printf("Variable declaration with type and value: %s\n", $1); 
+        variable_count++;
     }
+    free($1);
+	}
     | IDENTIFIER COLON TYPE LBRACKET NUMBER RBRACKET { 
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
-            addVar($1);
             printf("Array declaration detected FROM BISON: %s of type %s with size %d\n", $1, $3, $5); free($3); 
             variable_count++; 
         }
@@ -140,12 +153,18 @@ var_decl:
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
-            addVar($1);
             printf("Variable assignment detected FROM BISON: %s = %d\n", $1, $3); 
             variable_count++; 
         }
         free($1);
     }
+    ;
+
+value:
+    NUMBER { 
+        $$ = (VarValue) { .intValue = $1 };  // Assumes NUMBER is an int
+    }
+    // ... other value types
     ;
 
 assignment_statement:
@@ -312,23 +331,34 @@ break_statement:
 
 %%
 
+void addVar(const char* name, VarValue value, VarType type) {
+    VarNode* newNode = (VarNode*) malloc(sizeof(VarNode));
+    newNode->name = strdup(name);
+    newNode->value = value;
+    newNode->type = type;
+    newNode->next = varList;
+    varList = newNode;
+}
+
 int varExists(const char* name) {
     VarNode* current = varList;
     while (current != NULL) {
         if (strcmp(current->name, name) == 0) {
-            return 1;  // Variable exists
+            return 1;
         }
         current = current->next;
     }
-    return 0;  // Variable does not exist
+    return 0;
 }
 
-void addVar(const char* name) {
-    VarNode* newNode = (VarNode*) malloc(sizeof(VarNode));
-    newNode->name = strdup(name);
-    newNode->next = varList;
-    varList = newNode;
+VarType determineType(const char* typeStr) {
+    if (strcmp(typeStr, "int") == 0) return INT_TYPE;
+    if (strcmp(typeStr, "float") == 0) return FLOAT_TYPE;
+    // ... other type cases
+    return INT_TYPE; // Default case, or you could handle error here
 }
+
+
 
 void yyerror(char *s) {
     fprintf(stderr, "error: %s\n", s);
