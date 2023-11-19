@@ -109,12 +109,11 @@ typedef union YYSTYPE
 
     char *str;
     int num;
-	MyValue varValue;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 118 "echo.tab.h"
+#line 117 "echo.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

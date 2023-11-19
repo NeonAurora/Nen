@@ -41,11 +41,7 @@ int array_count = 0;
 %union {
     char *str;
     int num;
-	
-	MyValue varValue;
 }
-
-%type <varValue> value
 
 %right EQUALS
 %left OR_OP
@@ -130,12 +126,10 @@ var_decl:
         }
         free($1);
     }
-    | IDENTIFIER COLON TYPE EQUALS value { 
+    | IDENTIFIER COLON TYPE EQUALS NUMBER { 
     if (varExists($1)) {
         printf("Variable collision detected for variable: %s\n", $1);
     } else {
-        MyValue val = $5; // Assuming $5 is of type MyValue
-        addVar($1, val, determineType($3)); // determineType is a function you need to write
         printf("Variable declaration with type and value: %s\n", $1); 
         variable_count++;
     }
@@ -159,13 +153,6 @@ var_decl:
         }
         free($1);
     }
-    ;
-
-value:
-    NUMBER { 
-        $$ = (MyValue) { .intValue = $1 };  // Assumes NUMBER is an int
-    }
-    // ... other value types
     ;
 
 assignment_statement:
@@ -350,13 +337,6 @@ int varExists(const char* name) {
         current = current->next;
     }
     return 0;
-}
-
-VarType determineType(const char* typeStr) {
-    if (strcmp(typeStr, "int") == 0) return INT_TYPE;
-    if (strcmp(typeStr, "float") == 0) return FLOAT_TYPE;
-    // ... other type cases
-    return INT_TYPE; // Default case, or you could handle error here
 }
 
 

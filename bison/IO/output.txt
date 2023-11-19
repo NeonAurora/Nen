@@ -1,0 +1,10 @@
+Starting the parser.
+   Variable assignment detected FROM BISON: a = 2
+
+   Variable assignment detected FROM BISON: a = 3
+
+Counts:
+Variables: 2
+Statements: 2
+Functions: 0
+Arrays: 0
