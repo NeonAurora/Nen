@@ -71,13 +71,33 @@
 #line 1 "echo.y"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h> 
 
 extern int yylex();
 void yyerror(char *s);
 
 
+typedef struct VarNode {
+    char* name;
+    struct VarNode* next;
+} VarNode;
+
+VarNode* varList = NULL;
+
+
+int varExists(const char* name); // Function prototype
+void addVar(const char* name);   // Function prototype
+
+int variable_count = 0;
+int statement_count = 0;
+int function_count = 0;
+int array_count = 0;
+
+
+
 /* Line 189 of yacc.c  */
-#line 81 "echo.tab.c"
+#line 101 "echo.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -170,7 +190,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 8 "echo.y"
+#line 28 "echo.y"
 
     char *str;
     int num;
@@ -179,7 +199,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 183 "echo.tab.c"
+#line 203 "echo.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -191,7 +211,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 195 "echo.tab.c"
+#line 215 "echo.tab.c"
 
 #ifdef short
 # undef short
@@ -523,19 +543,19 @@ static const yytype_int8 yyrhs[] =
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_uint16 yyrline[] =
 {
-       0,    34,    34,    35,    39,    40,    41,    42,    43,    44,
-      45,    46,    47,    48,    49,    50,    51,    52,    56,    60,
-      61,    65,    69,    73,    74,    78,    79,    80,    81,    82,
-      86,    92,    98,   101,   106,   107,   113,   114,   115,   116,
-     117,   118,   121,   122,   123,   124,   125,   126,   127,   128,
-     129,   130,   131,   132,   133,   134,   135,   136,   137,   138,
-     139,   140,   141,   142,   146,   150,   155,   156,   157,   161,
-     164,   165,   166,   170,   175,   177,   178,   182,   188,   189,
-     190,   194,   195,   199,   200,   201,   202,   206,   212,   218,
-     219,   220,   223,   224,   225,   228,   229,   230,   233,   234,
-     235,   239,   242,   245
+       0,    55,    55,    56,    60,    61,    62,    63,    64,    65,
+      66,    67,    68,    69,    70,    71,    72,    73,    77,    81,
+      82,    86,    90,    94,    95,    99,   109,   119,   129,   139,
+     152,   158,   164,   167,   172,   173,   179,   180,   181,   182,
+     183,   184,   187,   188,   189,   190,   191,   192,   193,   194,
+     195,   196,   197,   198,   199,   200,   201,   202,   203,   204,
+     205,   206,   207,   208,   212,   216,   221,   222,   223,   227,
+     230,   231,   232,   236,   241,   243,   244,   248,   254,   255,
+     256,   260,   261,   265,   266,   267,   268,   272,   278,   284,
+     285,   286,   289,   290,   291,   294,   295,   296,   299,   300,
+     301,   305,   308,   311
 };
 #endif
 
@@ -1656,73 +1676,216 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 18:
+        case 4:
 
 /* Line 1455 of yacc.c  */
-#line 56 "echo.y"
+#line 60 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 5:
+
+/* Line 1455 of yacc.c  */
+#line 61 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 6:
+
+/* Line 1455 of yacc.c  */
+#line 62 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 7:
+
+/* Line 1455 of yacc.c  */
+#line 63 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 8:
+
+/* Line 1455 of yacc.c  */
+#line 64 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 9:
+
+/* Line 1455 of yacc.c  */
+#line 65 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 10:
+
+/* Line 1455 of yacc.c  */
+#line 66 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 11:
+
+/* Line 1455 of yacc.c  */
+#line 67 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 12:
+
+/* Line 1455 of yacc.c  */
+#line 68 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 13:
+
+/* Line 1455 of yacc.c  */
+#line 69 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 14:
+
+/* Line 1455 of yacc.c  */
+#line 70 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 15:
+
+/* Line 1455 of yacc.c  */
+#line 71 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 16:
+
+/* Line 1455 of yacc.c  */
+#line 72 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 17:
+
+/* Line 1455 of yacc.c  */
+#line 73 "echo.y"
+    { statement_count++; ;}
+    break;
+
+  case 18:
+
+/* Line 1455 of yacc.c  */
+#line 77 "echo.y"
     { printf("Import detected FROM BISON with path: %s\n", (yyvsp[(2) - (2)].str)); ;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 60 "echo.y"
+#line 81 "echo.y"
     { printf("Print detected FROM BISON with message: %s\n", (yyvsp[(3) - (5)].str)); ;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 61 "echo.y"
+#line 82 "echo.y"
     { printf("Print detected FROM BISON with IDENTIFIER: %s\n", (yyvsp[(3) - (5)].str)); ;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 65 "echo.y"
+#line 86 "echo.y"
     { printf("Input detected FROM BISON for variable %s with message: %s\n", (yyvsp[(1) - (6)].str), (yyvsp[(4) - (6)].str)); ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 78 "echo.y"
-    { printf("Variable declaration detected FROM BISON: %s\n", (yyvsp[(1) - (1)].str)); ;}
+#line 99 "echo.y"
+    { 
+        if (varExists((yyvsp[(1) - (1)].str))) {
+            printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (1)].str));
+        } else {
+            addVar((yyvsp[(1) - (1)].str));
+            printf("Variable declaration detected FROM BISON: %s\n", (yyvsp[(1) - (1)].str)); 
+            variable_count++; 
+        }
+        free((yyvsp[(1) - (1)].str));
+    ;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 79 "echo.y"
-    { printf("Variable declaration detected FROM BISON, Type: %s\n", (yyvsp[(3) - (3)].str)); free((yyvsp[(3) - (3)].str)); ;}
+#line 109 "echo.y"
+    { 
+        if (varExists((yyvsp[(1) - (3)].str))) {
+            printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (3)].str));
+        } else {
+            addVar((yyvsp[(1) - (3)].str));
+            printf("Variable declaration detected FROM BISON, Type: %s\n", (yyvsp[(3) - (3)].str)); free((yyvsp[(3) - (3)].str));
+            variable_count++; 
+        }
+        free((yyvsp[(1) - (3)].str));
+    ;}
     break;
 
   case 27:
 
 /* Line 1455 of yacc.c  */
-#line 80 "echo.y"
-    { printf("Variable declaration detected FROM BISON, Type: %s Value: %d\n", (yyvsp[(3) - (5)].str), (yyvsp[(5) - (5)].num)); free((yyvsp[(3) - (5)].str)); ;}
+#line 119 "echo.y"
+    { 
+        if (varExists((yyvsp[(1) - (5)].str))) {
+            printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (5)].str));
+        } else {
+            addVar((yyvsp[(1) - (5)].str));
+            printf("Variable declaration detected FROM BISON, Type: %s Value: %d\n", (yyvsp[(3) - (5)].str), (yyvsp[(5) - (5)].num)); 
+            variable_count++; 
+        }
+        free((yyvsp[(1) - (5)].str));
+    ;}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 81 "echo.y"
-    { printf("Array declaration detected FROM BISON: %s of type %s with size %d\n", (yyvsp[(1) - (6)].str), (yyvsp[(3) - (6)].str), (yyvsp[(5) - (6)].num)); free((yyvsp[(3) - (6)].str)); ;}
+#line 129 "echo.y"
+    { 
+        if (varExists((yyvsp[(1) - (6)].str))) {
+            printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (6)].str));
+        } else {
+            addVar((yyvsp[(1) - (6)].str));
+            printf("Array declaration detected FROM BISON: %s of type %s with size %d\n", (yyvsp[(1) - (6)].str), (yyvsp[(3) - (6)].str), (yyvsp[(5) - (6)].num)); free((yyvsp[(3) - (6)].str)); 
+            variable_count++; 
+        }
+        free((yyvsp[(1) - (6)].str));
+    ;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 82 "echo.y"
-    { printf("Variable assignment detected FROM BISON: %s = %d\n", (yyvsp[(1) - (3)].str), (yyvsp[(3) - (3)].num)); ;}
+#line 139 "echo.y"
+    { 
+        if (varExists((yyvsp[(1) - (3)].str))) {
+            printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (3)].str));
+        } else {
+            addVar((yyvsp[(1) - (3)].str));
+            printf("Variable assignment detected FROM BISON: %s = %d\n", (yyvsp[(1) - (3)].str), (yyvsp[(3) - (3)].num)); 
+            variable_count++; 
+        }
+        free((yyvsp[(1) - (3)].str));
+    ;}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 86 "echo.y"
+#line 152 "echo.y"
     {
         printf("Assignment detected FROM BISON: %s = <expression>\n", (yyvsp[(1) - (4)].str));
     ;}
@@ -1731,7 +1894,7 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 92 "echo.y"
+#line 158 "echo.y"
     {
         printf("Return statement detected FROM BISON with <expression>\n");
     ;}
@@ -1740,7 +1903,7 @@ yyreduce:
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 98 "echo.y"
+#line 164 "echo.y"
     {
         printf("If with Else-If(s) statement detected FROM BISON.\n");
     ;}
@@ -1749,7 +1912,7 @@ yyreduce:
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 101 "echo.y"
+#line 167 "echo.y"
     {
         printf("If with Else-If(s) and Else statement detected FROM BISON.\n");
     ;}
@@ -1758,7 +1921,7 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 107 "echo.y"
+#line 173 "echo.y"
     {
         printf("Else-If clause detected FROM BISON.\n");
     ;}
@@ -1767,40 +1930,40 @@ yyreduce:
   case 42:
 
 /* Line 1455 of yacc.c  */
-#line 121 "echo.y"
+#line 187 "echo.y"
     { printf("%d", (yyvsp[(1) - (1)].num)); ;}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 146 "echo.y"
+#line 212 "echo.y"
     {
         printf("Function %s with return type %s declared.\n", (yyvsp[(2) - (10)].str), (yyvsp[(4) - (10)].str));
-        free((yyvsp[(2) - (10)].str)); free((yyvsp[(4) - (10)].str));
+        free((yyvsp[(2) - (10)].str)); free((yyvsp[(4) - (10)].str)); function_count++;
     ;}
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 150 "echo.y"
+#line 216 "echo.y"
     {
-		printf("Main Function detected \n");
+		printf("Main Function detected \n"); function_count++;
 	;}
     break;
 
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 161 "echo.y"
+#line 227 "echo.y"
     { printf("Parameter: %s, Type: %s\n", (yyvsp[(1) - (3)].str), (yyvsp[(3) - (3)].str)); free((yyvsp[(1) - (3)].str)); free((yyvsp[(3) - (3)].str)); ;}
     break;
 
   case 73:
 
 /* Line 1455 of yacc.c  */
-#line 170 "echo.y"
+#line 236 "echo.y"
     {
         printf("Function call detected FROM BISON: %s\n", (yyvsp[(1) - (5)].str));
     ;}
@@ -1809,7 +1972,7 @@ yyreduce:
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 182 "echo.y"
+#line 248 "echo.y"
     {
         printf("For loop detected FROM BISON.\n");
     ;}
@@ -1818,7 +1981,7 @@ yyreduce:
   case 87:
 
 /* Line 1455 of yacc.c  */
-#line 206 "echo.y"
+#line 272 "echo.y"
     {
         printf("While loop detected FROM BISON.\n");
     ;}
@@ -1827,56 +1990,56 @@ yyreduce:
   case 90:
 
 /* Line 1455 of yacc.c  */
-#line 219 "echo.y"
+#line 285 "echo.y"
     { printf("Pre block detected FROM BISON.\n"); ;}
     break;
 
   case 93:
 
 /* Line 1455 of yacc.c  */
-#line 224 "echo.y"
+#line 290 "echo.y"
     { printf("Body block detected FROM BISON.\n"); ;}
     break;
 
   case 96:
 
 /* Line 1455 of yacc.c  */
-#line 229 "echo.y"
+#line 295 "echo.y"
     { printf("Post block detected FROM BISON.\n"); ;}
     break;
 
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 234 "echo.y"
+#line 300 "echo.y"
     { printf("Always block detected FROM BISON.\n"); ;}
     break;
 
   case 101:
 
 /* Line 1455 of yacc.c  */
-#line 239 "echo.y"
+#line 305 "echo.y"
     { printf("Increment detected FROM BISON: %s++\n", (yyvsp[(1) - (3)].str)); ;}
     break;
 
   case 102:
 
 /* Line 1455 of yacc.c  */
-#line 242 "echo.y"
+#line 308 "echo.y"
     { printf("Decrement detected FROM BISON: %s--\n", (yyvsp[(1) - (3)].str)); ;}
     break;
 
   case 103:
 
 /* Line 1455 of yacc.c  */
-#line 245 "echo.y"
+#line 311 "echo.y"
     { printf("Break Statement Detected. \n"); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1880 "echo.tab.c"
+#line 2043 "echo.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2088,18 +2251,50 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 247 "echo.y"
+#line 313 "echo.y"
 
 
+int varExists(const char* name) {
+    VarNode* current = varList;
+    while (current != NULL) {
+        if (strcmp(current->name, name) == 0) {
+            return 1;  // Variable exists
+        }
+        current = current->next;
+    }
+    return 0;  // Variable does not exist
+}
 
+void addVar(const char* name) {
+    VarNode* newNode = (VarNode*) malloc(sizeof(VarNode));
+    newNode->name = strdup(name);
+    newNode->next = varList;
+    varList = newNode;
+}
 
 void yyerror(char *s) {
     fprintf(stderr, "error: %s\n", s);
 }
 
+void freeVarList() {
+    VarNode* current = varList;
+    while (current != NULL) {
+        VarNode* temp = current;
+        current = current->next;
+        free(temp->name);
+        free(temp);
+    }
+}
+
 int main() {
     printf("Starting the parser.\n");
     yyparse();
+	printf("\nCounts:\n");
+    printf("Variables: %d\n", variable_count);
+    printf("Statements: %d\n", statement_count);
+    printf("Functions: %d\n", function_count);
+    printf("Arrays: %d\n", array_count);
+	freeVarList();
     return 0;
 }
 

@@ -21,10 +21,10 @@ Print detected FROM BISON with message: "HELLO world"
 
    Array declaration detected FROM BISON: myArray of type int with size 10
 
- Variable declaration detected FROM BISON, Type: int Value: 10
- Variable declaration detected FROM BISON, Type: float Value: 20
- Variable declaration detected FROM BISON, Type: double Value: 30
- Array declaration detected FROM BISON: myArray of type int with size 10
+ Variable collision detected for variable: x
+ Variable collision detected for variable: y
+ Variable collision detected for variable: z
+ Variable collision detected for variable: myArray
 
     Assignment detected FROM BISON: time = <expression>
 
@@ -147,3 +147,9 @@ While loop detected FROM BISON.
     Function call detected FROM BISON: name
 
 Main Function detected 
+
+Counts:
+Variables: 9
+Statements: 50
+Functions: 2
+Arrays: 0

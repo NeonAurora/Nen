@@ -1,8 +1,29 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h> 
 
 extern int yylex();
 void yyerror(char *s);
+
+
+typedef struct VarNode {
+    char* name;
+	int value;
+    struct VarNode* next;
+} VarNode;
+
+VarNode* varList = NULL;
+
+
+int varExists(const char* name); // Function prototype
+void addVar(const char* name);   // Function prototype
+
+int variable_count = 0;
+int statement_count = 0;
+int function_count = 0;
+int array_count = 0;
+
 %}
 
 %union {
@@ -37,20 +58,20 @@ program:
     ;
 
 statement:
-    import_statement
-    | print_statement
-    | input_statement
-    | var_declaration
-    | assignment_statement
-	| function_declaration
-	| return_statement
-	| conditional_statement
-	| for_statement
-	| while_statement
-	| break_statement
-	| increment_statement
-	| decrement_statement
-	| function_call_statement
+    import_statement { statement_count++; }
+    | print_statement { statement_count++; }
+    | input_statement { statement_count++; }
+    | var_declaration { statement_count++; }
+    | assignment_statement { statement_count++; }
+	| function_declaration { statement_count++; }
+	| return_statement { statement_count++; }
+	| conditional_statement { statement_count++; }
+	| for_statement { statement_count++; }
+	| while_statement { statement_count++; }
+	| break_statement { statement_count++; }
+	| increment_statement { statement_count++; }
+	| decrement_statement { statement_count++; }
+	| function_call_statement { statement_count++; }
     ;
 
 import_statement:
@@ -76,11 +97,56 @@ var_declaration_list:
     ;
 
 var_decl:
-    IDENTIFIER { printf("Variable declaration detected FROM BISON: %s\n", $1); }
-    | IDENTIFIER COLON TYPE { printf("Variable declaration detected FROM BISON, Type: %s\n", $3); free($3); }
-    | IDENTIFIER COLON TYPE EQUALS NUMBER { printf("Variable declaration detected FROM BISON, Type: %s Value: %d\n", $3, $5); free($3); }
-    | IDENTIFIER COLON TYPE LBRACKET NUMBER RBRACKET { printf("Array declaration detected FROM BISON: %s of type %s with size %d\n", $1, $3, $5); free($3); }
-    | IDENTIFIER EQUALS NUMBER { printf("Variable assignment detected FROM BISON: %s = %d\n", $1, $3); }
+    IDENTIFIER { 
+        if (varExists($1)) {
+            printf("Variable collision detected for variable: %s\n", $1);
+        } else {
+            addVar($1);
+            printf("Variable declaration detected FROM BISON: %s\n", $1); 
+            variable_count++; 
+        }
+        free($1);
+    }
+    | IDENTIFIER COLON TYPE { 
+        if (varExists($1)) {
+            printf("Variable collision detected for variable: %s\n", $1);
+        } else {
+            addVar($1);
+            printf("Variable declaration detected FROM BISON, Type: %s\n", $3); free($3);
+            variable_count++; 
+        }
+        free($1);
+    }
+    | IDENTIFIER COLON TYPE EQUALS NUMBER { 
+        if (varExists($1)) {
+            printf("Variable collision detected for variable: %s\n", $1);
+        } else {
+            addVar($1);
+            printf("Variable declaration detected FROM BISON, Type: %s Value: %d\n", $3, $5); 
+            variable_count++; 
+        }
+        free($1);
+    }
+    | IDENTIFIER COLON TYPE LBRACKET NUMBER RBRACKET { 
+        if (varExists($1)) {
+            printf("Variable collision detected for variable: %s\n", $1);
+        } else {
+            addVar($1);
+            printf("Array declaration detected FROM BISON: %s of type %s with size %d\n", $1, $3, $5); free($3); 
+            variable_count++; 
+        }
+        free($1);
+    }
+    | IDENTIFIER EQUALS NUMBER { 
+        if (varExists($1)) {
+            printf("Variable collision detected for variable: %s\n", $1);
+        } else {
+            addVar($1);
+            printf("Variable assignment detected FROM BISON: %s = %d\n", $1, $3); 
+            variable_count++; 
+        }
+        free($1);
+    }
     ;
 
 assignment_statement:
@@ -120,36 +186,36 @@ condition:
 
 expression:
       NUMBER { printf("%d", $1); }
-    | STRING_LITERAL
+    | STRING_LITERAL 
     | IDENTIFIER
-    | IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN  // Function call
-    | expression EQUALS expression    %prec EQUALS    // Assignment
-    | expression OR_OP expression                     // Logical OR
-    | expression AND_OP expression                    // Logical AND
-    | expression EQUALS_EQUALS expression             // Equality
-    | expression NOT_EQUAL expression                 // Inequality
-    | expression LESS_THAN expression                 // Less than
-    | expression LESS_THAN_EQUAL expression           // Less than or equal
-    | expression GREATER_THAN expression              // Greater than
-    | expression GREATER_THAN_EQUAL expression        // Greater than or equal
-    | expression PLUS expression                      // Addition
-    | expression MINUS expression                     // Subtraction
-    | expression MULT expression                      // Multiplication
-    | expression DIV expression                       // Division
-    | expression MOD expression                       // Modulus
-    | NOT_OP expression                               // Logical NOT
-    | OPEN_PAREN expression CLOSE_PAREN               // Parenthesized expression
-    | IDENTIFIER INCREMENT                            // Post-increment
-    | IDENTIFIER DECREMENT                            // Post-decrement
+    | IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN 
+    | expression EQUALS expression    %prec EQUALS   
+    | expression OR_OP expression                    
+    | expression AND_OP expression                    
+    | expression EQUALS_EQUALS expression          
+    | expression NOT_EQUAL expression                
+    | expression LESS_THAN expression               
+    | expression LESS_THAN_EQUAL expression        
+    | expression GREATER_THAN expression     
+    | expression GREATER_THAN_EQUAL expression        
+    | expression PLUS expression                  
+    | expression MINUS expression                    
+    | expression MULT expression                      
+    | expression DIV expression                       
+    | expression MOD expression                   
+    | NOT_OP expression                              
+    | OPEN_PAREN expression CLOSE_PAREN              
+    | IDENTIFIER INCREMENT                            
+    | IDENTIFIER DECREMENT                            
     ;
 
 function_declaration:
     FUNCTION IDENTIFIER COLON TYPE OPEN_PAREN param_list CLOSE_PAREN LBRACE function_body RBRACE {
         printf("Function %s with return type %s declared.\n", $2, $4);
-        free($2); free($4);
+        free($2); free($4); function_count++;
     }
 	| MAIN FUNCTION COLON TYPE OPEN_PAREN CLOSE_PAREN LBRACE function_body RBRACE {
-		printf("Main Function detected \n");
+		printf("Main Function detected \n"); function_count++;
 	}
     ;
 
@@ -247,14 +313,46 @@ break_statement:
 
 %%
 
+int varExists(const char* name) {
+    VarNode* current = varList;
+    while (current != NULL) {
+        if (strcmp(current->name, name) == 0) {
+            return 1;  // Variable exists
+        }
+        current = current->next;
+    }
+    return 0;  // Variable does not exist
+}
 
+void addVar(const char* name) {
+    VarNode* newNode = (VarNode*) malloc(sizeof(VarNode));
+    newNode->name = strdup(name);
+    newNode->next = varList;
+    varList = newNode;
+}
 
 void yyerror(char *s) {
     fprintf(stderr, "error: %s\n", s);
 }
 
+void freeVarList() {
+    VarNode* current = varList;
+    while (current != NULL) {
+        VarNode* temp = current;
+        current = current->next;
+        free(temp->name);
+        free(temp);
+    }
+}
+
 int main() {
     printf("Starting the parser.\n");
     yyparse();
+	printf("\nCounts:\n");
+    printf("Variables: %d\n", variable_count);
+    printf("Statements: %d\n", statement_count);
+    printf("Functions: %d\n", function_count);
+    printf("Arrays: %d\n", array_count);
+	freeVarList();
     return 0;
 }
