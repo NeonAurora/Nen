@@ -15,21 +15,26 @@ typedef union {
     char charValue;
     double doubleValue;
     char* stringValue;
-} MyValue;
+} VarValue;
 
 typedef struct VarNode {
     char* name;
-    MyValue value;
+    VarValue value;
     VarType type;
     struct VarNode* next;
 } VarNode;
 
+typedef struct {
+    VarValue value;
+    VarType type;
+} ExprValue;
+
 VarNode* varList = NULL;
 
 int varExists(const char* name); // Function prototype
-void addVar(const char* name, MyValue value, VarType type);   // Function prototype
+void addVar(const char* name, VarValue value, VarType type);   // Function prototype
 VarType determineType(const char* typeStr);
-MyValue getVarValue(const char* name);
+VarValue getVarValue(const char* name);
 void printVarValue(const char* name);
 VarNode* findVarNode(const char* name);
 
@@ -47,6 +52,18 @@ int array_count = 0;
 	char charValue;
 	float floatValue;
 	double doubleValue;
+
+	struct {
+        union {
+            int intValue;
+            float floatValue;
+            char charValue;
+            double doubleValue;
+            char* stringValue;
+        } value;
+        int type;
+    } exprValue;
+
 	union {
         int intValue;
         float floatValue;
@@ -57,6 +74,7 @@ int array_count = 0;
 }
 
 %type <varValue> value
+%type <exprValue> expression
 
 %right EQUALS
 %left OR_OP
@@ -150,7 +168,7 @@ var_decl:
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
             VarType type = determineType($3);
-            MyValue val;
+            VarValue val;
             switch(type) {
                 case INT_TYPE:
                     val.intValue = $5.intValue;
@@ -249,7 +267,10 @@ condition:
 
 expression:
       INTEGER { printf("%d", $1); }
-    | STRING_LITERAL 
+    | STRING_LITERAL
+	| CHAR_LITERAL
+	| FLOAT
+	| DOUBLE 
     | IDENTIFIER
     | IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN 
     | expression EQUALS expression    %prec EQUALS   
@@ -379,7 +400,7 @@ end_of_the_line:
 
 %%
 
-void addVar(const char* name, MyValue value, VarType type) {
+void addVar(const char* name, VarValue value, VarType type) {
     VarNode* newNode = (VarNode*) malloc(sizeof(VarNode));
     newNode->name = strdup(name);
     newNode->value = value;
@@ -399,7 +420,7 @@ int varExists(const char* name) {
     return 0;
 }
 
-MyValue getVarValue(const char* name) {
+VarValue getVarValue(const char* name) {
     VarNode* current = varList;
     while (current != NULL) {
         if (strcmp(current->name, name) == 0) {
@@ -408,11 +429,11 @@ MyValue getVarValue(const char* name) {
         current = current->next;
     }
     // Return a default value if not found, or handle the error as needed
-    /* return (MyValue){ .intValue = 0 };  */
+    /* return (VarValue){ .intValue = 0 };  */
 }
 
 void printVarValue(const char* name) {
-    MyValue val = getVarValue(name);
+    VarValue val = getVarValue(name);
     VarNode* varNode = findVarNode(name);
 
     if (varNode == NULL) {

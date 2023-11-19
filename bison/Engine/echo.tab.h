@@ -109,13 +109,25 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 44 "echo.y"
+#line 49 "echo.y"
 
     char *str;
     int num;
 	char charValue;
 	float floatValue;
 	double doubleValue;
+
+	struct {
+        union {
+            int intValue;
+            float floatValue;
+            char charValue;
+            double doubleValue;
+            char* stringValue;
+        } value;
+        int type;
+    } exprValue;
+
 	union {
         int intValue;
         float floatValue;
@@ -127,7 +139,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 131 "echo.tab.h"
+#line 143 "echo.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

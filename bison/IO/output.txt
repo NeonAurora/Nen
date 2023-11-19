@@ -1,12 +1,162 @@
 Starting the parser.
-     NumberPart = 23.793743
-Variable declaration with type double and Variable Name: car
+ Import detected FROM BISON with path: alpha.h
 
-Print detected FROM BISON with IDENTIFIER: car
-Value of car is 23.793743 and Type is Double
+Print detected FROM BISON with message: "HELLO world"
+
+  Input detected FROM BISON for variable a with message: "Enter Value of a"
+
+     Variable declaration with type int and Variable Name: myvar
+
+   Variable declaration detected FROM BISON, Type: int
+
+ Variable declaration with type int and Variable Name: x
+ Variable declaration with type float and Variable Name: y
+ Variable declaration with type double and Variable Name: z
+
+ Variable declaration detected FROM BISON: echo
+
+ Variable assignment detected FROM BISON: price = 30
+
+  30Assignment detected FROM BISON: echo = <expression>
+
+   Array declaration detected FROM BISON: myArray of type int with size 10
+
+ Variable collision detected for variable: x
+ Variable collision detected for variable: y
+ Variable collision detected for variable: z
+ Array declaration detected FROM BISON: myArray of type int with size 10
+
+    Assignment detected FROM BISON: time = <expression>
+
+    2Assignment detected FROM BISON: time = <expression>
+
+  2  Assignment detected FROM BISON: time = <expression>
+
+ Parameter: name, Type: string
+ Parameter: size, Type: float
+ Parameter: weight, Type: double
+
+      10Assignment detected FROM BISON: x = <expression>
+
+      Assignment detected FROM BISON: name = <expression>
+
+        Assignment detected FROM BISON: time = <expression>
+
+     Return statement detected FROM BISON with <expression>
+
+       5 
+       5 
+        Print detected FROM BISON with message: "Too big to measure"
+
+      
+        Print detected FROM BISON with IDENTIFIER: x
+Value of x is 10 and Type is Integer
+
+    If with Else-If(s) and Else statement detected FROM BISON.
+
+     5 
+    Print detected FROM BISON with IDENTIFIER: x
+Value of x is 10 and Type is Integer
+
+Else-If clause detected FROM BISON.
+
+If with Else-If(s) statement detected FROM BISON.
+Function name with return type int declared.
+
+
+   0 
+        Assignment detected FROM BISON: BMI = <expression>
+
+    
+      0Assignment detected FROM BISON: BMI = <expression>
+
+If with Else-If(s) and Else statement detected FROM BISON.
+
+
+   5 
+    Print detected FROM BISON with message: "Too big to measure"
+
+  
+    Print detected FROM BISON with IDENTIFIER: x
+Value of x is 10 and Type is Integer
+
+If with Else-If(s) and Else statement detected FROM BISON.
+
+
+   5 
+       5 
+        Print detected FROM BISON with message: "Too big to measure"
+
+      
+        Print detected FROM BISON with IDENTIFIER: x
+Value of x is 10 and Type is Integer
+
+    If with Else-If(s) and Else statement detected FROM BISON.
+
+     5 
+    Print detected FROM BISON with IDENTIFIER: x
+Value of x is 10 and Type is Integer
+
+Else-If clause detected FROM BISON.
+
+
+If with Else-If(s) statement detected FROM BISON.
+  109   90  
+    Print detected FROM BISON with IDENTIFIER: x
+Value of x is 10 and Type is Integer
+
+For loop detected FROM BISON.
+
+
+
+   Variable assignment detected FROM BISON: i = 100
+ 
+    Print detected FROM BISON with IDENTIFIER: i
+Variable 'i' not found.
+
+    Increment detected FROM BISON: i++
+
+    50
+      Break Statement Detected. 
+
+    
+If with Else-If(s) statement detected FROM BISON.
+For loop detected FROM BISON.
+
+
+    
+     
+          1Assignment detected FROM BISON: a = <expression>
+
+    Pre block detected FROM BISON.
+
+     
+        1Assignment detected FROM BISON: b = <expression>
+
+    Body block detected FROM BISON.
+
+     
+          1Assignment detected FROM BISON: c = <expression>
+
+    Post block detected FROM BISON.
+
+     
+          1Assignment detected FROM BISON: f = <expression>
+
+    Always block detected FROM BISON.
+
+While loop detected FROM BISON.
+
+
+   
+    Increment detected FROM BISON: i++
+
+    Function call detected FROM BISON: name
+
+Main Function detected 
 
 Counts:
-Variables: 1
-Statements: 2
-Functions: 0
+Variables: 10
+Statements: 50
+Functions: 2
 Arrays: 0

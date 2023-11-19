@@ -1,2 +1,84 @@
-var car : double = @23.793743;
-print(car);
+import alpha.h
+print("HELLO world");
+a =>> ("Enter Value of a");
+var myvar : int = 50;
+var something : int;
+var x:int=10, y:float=20, z:double=30;
+var echo;
+var price=30;
+echo = 30;
+var myArray : int[10];
+var x:int=10, y:float=20, z:double=30, myArray:int[10];
+time = distance * price;
+time = distance * 2;
+time = 2 * distance;
+function name:int(name:string, size:float, weight:double){
+    x = 10;
+    name = "wow";
+    time = distance * price;
+    return time*x;
+    if (x > 5) {
+    if (x > 5) {
+        print("Too big to measure");
+    } else {
+        print(x);
+    }
+} else if (x < 5) {
+    print(x);
+}
+}
+
+if (x > 0) {
+    BMI = weight * size;
+  } else {
+    BMI = 0;
+}
+
+if (x > 5) {
+    print("Too big to measure");
+} else {
+    print(x);
+}
+
+if (x > 5) {
+    if (x > 5) {
+        print("Too big to measure");
+    } else {
+        print(x);
+    }
+} else if (x < 5) {
+    print(x);
+}
+
+for(i = 109; i < 90; i++) {
+    print(x);
+}
+
+
+for(var i = 100;;) {
+    print(i);
+    i++;
+    if(i>50){
+      break;
+    }
+}
+
+while < i<x > {
+    pre {
+      a = a - 1;
+    }
+    body {
+      b = b+1;
+    }
+    post {
+      c = c + 1;
+    }
+    always {
+      f = f + 1;
+    }
+}
+
+main function : int(){
+    i++;
+    name(name,size);
+}
