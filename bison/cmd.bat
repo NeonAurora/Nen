@@ -25,7 +25,7 @@ move echo.tab.c "%ENGINE_DIR%"
 move echo.tab.h "%ENGINE_DIR%"
 
 :: Compile the generated C files from the Engine directory
-g++ -w -o "%ENGINE_DIR%\parser.exe" "%ENGINE_DIR%\echo.tab.c" "%ENGINE_DIR%\lex.yy.c"
+g++ -Wall -o "%ENGINE_DIR%\parser.exe" "%ENGINE_DIR%\echo.tab.c" "%ENGINE_DIR%\lex.yy.c"
 
 :: Run the parser with input from b.n in the I/O directory and output to output.txt in the same directory
 type "%IO_DIR%\b.n" | "%ENGINE_DIR%\parser.exe" > "%IO_DIR%\output.txt"

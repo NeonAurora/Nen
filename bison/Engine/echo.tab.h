@@ -109,7 +109,7 @@ typedef union YYSTYPE
 
     char *str;
     int num;
-	VarValue varValue;
+	MyValue varValue;
 
 
 

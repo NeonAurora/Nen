@@ -496,13 +496,7 @@ char *yytext;
 #include <map> // Include map header for C++
 #include <string>
 #include "echo.tab.h"
-std::map<std::string, std::string> varMap;
-#include "counters.h"
-int varCount = 0;
-int smtCount = 0;
-int functionCount = 0;
-int arrCount = 0;
-#line 506 "lex.yy.c"
+#line 500 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -653,11 +647,11 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 18 "echo.l"
+#line 12 "echo.l"
 
 
 
-#line 661 "lex.yy.c"
+#line 655 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -742,280 +736,280 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 21 "echo.l"
+#line 15 "echo.l"
 { return IMPORT; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 22 "echo.l"
+#line 16 "echo.l"
 { return PRINT; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 23 "echo.l"
+#line 17 "echo.l"
 { return VAR; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 24 "echo.l"
+#line 18 "echo.l"
 { return RETURN; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 25 "echo.l"
+#line 19 "echo.l"
 { return FUNCTION; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 26 "echo.l"
+#line 20 "echo.l"
 { return MAIN; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 27 "echo.l"
+#line 21 "echo.l"
 { return IF; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 28 "echo.l"
+#line 22 "echo.l"
 { return ELSE; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 29 "echo.l"
+#line 23 "echo.l"
 { return WHILE; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 30 "echo.l"
+#line 24 "echo.l"
 { return FOR;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 31 "echo.l"
+#line 25 "echo.l"
 { return PRE; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 32 "echo.l"
+#line 26 "echo.l"
 { return BODY; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 33 "echo.l"
+#line 27 "echo.l"
 { return POST; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 34 "echo.l"
+#line 28 "echo.l"
 { return ALWAYS; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 35 "echo.l"
+#line 29 "echo.l"
 { yylval.str = strdup("int"); return TYPE; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 36 "echo.l"
+#line 30 "echo.l"
 { yylval.str = strdup("float"); return TYPE; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 37 "echo.l"
+#line 31 "echo.l"
 { yylval.str = strdup("char"); return TYPE; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 38 "echo.l"
+#line 32 "echo.l"
 { yylval.str = strdup("double"); return TYPE; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 39 "echo.l"
+#line 33 "echo.l"
 { yylval.str = strdup("string"); return TYPE; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 40 "echo.l"
+#line 34 "echo.l"
 { return BREAK; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 41 "echo.l"
+#line 35 "echo.l"
 { return LBRACE; }  
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 42 "echo.l"
+#line 36 "echo.l"
 { return RBRACE; } 
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 43 "echo.l"
+#line 37 "echo.l"
 { return OPEN_PAREN; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 44 "echo.l"
+#line 38 "echo.l"
 { return CLOSE_PAREN; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 45 "echo.l"
+#line 39 "echo.l"
 { return LBRACKET; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 46 "echo.l"
+#line 40 "echo.l"
 { return RBRACKET; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 47 "echo.l"
+#line 41 "echo.l"
 { return SEMICOLON; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 48 "echo.l"
+#line 42 "echo.l"
 { return COLON; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 49 "echo.l"
+#line 43 "echo.l"
 { return COMMA; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 50 "echo.l"
+#line 44 "echo.l"
 { return INVERTED_COMMA; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 51 "echo.l"
+#line 45 "echo.l"
 { return DOUBLE_QUOTE; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 52 "echo.l"
+#line 46 "echo.l"
 { return EQUALS; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 53 "echo.l"
+#line 47 "echo.l"
 { return LESS_THAN; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 54 "echo.l"
+#line 48 "echo.l"
 { return LESS_THAN_EQUAL; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 55 "echo.l"
+#line 49 "echo.l"
 { return GREATER_THAN; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 56 "echo.l"
+#line 50 "echo.l"
 { return GREATER_THAN_EQUAL; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 57 "echo.l"
+#line 51 "echo.l"
 { return EQUALS_EQUALS; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 58 "echo.l"
+#line 52 "echo.l"
 { return NOT_EQUAL; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 59 "echo.l"
+#line 53 "echo.l"
 { return PLUS; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 60 "echo.l"
+#line 54 "echo.l"
 { return MINUS; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 61 "echo.l"
+#line 55 "echo.l"
 { return MULT; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 62 "echo.l"
+#line 56 "echo.l"
 { return DIV; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 63 "echo.l"
+#line 57 "echo.l"
 { return MOD; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 64 "echo.l"
+#line 58 "echo.l"
 { return INCREMENT; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 65 "echo.l"
+#line 59 "echo.l"
 { return DECREMENT; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 66 "echo.l"
+#line 60 "echo.l"
 { return INPUT_OP; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 67 "echo.l"
+#line 61 "echo.l"
 { return SINGLE_LINE_COMMENT_START; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 68 "echo.l"
+#line 62 "echo.l"
 { return MULTI_LINE_COMMENT_START; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 69 "echo.l"
+#line 63 "echo.l"
 { return MULTI_LINE_COMMENT_END; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 70 "echo.l"
+#line 64 "echo.l"
 { return END_PROGRAM; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 71 "echo.l"
+#line 65 "echo.l"
 { yylval.num = atoi(yytext); return NUMBER; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 72 "echo.l"
+#line 66 "echo.l"
 { yylval.str = strdup(yytext); return IDENTIFIER; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 73 "echo.l"
+#line 67 "echo.l"
 { yylval.str = strdup(yytext); return STRING_LITERAL; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 74 "echo.l"
+#line 68 "echo.l"
 { yylval.str = strdup(yytext); return PATH; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 76 "echo.l"
+#line 70 "echo.l"
 ECHO;
 	YY_BREAK
-#line 1019 "lex.yy.c"
+#line 1013 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1901,6 +1895,6 @@ int main()
 	return 0;
 	}
 #endif
-#line 76 "echo.l"
+#line 70 "echo.l"
 
 

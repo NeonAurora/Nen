@@ -80,17 +80,17 @@ void yyerror(char *s);
 
 typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, DOUBLE_TYPE, STRING_TYPE } VarType;
 
-typedef union {
+typedef struct {
     int intValue;
     float floatValue;
     char charValue;
     double doubleValue;
     char* stringValue;
-} VarValue;
+} MyValue;
 
 typedef struct VarNode {
     char* name;
-    VarValue value;
+    MyValue value;
     VarType type;
     struct VarNode* next;
 } VarNode;
@@ -98,7 +98,7 @@ typedef struct VarNode {
 VarNode* varList = NULL;
 
 int varExists(const char* name); // Function prototype
-void addVar(const char* name, VarValue value, VarType type);   // Function prototype
+void addVar(const char* name, MyValue value, VarType type);   // Function prototype
 VarType determineType(const char* typeStr);
 
 int variable_count = 0;
@@ -207,7 +207,7 @@ typedef union YYSTYPE
 
     char *str;
     int num;
-	VarValue varValue;
+	MyValue varValue;
 
 
 
@@ -1855,7 +1855,7 @@ yyreduce:
     if (varExists((yyvsp[(1) - (5)].str))) {
         printf("Variable collision detected for variable: %s\n", (yyvsp[(1) - (5)].str));
     } else {
-        VarValue val = (yyvsp[(5) - (5)].varValue); // Assuming $5 is of type VarValue
+        MyValue val = (yyvsp[(5) - (5)].varValue); // Assuming $5 is of type MyValue
         addVar((yyvsp[(1) - (5)].str), val, determineType((yyvsp[(3) - (5)].str))); // determineType is a function you need to write
         printf("Variable declaration with type and value: %s\n", (yyvsp[(1) - (5)].str)); 
         variable_count++;
@@ -1899,7 +1899,7 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 164 "echo.y"
     { 
-        (yyval.varValue) = (VarValue) { .intValue = (yyvsp[(1) - (1)].num) };  // Assumes NUMBER is an int
+        (yyval.varValue) = (MyValue) { .intValue = (yyvsp[(1) - (1)].num) };  // Assumes NUMBER is an int
     ;}
     break;
 
@@ -2275,7 +2275,7 @@ yyreturn:
 #line 332 "echo.y"
 
 
-void addVar(const char* name, VarValue value, VarType type) {
+void addVar(const char* name, MyValue value, VarType type) {
     VarNode* newNode = (VarNode*) malloc(sizeof(VarNode));
     newNode->name = strdup(name);
     newNode->value = value;

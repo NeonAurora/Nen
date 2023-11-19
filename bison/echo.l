@@ -4,12 +4,6 @@
 #include <map> // Include map header for C++
 #include <string>
 #include "echo.tab.h"
-std::map<std::string, std::string> varMap;
-#include "counters.h"
-int varCount = 0;
-int smtCount = 0;
-int functionCount = 0;
-int arrCount = 0;
 %}
 
 

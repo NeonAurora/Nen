@@ -9,17 +9,17 @@ void yyerror(char *s);
 
 typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, DOUBLE_TYPE, STRING_TYPE } VarType;
 
-typedef union {
+typedef struct {
     int intValue;
     float floatValue;
     char charValue;
     double doubleValue;
     char* stringValue;
-} VarValue;
+} MyValue;
 
 typedef struct VarNode {
     char* name;
-    VarValue value;
+    MyValue value;
     VarType type;
     struct VarNode* next;
 } VarNode;
@@ -27,7 +27,7 @@ typedef struct VarNode {
 VarNode* varList = NULL;
 
 int varExists(const char* name); // Function prototype
-void addVar(const char* name, VarValue value, VarType type);   // Function prototype
+void addVar(const char* name, MyValue value, VarType type);   // Function prototype
 VarType determineType(const char* typeStr);
 
 int variable_count = 0;
@@ -41,7 +41,8 @@ int array_count = 0;
 %union {
     char *str;
     int num;
-	VarValue varValue;
+	
+	MyValue varValue;
 }
 
 %type <varValue> value
@@ -133,7 +134,7 @@ var_decl:
     if (varExists($1)) {
         printf("Variable collision detected for variable: %s\n", $1);
     } else {
-        VarValue val = $5; // Assuming $5 is of type VarValue
+        MyValue val = $5; // Assuming $5 is of type MyValue
         addVar($1, val, determineType($3)); // determineType is a function you need to write
         printf("Variable declaration with type and value: %s\n", $1); 
         variable_count++;
@@ -162,7 +163,7 @@ var_decl:
 
 value:
     NUMBER { 
-        $$ = (VarValue) { .intValue = $1 };  // Assumes NUMBER is an int
+        $$ = (MyValue) { .intValue = $1 };  // Assumes NUMBER is an int
     }
     // ... other value types
     ;
@@ -331,7 +332,7 @@ break_statement:
 
 %%
 
-void addVar(const char* name, VarValue value, VarType type) {
+void addVar(const char* name, MyValue value, VarType type) {
     VarNode* newNode = (VarNode*) malloc(sizeof(VarNode));
     newNode->name = strdup(name);
     newNode->value = value;
