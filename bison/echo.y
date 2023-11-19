@@ -7,7 +7,7 @@ extern int yylex();
 void yyerror(char *s);
 
 
-typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, DOUBLE_TYPE, STRING_TYPE } VarType;
+typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, DOUBLE_TYPE, STRING_TYPE, ARRAY_TYPE, BOOL_TYPE } VarType;
 
 typedef union {
     int intValue;
@@ -15,6 +15,7 @@ typedef union {
     char charValue;
     double doubleValue;
     char* stringValue;
+    bool boolValue;
 } VarValue;
 
 typedef struct VarNode {
@@ -32,12 +33,13 @@ typedef struct {
 VarNode* varList = NULL;
 
 int varExists(const char* name); // Function prototype
-void addVar(const char* name, VarValue value, VarType type);   // Function prototype
+void addVar(const char* name, VarValue* value, VarType type);   // Function prototype
 VarType determineType(const char* typeStr);
 VarValue getVarValue(const char* name);
 void printVarValue(const char* name);
 VarNode* findVarNode(const char* name);
 VarType mapIntToVarType(int typeInt);
+void freeVarValue(VarValue *value, VarType type);
 
 
 int variable_count = 0;
@@ -54,6 +56,7 @@ int array_count = 0;
 	char charValue;
 	float floatValue;
 	double doubleValue;
+    bool boolValue;
 
 	struct {
         union {
@@ -62,20 +65,13 @@ int array_count = 0;
             char charValue;
             double doubleValue;
             char* stringValue;
+            bool boolValue;
         } value;
         int type;
     } exprValue;
-
-	union {
-        int intValue;
-        float floatValue;
-        char charValue;
-        double doubleValue;
-        char* stringValue;
-    } varValue;
 }
 
-%type <varValue> value
+%type <exprValue> value
 %type <exprValue> expression
 
 %right EQUALS
@@ -93,6 +89,7 @@ int array_count = 0;
 %token <doubleValue> DOUBLE
 %token <floatValue> FLOAT
 %token <num> INTEGER
+%token <boolValue> BOOL
 %token <charValue> CHAR_LITERAL
 %token <str> STRING_LITERAL IDENTIFIER PATH TYPE
 %token SINGLE_LINE_COMMENT_START MULTI_LINE_COMMENT_START MULTI_LINE_COMMENT_END ARRAY_INIT END
@@ -151,8 +148,7 @@ var_decl:
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
-            printf("Variable declaration detected FROM BISON: %s\n", $1); 
-            variable_count++; 
+            printf("<Invalid variable declaration %s> Pls include a type. read docs for mor information.\n URL: https://www.swift.org", $1);
         }
         free($1);
     }
@@ -160,9 +156,12 @@ var_decl:
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
-            printf("Variable declaration detected FROM BISON, Type: %s\n", $3); free($3);
+            VarType type = determineType($3);
+            addVar($1, NULL, type); // Pass NULL as the value
+            printf("Variable declaration detected FROM BISON, Type: %s\n", $3);
             variable_count++; 
         }
+        free($3);
         free($1);
     }
     | IDENTIFIER COLON TYPE EQUALS value { 
@@ -173,22 +172,25 @@ var_decl:
             VarValue val;
             switch(type) {
                 case INT_TYPE:
-                    val.intValue = $5.intValue;
+                    val.intValue = $5.value.intValue;
                     break;
                 case FLOAT_TYPE:
-                    val.floatValue = $5.floatValue;
+                    val.floatValue = $5.value.floatValue;
                     break;
 				case STRING_TYPE:
-					val.stringValue = $5.stringValue;
+					val.stringValue = $5.value.stringValue;
 					break;
 				case CHAR_TYPE:
-					val.charValue = $5.charValue;
+					val.charValue = $5.value.charValue;
 					break;
 				case DOUBLE_TYPE:
-					val.doubleValue = $5.doubleValue;
+					val.doubleValue = $5.value.doubleValue;
 					break;
+                case BOOL_TYPE:
+                    val.boolValue = $5.value.boolValue;
+                    break;
             }
-            addVar($1, val, type);
+            addVar($1, &val, type);
             printf("Variable declaration with type %s and Variable Name: %s\n", $3, $1);
             variable_count++;
         }
@@ -198,16 +200,49 @@ var_decl:
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
+
             printf("Array declaration detected FROM BISON: %s of type %s with size %d\n", $1, $3, $5); free($3); 
             variable_count++; 
         }
         free($1);
     }
-    | IDENTIFIER EQUALS INTEGER { 
+    | IDENTIFIER EQUALS value { 
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
-            printf("Variable assignment detected FROM BISON: %s = %d\n", $1, $3); 
+            VarType type;
+            VarValue val;
+
+            switch ($3.type) {
+                case INT_TYPE:
+                    val.intValue = $3.value.intValue;
+                    type = INT_TYPE;
+                    break;
+                case FLOAT_TYPE:
+                    val.floatValue = $3.value.floatValue;
+                    type = FLOAT_TYPE;
+                    break;
+                case CHAR_TYPE:
+                    val.charValue = $3.value.charValue;
+                    type = CHAR_TYPE;
+                    break;
+                case DOUBLE_TYPE:
+                    val.doubleValue = $3.value.doubleValue;
+                    type = DOUBLE_TYPE;
+                    break;
+                case STRING_TYPE:
+                    val.stringValue = strdup($3.value.stringValue);
+                    type = STRING_TYPE;
+                    break;
+                case BOOL_TYPE:
+                    val.boolValue = $3.value.floatValue;
+                    type = BOOL_TYPE;
+                    break;
+
+            }
+
+            addVar($1, &val, type);
+            printf("Variable declaration and assignment detected FROM BISON: %s\n", $1);
             variable_count++; 
         }
         free($1);
@@ -216,19 +251,19 @@ var_decl:
 
 value:
     INTEGER { 
-        $$.intValue = $1;
+        $$.value.intValue = $1;
     }
     | FLOAT {
-        $$.floatValue = $1;
+        $$.value.floatValue = $1;
     }
     | STRING_LITERAL {
-        $$.stringValue = $1;
+        $$.value.stringValue = $1;
     }
 	| CHAR_LITERAL {
-		$$.charValue = $1;
+		$$.value.charValue = $1;
 	}
 	| DOUBLE {
-		$$.doubleValue = $1;
+		$$.value.doubleValue = $1;
 	}
     ;
 
@@ -278,10 +313,21 @@ assignment_statement:
                             fprintf(stderr, "Type mismatch: Cannot assign non-string to string variable '%s'.\n", var->name);
                         }
                         break;
+                    
+                    case BOOL_TYPE:
+                        if($3.type == BOOL_TYPE) {
+                            var->value.boolValue = $3.value.boolValue;
+                        } else if ($3.type == INT_TYPE) {
+                            var->value.boolValue = ($3.value.intValue != 0) ? 1 : 0;
+                        } else {
+                            fprintf(stderr, "Type mismatch: Cannot assign non-double to double variable '%s'.\n", var->name);
+                        }
 
                     default:
                         fprintf(stderr, "Unsupported variable type for variable '%s'.\n", var->name);
+                        break;
                 }
+                freeVarValue(&var->value, var->type);  
             }
         } else {
             printf("Variable not declared: %s\n", $1);
@@ -339,6 +385,10 @@ expression:
         $$.value.doubleValue = $1; 
         $$.type = DOUBLE_TYPE;
     }
+    | BOOL {
+        $$.value.boolValue = $1;
+        $$.type = BOOL_TYPE; 
+    }
     | IDENTIFIER {
     	VarNode* var = findVarNode($1);
     	if (var) {
@@ -363,9 +413,13 @@ expression:
     	            $$.value.stringValue = strdup(var->value.stringValue);
     	            $$.type = STRING_TYPE;
     	            break;
+                case BOOL_TYPE:
+                    $$.value.boolValue = var->value.boolValue;
+                    $$.type = BOOL_TYPE;
     	        default:
     	            yyerror("Unsupported variable type");
     	            break;
+                freeVarValue(&var->value, var->type);
     	    }
     	} else {
     	    yyerror("Undefined variable");
@@ -373,23 +427,145 @@ expression:
 	}
     | IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN 
     | expression EQUALS expression    %prec EQUALS   
-    | expression OR_OP expression                    
-    | expression AND_OP expression                    
-    | expression EQUALS_EQUALS expression          
-    | expression NOT_EQUAL expression                
+    | expression OR_OP expression {
+        $$.value.intValue = ($1.value.intValue || $3.value.intValue) ? 1 : 0;
+        $$.type = INT_TYPE;
+    }         
+    | expression AND_OP expression {
+        $$.value.intValue = ($1.value.intValue && $3.value.intValue) ? 1 : 0;
+        $$.type = INT_TYPE;
+    }       
+    | expression EQUALS_EQUALS expression {
+        $$.value.intValue = ($1.value.intValue == $3.value.intValue) ? 1 : 0;
+        $$.type = INT_TYPE;
+    }
+    | expression NOT_EQUAL expression {
+        $$.value.intValue = ($1.value.intValue != $3.value.intValue) ? 1 : 0;
+        $$.type = INT_TYPE;
+    }                
     | expression LESS_THAN expression               
     | expression LESS_THAN_EQUAL expression        
     | expression GREATER_THAN expression     
     | expression GREATER_THAN_EQUAL expression        
-    | expression PLUS expression                  
-    | expression MINUS expression                    
-    | expression MULT expression                      
-    | expression DIV expression                       
-    | expression MOD expression                   
-    | NOT_OP expression                              
+    | expression PLUS expression {
+        if ($1.type == INT_TYPE && $3.type == INT_TYPE) {
+            $$.value.intValue = $1.value.intValue + $3.value.intValue;
+            $$.type = INT_TYPE;
+        } else if (($1.type == INT_TYPE || $1.type == FLOAT_TYPE) &&
+                   ($3.type == INT_TYPE || $3.type == FLOAT_TYPE)) {
+            $$.value.floatValue = ($1.type == INT_TYPE ? (float)$1.value.intValue : $1.value.floatValue) + ($3.type == INT_TYPE ? (float)$3.value.intValue : $3.value.floatValue);
+            $$.type = FLOAT_TYPE;
+        } else {
+            yyerror("Type mismatch in addition operation");
+        }
+    }      
+    | expression MINUS expression {
+        if ($1.type == INT_TYPE && $3.type == INT_TYPE) {
+            $$.value.intValue = $1.value.intValue - $3.value.intValue;
+            $$.type = INT_TYPE;
+        } else if (($1.type == INT_TYPE || $1.type == FLOAT_TYPE) &&
+                   ($3.type == INT_TYPE || $3.type == FLOAT_TYPE)) {
+            $$.value.floatValue = ($1.type == INT_TYPE ? (float)$1.value.intValue : $1.value.floatValue) - ($3.type == INT_TYPE ? (float)$3.value.intValue : $3.value.floatValue);
+            $$.type = FLOAT_TYPE;
+        } else {
+            yyerror("Type mismatch in subtraction operation");
+        }
+    }
+                    
+    | expression MULT expression {
+        if ($1.type == INT_TYPE && $3.type == INT_TYPE) {
+            $$.value.intValue = $1.value.intValue * $3.value.intValue;
+            $$.type = INT_TYPE;
+        } else if (($1.type == INT_TYPE || $1.type == FLOAT_TYPE) &&
+                   ($3.type == INT_TYPE || $3.type == FLOAT_TYPE)) {
+            $$.value.floatValue = ($1.type == INT_TYPE ? (float)$1.value.intValue : $1.value.floatValue) * ($3.type == INT_TYPE ? (float)$3.value.intValue : $3.value.floatValue);
+            $$.type = FLOAT_TYPE;
+        } else {
+            yyerror("Type mismatch in multiplication operation");
+        }
+    }
+                      
+    | expression DIV expression {
+        if ($1.type == INT_TYPE && $3.type == INT_TYPE) {
+            if ($3.value.intValue == 0) {
+                yyerror("Division by zero");
+                break;
+            }
+            $$.value.intValue = $1.value.intValue / $3.value.intValue;
+            $$.type = INT_TYPE;
+        } else if (($1.type == INT_TYPE || $1.type == FLOAT_TYPE) &&
+                   ($3.type == INT_TYPE || $3.type == FLOAT_TYPE)) {
+            float divisor = ($3.type == INT_TYPE ? (float)$3.value.intValue : $3.value.floatValue);
+            if (divisor == 0.0) {
+                yyerror("Division by zero");
+                break;
+            }
+            $$.value.floatValue = ($1.type == INT_TYPE ? (float)$1.value.intValue : $1.value.floatValue) / divisor;
+            $$.type = FLOAT_TYPE;
+        } else {
+            yyerror("Type mismatch in division operation");
+        }
+    }
+                       
+    | expression MOD expression {
+        if ($1.type == INT_TYPE && $3.type == INT_TYPE) {
+            if ($3.value.intValue == 0) {
+                yyerror("Modulo by zero");
+                break;
+            }
+            $$.value.intValue = $1.value.intValue % $3.value.intValue;
+            $$.type = INT_TYPE;
+        } else {
+            yyerror("Modulo operation only valid for integers");
+        }
+    }
+                   
+    | NOT_OP expression {
+        $$.value.intValue = ($2.value.intValue == 0) ? 1 : 0;
+        $$.type = INT_TYPE;
+    }
+                             
     | OPEN_PAREN expression CLOSE_PAREN              
-    | IDENTIFIER INCREMENT                            
-    | IDENTIFIER DECREMENT                            
+    | IDENTIFIER INCREMENT {
+        printf("IDENTIFIER increment detected");
+        VarNode* var = findVarNode($1);
+        if (var) {
+            switch(var->type) {
+                case INT_TYPE:
+                    int a;
+                    a = var->value.intValue;
+                    a = a + 1;
+                    $$.value.intValue = a;
+                    $$.type = INT_TYPE;
+                    break;
+                // You can add cases for other types if incrementing them makes sense in your language
+                default:
+                    yyerror("Increment operation not supported for this type");
+            }
+        } else {
+            yyerror("Undefined variable");
+        }
+    }
+
+    | IDENTIFIER DECREMENT {
+        VarNode* var = findVarNode($1);
+        if (var) {
+            switch(var->type) {
+                case INT_TYPE:
+                    int a;
+                    a = var->value.intValue;
+                    a = a - 1;
+                    $$.value.intValue = a;
+                    break;
+                // You can add cases for other types if decrementing them makes sense in your language
+                default:
+                    yyerror("Decrement operation not supported for this type");
+            }
+        } else {
+            yyerror("Undefined variable");
+        }
+    }
+                            
     ;
 
 function_declaration:
@@ -486,11 +662,47 @@ always_block:
     ;
 
 increment_statement:
-	IDENTIFIER INCREMENT SEMICOLON { printf("Increment detected FROM BISON: %s++\n", $1); }
+	IDENTIFIER INCREMENT SEMICOLON {
+        printf("increament_statment detected");
+        VarNode* var = findVarNode($1);
+        if (var) {
+            switch(var->type) {
+                case INT_TYPE:
+                    int a;
+                    a = var->value.intValue;
+                    a = a + 1;
+                    var->value.intValue = a;
+                    break;
+                // You can add cases for other types if incrementing them makes sense in your language
+                default:
+                    yyerror("Increment operation not supported for this type");
+            }
+        } else {
+            yyerror("Undefined variable");
+        }
+    }
 
 decrement_statement:
-	IDENTIFIER DECREMENT SEMICOLON { printf("Decrement detected FROM BISON: %s--\n", $1); }
-
+	IDENTIFIER DECREMENT SEMICOLON {
+        printf("decrement_statement detected");
+        VarNode* var = findVarNode($1);
+        if (var) {
+            switch(var->type) {
+                case INT_TYPE:
+                    int a;
+                    a = var->value.intValue;
+                    a = a - 1;
+                    var->value.intValue = a;
+                    break;
+                // You can add cases for other types if decrementing them makes sense in your language
+                default:
+                    yyerror("Decrement operation not supported for this type");
+            }
+        } else {
+            yyerror("Undefined variable");
+        }
+    }
+    ; 
 break_statement:
 	BREAK SEMICOLON { printf("Break Statement Detected. \n"); }
 
@@ -499,14 +711,38 @@ end_of_the_line:
 
 %%
 
-void addVar(const char* name, VarValue value, VarType type) {
+void addVar(const char* name, VarValue* value, VarType type) {
     VarNode* newNode = (VarNode*) malloc(sizeof(VarNode));
     newNode->name = strdup(name);
-    newNode->value = value;
+    if (value != NULL) {
+        newNode->value = *value;
+    } else {
+        // Set default values based on the type
+        switch (type) {
+            case INT_TYPE:
+                newNode->value.intValue = 0;
+                break;
+            case FLOAT_TYPE:
+                newNode->value.floatValue = 0.0; 
+                break;
+            case CHAR_TYPE:
+                newNode->value.charValue = '\0'; 
+                break;
+            case DOUBLE_TYPE:
+                newNode->value.doubleValue = 0.0; 
+                break;
+            case STRING_TYPE:
+                newNode->value.stringValue = NULL; 
+                break;
+            case BOOL_TYPE:
+                newNode->value.intValue = 0;
+        }
+    }
     newNode->type = type;
     newNode->next = varList;
     varList = newNode;
 }
+
 
 int varExists(const char* name) {
     VarNode* current = varList;
@@ -556,6 +792,9 @@ void printVarValue(const char* name) {
         case STRING_TYPE:
             printf("Value of %s is \"%s\"  and Type is String\n", name, val.stringValue);
             break;
+        case BOOL_TYPE:
+            printf("Value of %s is %d and Type is BOOL\n", name, val.boolValue);
+            break;
         default:
             printf("Unknown type for variable %s.\n", name);
     }
@@ -580,6 +819,7 @@ VarType determineType(const char* typeStr) {
 	if (strcmp(typeStr, "string") == 0) return STRING_TYPE;
 	if (strcmp(typeStr, "char") == 0) return CHAR_TYPE;
 	if (strcmp(typeStr, "double") == 0) return DOUBLE_TYPE;
+    if (strcmp(typeStr, "bool") == 0) return BOOL_TYPE;
     // ... other type cases
     return INT_TYPE; // Default case, or you could handle error here
 }
@@ -591,12 +831,20 @@ VarType mapIntToVarType(int typeInt) {
         case 2: return CHAR_TYPE;
         case 3: return DOUBLE_TYPE;
         case 4: return STRING_TYPE;
+        case 5: return BOOL_TYPE;
         default: return INT_TYPE;
     }
 }
 
 void yyerror(char *s) {
     fprintf(stderr, "error: %s\n", s);
+}
+
+void freeVarValue(VarValue *value, VarType type) {
+    if (type == STRING_TYPE && value->stringValue != NULL) {
+        free(value->stringValue);
+        value->stringValue = NULL;
+    }
 }
 
 void freeVarList() {

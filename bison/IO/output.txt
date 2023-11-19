@@ -1,28 +1,18 @@
 Starting the parser.
      Variable declaration with type int and Variable Name: a
 
+decrement_statement detected
 Print detected FROM BISON with IDENTIFIER: a
-Value of a is 5 and Type is Integer
+Value of a is 0 and Type is Integer
 
-  
-Print detected FROM BISON with IDENTIFIER: a
-Value of a is 4 and Type is Integer
+   Variable declaration detected FROM BISON, Type: int
 
-  
-Print detected FROM BISON with IDENTIFIER: a
-Value of a is 6 and Type is Integer
-
-     Variable declaration with type int and Variable Name: b
-
+  IDENTIFIER increment detected
 Print detected FROM BISON with IDENTIFIER: b
-Value of b is 13 and Type is Integer
-
-  
-Print detected FROM BISON with IDENTIFIER: b
-Value of b is 6 and Type is Integer
+Value of b is 1 and Type is Integer
 
 Counts:
 Variables: 2
-Statements: 10
+Statements: 6
 Functions: 0
 Arrays: 0

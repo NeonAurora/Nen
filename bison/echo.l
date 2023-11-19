@@ -31,6 +31,7 @@
 "char"       { yylval.str = strdup("char"); return TYPE; }
 "double"     { yylval.str = strdup("double"); return TYPE; }
 "string"     { yylval.str = strdup("string"); return TYPE; }
+"bool"       { yylval.str = strdup("bool"); return TYPE; }
 "break"      { return BREAK; }
 "{"          { return LBRACE; }  
 "}"          { return RBRACE; } 
@@ -55,6 +56,9 @@
 "*"          { return MULT; }
 "/"          { return DIV; }
 "%"          { return MOD; }
+"||"         { return OR_OP; }
+"&&"         { return AND_OP; }
+"!"          { return NOT_OP; }
 "++"         { return INCREMENT; }
 "--"         { return DECREMENT; }
 "=>>"        { return INPUT_OP; }
