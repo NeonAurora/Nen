@@ -61,9 +61,16 @@
 "//"         { return SINGLE_LINE_COMMENT_START; }
 "<<"         { return MULTI_LINE_COMMENT_START; }
 ">>"         { return MULTI_LINE_COMMENT_END; }
-"<-<-<>->->" { return END_PROGRAM; }
-[0-9]+      { yylval.num = atoi(yytext); return NUMBER; }
+"<-<-<>->->" { return END_PROGRAM; return END; }
+@[+-]?[0-9]+\.?[0-9]*([eE][+-]?[0-9]+)? { 
+    char* numberPart = strdup(yytext + 1);
+    printf("NumberPart = %s\n", numberPart);
+    yylval.doubleValue = strtod(numberPart, NULL); 
+    return DOUBLE; }
+[0-9]+"."[0-9]+    { yylval.floatValue = atof(yytext); return FLOAT; }
+[0-9]+      { yylval.num = atoi(yytext); return INTEGER; }
 [a-zA-Z_][a-zA-Z_0-9]* { yylval.str = strdup(yytext); return IDENTIFIER; }
+\'[^\'\\n]\' { yylval.charValue = yytext[1]; return CHAR_LITERAL; }
 \"[^\"]*\" { yylval.str = strdup(yytext); return STRING_LITERAL; }
 [a-zA-Z0-9_\/\.]+ { yylval.str = strdup(yytext); return PATH; }
 

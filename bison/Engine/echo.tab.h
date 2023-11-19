@@ -86,15 +86,19 @@
      COLON = 302,
      BODY_START = 303,
      BODY_END = 304,
-     STRING_LITERAL = 305,
-     IDENTIFIER = 306,
-     PATH = 307,
-     TYPE = 308,
-     NUMBER = 309,
-     SINGLE_LINE_COMMENT_START = 310,
-     MULTI_LINE_COMMENT_START = 311,
-     MULTI_LINE_COMMENT_END = 312,
-     ARRAY_INIT = 313
+     DOUBLE = 305,
+     FLOAT = 306,
+     INTEGER = 307,
+     CHAR_LITERAL = 308,
+     STRING_LITERAL = 309,
+     IDENTIFIER = 310,
+     PATH = 311,
+     TYPE = 312,
+     SINGLE_LINE_COMMENT_START = 313,
+     MULTI_LINE_COMMENT_START = 314,
+     MULTI_LINE_COMMENT_END = 315,
+     ARRAY_INIT = 316,
+     END = 317
    };
 #endif
 
@@ -105,15 +109,25 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 41 "echo.y"
+#line 44 "echo.y"
 
     char *str;
     int num;
+	char charValue;
+	float floatValue;
+	double doubleValue;
+	union {
+        int intValue;
+        float floatValue;
+        char charValue;
+        double doubleValue;
+        char* stringValue;
+    } varValue;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 117 "echo.tab.h"
+#line 131 "echo.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

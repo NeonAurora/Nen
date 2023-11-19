@@ -9,7 +9,7 @@ void yyerror(char *s);
 
 typedef enum { INT_TYPE, FLOAT_TYPE, CHAR_TYPE, DOUBLE_TYPE, STRING_TYPE } VarType;
 
-typedef struct {
+typedef union {
     int intValue;
     float floatValue;
     char charValue;
@@ -29,6 +29,9 @@ VarNode* varList = NULL;
 int varExists(const char* name); // Function prototype
 void addVar(const char* name, MyValue value, VarType type);   // Function prototype
 VarType determineType(const char* typeStr);
+MyValue getVarValue(const char* name);
+void printVarValue(const char* name);
+VarNode* findVarNode(const char* name);
 
 int variable_count = 0;
 int statement_count = 0;
@@ -41,7 +44,19 @@ int array_count = 0;
 %union {
     char *str;
     int num;
+	char charValue;
+	float floatValue;
+	double doubleValue;
+	union {
+        int intValue;
+        float floatValue;
+        char charValue;
+        double doubleValue;
+        char* stringValue;
+    } varValue;
 }
+
+%type <varValue> value
 
 %right EQUALS
 %left OR_OP
@@ -55,9 +70,12 @@ int array_count = 0;
 %token INPUT_OP
 %token NOT_OP INCREMENT DECREMENT
 %token OPEN_PAREN CLOSE_PAREN LBRACKET RBRACKET LBRACE RBRACE SEMICOLON COMMA INVERTED_COMMA DOUBLE_QUOTE COLON BODY_START BODY_END
+%token <doubleValue> DOUBLE
+%token <floatValue> FLOAT
+%token <num> INTEGER
+%token <charValue> CHAR_LITERAL
 %token <str> STRING_LITERAL IDENTIFIER PATH TYPE
-%token <num> NUMBER
-%token SINGLE_LINE_COMMENT_START MULTI_LINE_COMMENT_START MULTI_LINE_COMMENT_END ARRAY_INIT
+%token SINGLE_LINE_COMMENT_START MULTI_LINE_COMMENT_START MULTI_LINE_COMMENT_END ARRAY_INIT END
 
 
 
@@ -66,6 +84,7 @@ int array_count = 0;
 // Grammar rules
 program:
     | program statement
+	| end_of_the_line
     ;
 
 statement:
@@ -75,7 +94,7 @@ statement:
     | var_declaration { statement_count++; }
     | assignment_statement { statement_count++; }
 	| function_declaration { statement_count++; }
-	| return_statement { statement_count++; }
+	| return_statement { statement_count++; }	
 	| conditional_statement { statement_count++; }
 	| for_statement { statement_count++; }
 	| while_statement { statement_count++; }
@@ -91,7 +110,7 @@ import_statement:
 
 print_statement:
     PRINT OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON { printf("Print detected FROM BISON with message: %s\n", $3); }
-	| PRINT OPEN_PAREN IDENTIFIER CLOSE_PAREN SEMICOLON { printf("Print detected FROM BISON with IDENTIFIER: %s\n", $3); }
+	| PRINT OPEN_PAREN IDENTIFIER CLOSE_PAREN SEMICOLON { printf("Print detected FROM BISON with IDENTIFIER: %s\n", $3); printVarValue($3); }
     ;
 
 input_statement:
@@ -126,16 +145,36 @@ var_decl:
         }
         free($1);
     }
-    | IDENTIFIER COLON TYPE EQUALS NUMBER { 
-    if (varExists($1)) {
-        printf("Variable collision detected for variable: %s\n", $1);
-    } else {
-        printf("Variable declaration with type and value: %s\n", $1); 
-        variable_count++;
+    | IDENTIFIER COLON TYPE EQUALS value { 
+        if (varExists($1)) {
+            printf("Variable collision detected for variable: %s\n", $1);
+        } else {
+            VarType type = determineType($3);
+            MyValue val;
+            switch(type) {
+                case INT_TYPE:
+                    val.intValue = $5.intValue;
+                    break;
+                case FLOAT_TYPE:
+                    val.floatValue = $5.floatValue;
+                    break;
+				case STRING_TYPE:
+					val.stringValue = $5.stringValue;
+					break;
+				case CHAR_TYPE:
+					val.charValue = $5.charValue;
+					break;
+				case DOUBLE_TYPE:
+					val.doubleValue = $5.doubleValue;
+					break;
+            }
+            addVar($1, val, type);
+            printf("Variable declaration with type %s and Variable Name: %s\n", $3, $1);
+            variable_count++;
+        }
+        free($1);
     }
-    free($1);
-	}
-    | IDENTIFIER COLON TYPE LBRACKET NUMBER RBRACKET { 
+    | IDENTIFIER COLON TYPE LBRACKET INTEGER RBRACKET { 
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
@@ -144,7 +183,7 @@ var_decl:
         }
         free($1);
     }
-    | IDENTIFIER EQUALS NUMBER { 
+    | IDENTIFIER EQUALS INTEGER { 
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
@@ -153,6 +192,24 @@ var_decl:
         }
         free($1);
     }
+    ;
+
+value:
+    INTEGER { 
+        $$.intValue = $1;
+    }
+    | FLOAT {
+        $$.floatValue = $1;
+    }
+    | STRING_LITERAL {
+        $$.stringValue = $1;
+    }
+	| CHAR_LITERAL {
+		$$.charValue = $1;
+	}
+	| DOUBLE {
+		$$.doubleValue = $1;
+	}
     ;
 
 assignment_statement:
@@ -191,7 +248,7 @@ condition:
     | expression GREATER_THAN_EQUAL expression
 
 expression:
-      NUMBER { printf("%d", $1); }
+      INTEGER { printf("%d", $1); }
     | STRING_LITERAL 
     | IDENTIFIER
     | IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN 
@@ -317,6 +374,9 @@ decrement_statement:
 break_statement:
 	BREAK SEMICOLON { printf("Break Statement Detected. \n"); }
 
+end_of_the_line:
+	END { printf("program terminates here"); }
+
 %%
 
 void addVar(const char* name, MyValue value, VarType type) {
@@ -337,6 +397,71 @@ int varExists(const char* name) {
         current = current->next;
     }
     return 0;
+}
+
+MyValue getVarValue(const char* name) {
+    VarNode* current = varList;
+    while (current != NULL) {
+        if (strcmp(current->name, name) == 0) {
+            return current->value;
+        }
+        current = current->next;
+    }
+    // Return a default value if not found, or handle the error as needed
+    /* return (MyValue){ .intValue = 0 };  */
+}
+
+void printVarValue(const char* name) {
+    MyValue val = getVarValue(name);
+    VarNode* varNode = findVarNode(name);
+
+    if (varNode == NULL) {
+        printf("Variable '%s' not found.\n", name);
+        return;
+    }
+
+    switch (varNode->type) {
+        case INT_TYPE:
+            printf("Value of %s is %d and Type is Integer\n", name, val.intValue);
+            break;
+        case FLOAT_TYPE:
+            printf("Value of %s is %f and Type is Float\n", name, val.floatValue);
+            break;
+        case DOUBLE_TYPE:
+            printf("Value of %s is %lf and Type is Double\n", name, val.doubleValue);
+            break;
+        case CHAR_TYPE:
+            printf("Value of %s is '%c' and Type is Character\n", name, val.charValue);
+            break;
+        case STRING_TYPE:
+            printf("Value of %s is \"%s\"  and Type is String\n", name, val.stringValue);
+            break;
+        default:
+            printf("Unknown type for variable %s.\n", name);
+    }
+}
+
+
+VarNode* findVarNode(const char* name) {
+    VarNode* current = varList;
+    while (current != NULL) {
+        if (strcmp(current->name, name) == 0) {
+            return current;
+        }
+        current = current->next;
+    }
+    return NULL;
+}
+
+
+VarType determineType(const char* typeStr) {
+    if (strcmp(typeStr, "int") == 0) return INT_TYPE;
+    if (strcmp(typeStr, "float") == 0) return FLOAT_TYPE;
+	if (strcmp(typeStr, "string") == 0) return STRING_TYPE;
+	if (strcmp(typeStr, "char") == 0) return CHAR_TYPE;
+	if (strcmp(typeStr, "double") == 0) return DOUBLE_TYPE;
+    // ... other type cases
+    return INT_TYPE; // Default case, or you could handle error here
 }
 
 

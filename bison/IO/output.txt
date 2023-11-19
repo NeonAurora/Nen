@@ -1,10 +1,12 @@
 Starting the parser.
-   Variable assignment detected FROM BISON: a = 2
+     NumberPart = 23.793743
+Variable declaration with type double and Variable Name: car
 
-   Variable assignment detected FROM BISON: a = 3
+Print detected FROM BISON with IDENTIFIER: car
+Value of car is 23.793743 and Type is Double
 
 Counts:
-Variables: 2
+Variables: 1
 Statements: 2
 Functions: 0
 Arrays: 0
