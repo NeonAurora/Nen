@@ -9,7 +9,6 @@ void yyerror(char *s);
 
 typedef struct VarNode {
     char* name;
-	int value;
     struct VarNode* next;
 } VarNode;
 

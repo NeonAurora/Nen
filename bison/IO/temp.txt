@@ -78,7 +78,7 @@ while < i<x > {
     }
 }
 
-main function : int(var i = 10,var j = 9){
+main function : int(){
     i++;
     name(name,size);
 }
