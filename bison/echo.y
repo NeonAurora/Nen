@@ -101,6 +101,7 @@ int array_count = 0;
 // Grammar rules
 program:
     | program statement
+    /* | param_list { printf("Param detected \n"); } */
 	| end_of_the_line
     ;
 
@@ -127,15 +128,44 @@ import_statement:
 
 print_statement:
     PRINT OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON { printf("Print detected FROM BISON with message: %s\n", $3); }
-	| PRINT OPEN_PAREN IDENTIFIER CLOSE_PAREN SEMICOLON { printf("Print detected FROM BISON with IDENTIFIER: %s\n", $3); printVarValue($3); }
+    | PRINT OPEN_PAREN expression CLOSE_PAREN SEMICOLON {
+        switch ($3.type) {
+            case INT_TYPE:
+                printf("Print detected of TYPE INT and value %d\n", $3.value.intValue);
+                break;
+            case FLOAT_TYPE:
+                printf("%f\n", $3.value.floatValue);
+                break;
+            case CHAR_TYPE:
+                printf("%c\n", $3.value.charValue);
+                break;
+            case DOUBLE_TYPE:
+                printf("%lf\n", $3.value.doubleValue);
+                break;
+            case STRING_TYPE:
+                if ($3.value.stringValue != NULL) {
+                    printf("%s\n", $3.value.stringValue);
+                } else {
+                    printf("(null)\n");
+                }
+                break;
+            default:
+                printf("Unknown type for printing\n");
+        }
+    }
     ;
+
 
 input_statement:
     IDENTIFIER INPUT_OP OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON { printf("Input detected FROM BISON for variable %s with message: %s\n", $1, $4); }
     ;
 
 var_declaration:
-    VAR var_declaration_list SEMICOLON
+    var_declaration_without_semicolon SEMICOLON
+    ;
+
+var_declaration_without_semicolon:
+    VAR var_declaration_list
     ;
 
 var_declaration_list:
@@ -527,7 +557,7 @@ expression:
                              
     | OPEN_PAREN expression CLOSE_PAREN              
     | IDENTIFIER INCREMENT {
-        printf("IDENTIFIER increment detected");
+        printf("IDENTIFIER increment detected \n");
         VarNode* var = findVarNode($1);
         if (var) {
             switch(var->type) {
@@ -549,6 +579,7 @@ expression:
 
     | IDENTIFIER DECREMENT {
         VarNode* var = findVarNode($1);
+        printf("IDENTIFIER decrement detected \n");
         if (var) {
             switch(var->type) {
                 case INT_TYPE:
@@ -584,7 +615,7 @@ param_list:
     ;
 
 param:
-    IDENTIFIER COLON TYPE { printf("Parameter: %s, Type: %s\n", $1, $3); free($1); free($3); }
+    LESS_THAN var_declaration_without_semicolon GREATER_THAN
     ;
 
 function_body:
@@ -663,7 +694,7 @@ always_block:
 
 increment_statement:
 	IDENTIFIER INCREMENT SEMICOLON {
-        printf("increament_statment detected");
+        printf("increament_statment detected \n");
         VarNode* var = findVarNode($1);
         if (var) {
             switch(var->type) {
@@ -684,7 +715,7 @@ increment_statement:
 
 decrement_statement:
 	IDENTIFIER DECREMENT SEMICOLON {
-        printf("decrement_statement detected");
+        printf("decrement_statement detected \n");
         VarNode* var = findVarNode($1);
         if (var) {
             switch(var->type) {

@@ -1,6 +1,6 @@
-var a : int = 1;
-a--;
-print(a);
-var b : int;
-b = a++;
-print(b);
+import alpha.h
+
+function name : int ( <var a : int>, <var b : int> ) {
+    a = 5;
+    print(a);
+}

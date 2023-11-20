@@ -1,18 +1,18 @@
 Starting the parser.
-     Variable declaration with type int and Variable Name: a
+ Import detected FROM BISON with path: alpha.h
 
-decrement_statement detected
-Print detected FROM BISON with IDENTIFIER: a
-Value of a is 0 and Type is Integer
 
-   Variable declaration detected FROM BISON, Type: int
+        Variable declaration detected FROM BISON, Type: int
+COMMA DEBUG REPORT 
+    Variable declaration detected FROM BISON, Type: int
+  
+      
+    Print detected of TYPE INT and value 5
 
-  IDENTIFIER increment detected
-Print detected FROM BISON with IDENTIFIER: b
-Value of b is 1 and Type is Integer
+Function name with return type int declared.
 
 Counts:
 Variables: 2
-Statements: 6
-Functions: 0
+Statements: 4
+Functions: 1
 Arrays: 0

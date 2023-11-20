@@ -41,7 +41,7 @@
 "]"          { return RBRACKET; }
 ";"          { return SEMICOLON; }
 ":"          { return COLON; }
-","          { return COMMA; }
+","          { printf("COMMA DEBUG REPORT \n" ); return COMMA; }
 "'"          { return INVERTED_COMMA; }
 "\""         { return DOUBLE_QUOTE; }
 "="          { return EQUALS; }

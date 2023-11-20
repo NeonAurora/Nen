@@ -903,7 +903,7 @@ YY_RULE_SETUP
 case 30:
 YY_RULE_SETUP
 #line 44 "echo.l"
-{ return COMMA; }
+{ printf("COMMA DEBUG REPORT \n" ); return COMMA; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
