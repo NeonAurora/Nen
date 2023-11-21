@@ -2,17 +2,277 @@ Starting the parser.
  Import detected FROM BISON with path: alpha.h
 
 
-        Variable declaration detected FROM BISON, Type: int
-COMMA DEBUG REPORT 
-    Variable declaration detected FROM BISON, Type: int
-  
-      
-    Print detected of TYPE INT and value 5
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // Int handling started
 
-Function name with return type int declared.
+Print detected FROM BISON with message: "start of execution"
+
+     Variable declaration with type int and Variable Name: a
+ Print detected of TYPE INT and value 8
+
+   Variable declaration detected FROM BISON, Type: int
+
+  Variable b assigned value of 2 of type INT_TYPE 
+ Print detected of TYPE INT and value 2
+
+   Variable declaration and assignment detected FROM BISON: c
+ Print detected of TYPE INT and value 2
+
+   Variable declaration and assignment detected FROM BISON: x
+   Variable declaration and assignment detected FROM BISON: y
+   Variable declaration and assignment detected FROM BISON: z
+ Print detected of TYPE INT and value 45
+ Print detected of TYPE INT and value 56
+ Print detected of TYPE INT and value 89
+
+  Variable z assigned value of 10 of type INT_TYPE 
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // assigning int value
+
+
+Print detected of TYPE INT and value 53
+
+Print detected of TYPE INT and value 54
+
+Print detected of TYPE INT and value 80
+
+Print detected of TYPE INT and value 28
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // Int handling ended
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // float handling initiated
+
+     Variable declaration with type float and Variable Name: float1
+ Print detected of TYPE FLOAT and value 2.750000
+
+   Variable declaration detected FROM BISON, Type: float
+
+  Variable float2 assigned value of 2.750000 of type FLOAT_TYPE 
+ Print detected of TYPE FLOAT and value 2.750000
+
+   Variable declaration detected FROM BISON, Type: float
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: //assigning and operation of float
+
+    Variable float3 assigned value of 5.500000 of type FLOAT_TYPE 
+ Print detected of TYPE FLOAT and value 5.500000
+
+    Variable float3 assigned value of 7.562500 of type FLOAT_TYPE 
+ Print detected of TYPE FLOAT and value 7.562500
+
+    Variable float3 assigned value of 0.000000 of type FLOAT_TYPE 
+ Print detected of TYPE FLOAT and value 0.000000
+
+    Variable float3 assigned value of 1.000000 of type FLOAT_TYPE 
+ Print detected of TYPE FLOAT and value 1.000000
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: //float handling ended
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: //string handling initiated
+
+     Variable declaration with type string and Variable Name: string1
+
+Print detected of TYPE STRING and value "kola"
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: //string handling ended
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // char handling initiated
+
+   Variable declaration and assignment detected FROM BISON: char1
+ Print detected of TYPE CHAR and value a
+
+  Variable char1 assigned value of b of type CHAR_TYPE 
+ Print detected of TYPE CHAR and value b
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // char handling terminated
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // bool handling initiated
+
+     Variable declaration with type bool and Variable Name: bool1
+ Print detected of TYPE BOOL and value 1
+
+    open_paren detected for expression 
+ Print detected of TYPE BOOL and value 0
+
+    open_paren detected for expression 
+ Print detected of TYPE BOOL and value 1
+
+    open_paren detected for expression 
+ Print detected of TYPE BOOL and value 0
+
+    open_paren detected for expression 
+  open_paren detected for expression 
+ Print detected of TYPE BOOL and value 1
+    Variable declaration detected FROM BISON, Type: bool
+
+   Print detected of TYPE BOOL and value 0
+ 
+    open_paren detected for expression 
+open_paren detected for expression 
+ Print detected of TYPE BOOL and value 1
+
+    open_paren detected for expression 
+open_paren detected for expression 
+ Print detected of TYPE BOOL and value 0
+
+    open_paren detected for expression 
+open_paren detected for expression 
+ Print detected of TYPE BOOL and value 1
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // bool handling ended
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // function handling initiated
+
+       Variable declaration detected FROM BISON, Type: int
+    Variable declaration detected FROM BISON, Type: int
+ 
+    Print detected FROM BISON with message: "kola"
+
+         Variable collision detected for variable: a
+
+     Return statement with integer value: 8
+
+Function area with return type int declared.
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // function handling ended
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // IO handling initiated
+
+  Input detected FROM BISON for variable a with message: "Enter value of a : "
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // IO handling terminated
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: //increment decrement initiated
+
+  Variable a assigned value of 0 of type INT_TYPE 
+ Print detected of TYPE INT and value 0
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // a = 0 initial
+
+increament_statment detected 
+ Print detected of TYPE INT and value 1
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // a incremented once expecting 1
+
+decrement_statement detected 
+ Print detected of TYPE INT and value 0
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // a decremented once expecting 0
+
+  IDENTIFIER increment detected 
+Variable b assigned value of 1 of type INT_TYPE 
+ Print detected of TYPE INT and value 1
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // b assigned value of incremented a expecting 1 cause a was 0
+
+  IDENTIFIER decrement detected 
+Variable b assigned value of -1 of type INT_TYPE 
+ Print detected of TYPE INT and value -1
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // b assigned value of decremented a expecting -1 cause a was 0
+
+IDENTIFIER increment detected 
+Print detected of TYPE INT and value 0
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // b incremented once and printed expectd 0 cause b was -1
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // increment decrement terminated
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // conditional statement intitiated
+
+  Single-line comment detected:  FROM FLEX. COMMENTED LINE: //raw input
+
+    increament_statment detected 
+
+
+
+If with Else-If(s) statement detected FROM BISON.
+    Single-line comment detected:  FROM FLEX. COMMENTED LINE: //standard format with conditions
+
+    increament_statment detected 
+
+    Print detected of TYPE INT and value 2
+
+         Single-line comment detected:  FROM FLEX. COMMENTED LINE: // standard else if
+
+    increament_statment detected 
+
+    Print detected of TYPE INT and value 0
+
+Else-If clause detected FROM BISON.
+  
+    decrement_statement detected 
+
+    decrement_statement detected 
+
+    Print detected of TYPE INT and value 0
+
+If with Else-If(s) and Else statement detected FROM BISON.
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: //nested if else if else
+
+   
+    increament_statment detected 
+
+    Print detected of TYPE INT and value 2
+
+      Single-line comment detected:  FROM FLEX. COMMENTED LINE: // nested block
+
+        increament_statment detected 
+ Print detected of TYPE INT and value 3
+
+      
+        increament_statment detected 
+ Print detected of TYPE INT and value 46
+
+    If with Else-If(s) and Else statement detected FROM BISON.
+
+       
+      
+Else-If clause detected FROM BISON.
+  
+        Single-line comment detected:  FROM FLEX. COMMENTED LINE: // nested block
+
+        Print detected FROM BISON with message: "z is ranged variable"
+
+    
+    If with Else-If(s) statement detected FROM BISON.
+Function call detected FROM BISON: printf
+
+If with Else-If(s) and Else statement detected FROM BISON.
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // conditional statement terminated
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // loop statment initiated
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // 3 kinds of loops can be used in this language
+
+
+     Variable declaration with type int and Variable Name: i
+      Single-line comment detected:  FROM FLEX. COMMENTED LINE: // kind 1 defualt for loop with full parameters
+
+    Print detected FROM BISON with message: "for loop"
+
+For loop detected FROM BISON.
+
+
+     Variable declaration with type int and Variable Name: j
+     Single-line comment detected:  FROM FLEX. COMMENTED LINE: // type 2 without incrementer 
+
+    Print detected FROM BISON with message: "for loop"
+
+    increament_statment detected 
+
+    increament_statment detected 
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // custom increments
+
+For loop detected FROM BISON.
 
 Counts:
-Variables: 2
-Statements: 4
+Variables: 17
+Statements: 101
 Functions: 1
 Arrays: 0

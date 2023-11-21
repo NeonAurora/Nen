@@ -16,6 +16,10 @@ typedef union {
     double doubleValue;
     char* stringValue;
     bool boolValue;
+    struct {
+        int size;
+        void* elements;
+    } array;
 } VarValue;
 
 typedef struct VarNode {
@@ -40,6 +44,8 @@ void printVarValue(const char* name);
 VarNode* findVarNode(const char* name);
 VarType mapIntToVarType(int typeInt);
 void freeVarValue(VarValue *value, VarType type);
+void* allocateArrayElements(VarType type, int size);
+void parseArrayLiteral(const char* literal, int** elements, int* size);
 
 
 int variable_count = 0;
@@ -66,6 +72,10 @@ int array_count = 0;
             double doubleValue;
             char* stringValue;
             bool boolValue;
+            struct {
+                int size;
+                void* elements;
+            } array;
         } value;
         int type;
     } exprValue;
@@ -91,7 +101,7 @@ int array_count = 0;
 %token <num> INTEGER
 %token <boolValue> BOOL
 %token <charValue> CHAR_LITERAL
-%token <str> STRING_LITERAL IDENTIFIER PATH TYPE
+%token <str> STRING_LITERAL IDENTIFIER PATH TYPE ARRAY_LITERAL
 %token SINGLE_LINE_COMMENT_START MULTI_LINE_COMMENT_START MULTI_LINE_COMMENT_END ARRAY_INIT END
 
 
@@ -134,20 +144,23 @@ print_statement:
                 printf("Print detected of TYPE INT and value %d\n", $3.value.intValue);
                 break;
             case FLOAT_TYPE:
-                printf("%f\n", $3.value.floatValue);
+                printf("Print detected of TYPE FLOAT and value %f\n", $3.value.floatValue);
                 break;
             case CHAR_TYPE:
-                printf("%c\n", $3.value.charValue);
+                printf("Print detected of TYPE CHAR and value %c\n", $3.value.charValue);
                 break;
             case DOUBLE_TYPE:
-                printf("%lf\n", $3.value.doubleValue);
+                printf("Print detected of TYPE DOUBLE and value %lf\n", $3.value.doubleValue);
                 break;
             case STRING_TYPE:
                 if ($3.value.stringValue != NULL) {
-                    printf("%s\n", $3.value.stringValue);
+                    printf("Print detected of TYPE STRING and value %s\n", $3.value.stringValue);
                 } else {
                     printf("(null)\n");
                 }
+                break;
+            case BOOL_TYPE:
+                printf("Print detected of TYPE BOOL and value %d\n", $3.value.boolValue);
                 break;
             default:
                 printf("Unknown type for printing\n");
@@ -230,12 +243,20 @@ var_decl:
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
         } else {
-
-            printf("Array declaration detected FROM BISON: %s of type %s with size %d\n", $1, $3, $5); free($3); 
-            variable_count++; 
+            VarType type = determineType($3);
+            // Allocate and initialize array
+            void* arrayElements = allocateArrayElements(type, $5);
+            VarValue val;
+            val.array.size = $5;
+            val.array.elements = arrayElements;
+            addVar($1, &val, ARRAY_TYPE); // ARRAY_TYPE is a new enum value to represent arrays
+            printf("Array declaration detected FROM BISON: %s of type %s with size %d\n", $1, $3, $5);
+            variable_count++;
         }
+        free($3);
         free($1);
     }
+
     | IDENTIFIER EQUALS value { 
         if (varExists($1)) {
             printf("Variable collision detected for variable: %s\n", $1);
@@ -270,7 +291,6 @@ var_decl:
                     break;
 
             }
-
             addVar($1, &val, type);
             printf("Variable declaration and assignment detected FROM BISON: %s\n", $1);
             variable_count++; 
@@ -282,18 +302,23 @@ var_decl:
 value:
     INTEGER { 
         $$.value.intValue = $1;
+        $$.type = INT_TYPE;
     }
     | FLOAT {
         $$.value.floatValue = $1;
+        $$.type = FLOAT_TYPE;
     }
     | STRING_LITERAL {
         $$.value.stringValue = $1;
+        $$.type = STRING_TYPE;
     }
 	| CHAR_LITERAL {
 		$$.value.charValue = $1;
+        $$.type = CHAR_TYPE;
 	}
 	| DOUBLE {
 		$$.value.doubleValue = $1;
+        $$.type = DOUBLE_TYPE;
 	}
     ;
 
@@ -306,6 +331,7 @@ assignment_statement:
                     case INT_TYPE:
                         if ($3.type == INT_TYPE) {
                             var->value.intValue = $3.value.intValue;
+                            printf("Variable %s assigned value of %d of type INT_TYPE \n", $1, $3.value.intValue);
                         } else {
                             fprintf(stderr, "Type mismatch: Cannot assign non-integer to integer variable '%s'.\n", var->name);
                         }
@@ -314,6 +340,7 @@ assignment_statement:
                     case FLOAT_TYPE:
                         if ($3.type == FLOAT_TYPE) {
                             var->value.floatValue = $3.value.floatValue;
+                            printf("Variable %s assigned value of %f of type FLOAT_TYPE \n", $1, $3.value.floatValue);
                         } else {
                             fprintf(stderr, "Type mismatch: Cannot assign non-float to float variable '%s'.\n", var->name);
                         }
@@ -322,6 +349,7 @@ assignment_statement:
                     case CHAR_TYPE:
                         if ($3.type == CHAR_TYPE) {
                             var->value.charValue = $3.value.charValue;
+                            printf("Variable %s assigned value of %c of type CHAR_TYPE \n", $1, $3.value.charValue);
                         } else {
                             fprintf(stderr, "Type mismatch: Cannot assign non-char to char variable '%s'.\n", var->name);
                         }
@@ -330,6 +358,7 @@ assignment_statement:
                     case DOUBLE_TYPE:
                         if ($3.type == DOUBLE_TYPE) {
                             var->value.doubleValue = $3.value.doubleValue;
+                            printf("Variable %s assigned value of %lf of type DOUBLE_TYPE \n", $1, $3.value.doubleValue);
                         } else {
                             fprintf(stderr, "Type mismatch: Cannot assign non-double to double variable '%s'.\n", var->name);
                         }
@@ -339,6 +368,7 @@ assignment_statement:
                         if ($3.type == STRING_TYPE) {
                             free(var->value.stringValue); // Free existing string
                             var->value.stringValue = strdup($3.value.stringValue);
+                            printf("Variable %s assigned value of \"%s\" of type STRING_TYPE \n", $1, var->value.stringValue);
                         } else {
                             fprintf(stderr, "Type mismatch: Cannot assign non-string to string variable '%s'.\n", var->name);
                         }
@@ -347,12 +377,13 @@ assignment_statement:
                     case BOOL_TYPE:
                         if($3.type == BOOL_TYPE) {
                             var->value.boolValue = $3.value.boolValue;
+                            
                         } else if ($3.type == INT_TYPE) {
                             var->value.boolValue = ($3.value.intValue != 0) ? 1 : 0;
                         } else {
                             fprintf(stderr, "Type mismatch: Cannot assign non-double to double variable '%s'.\n", var->name);
                         }
-
+                        break;
                     default:
                         fprintf(stderr, "Unsupported variable type for variable '%s'.\n", var->name);
                         break;
@@ -363,36 +394,79 @@ assignment_statement:
             printf("Variable not declared: %s\n", $1);
         }
     }
+    | IDENTIFIER EQUALS ARRAY_LITERAL SEMICOLON {
+        if (varExists($1)) {
+            VarNode* var = findVarNode($1);
+            if (var && var->type == ARRAY_TYPE) {
+                int* elements;
+                int size;
+                parseArrayLiteral($3, &elements, &size);
+                if (size != var->value.array.size) {
+                    printf("Size is %d\n", size);
+                    printf("var size is %d\n", var->value.array.size);
+                    yyerror("Array size mismatch");
+                } else {
+                    memcpy(var->value.array.elements, elements, size * sizeof(int));
+                }
+                free(elements); // Assuming parseArrayLiteral allocates memory for elements
+            } else {
+                yyerror("Variable is not an array");
+            }
+        } else {
+            yyerror("Undefined variable");
+        }
+        free($3); // Free the literal string
+    }
 	;
+
+value_list:
+    INTEGER
+    | value_list COMMA INTEGER
 
 return_statement:
     RETURN expression SEMICOLON {
-        printf("Return statement detected FROM BISON with <expression>\n");
+        switch($2.type) {
+            case INT_TYPE:
+                printf("Return statement with integer value: %d\n", $2.value.intValue);
+                break;
+            case FLOAT_TYPE:
+                printf("Return statement with float value: %f\n", $2.value.floatValue);
+                break;
+            case STRING_TYPE:
+                printf("Return statement with string value: \"%s\"\n", $2.value.stringValue);
+                free($2.value.stringValue); // Don't forget to free the duplicated string
+                break;
+            case CHAR_TYPE:
+                printf("Return statement with char value: '%c'\n", $2.value.charValue);
+                break;
+            case DOUBLE_TYPE:
+                printf("Return statement with double value: %lf\n", $2.value.doubleValue);
+                break;
+            case BOOL_TYPE:
+                printf("Return statement with bool value: %s\n", $2.value.boolValue ? "true" : "false");
+                break;
+            default:
+                printf("Return statement with unknown type\n");
+                break;
+        }
     }
-    ;
+;
+
 
 conditional_statement:
-    IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses {
+    IF OPEN_PAREN expression CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses {
         printf("If with Else-If(s) statement detected FROM BISON.\n");
     }
-    | IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses ELSE LBRACE function_body RBRACE {
+    | IF OPEN_PAREN expression CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses ELSE LBRACE function_body RBRACE {
         printf("If with Else-If(s) and Else statement detected FROM BISON.\n");
     }
     ;
 
 else_if_clauses:
-    | else_if_clauses ELSE IF OPEN_PAREN condition CLOSE_PAREN LBRACE function_body RBRACE {
+    | else_if_clauses ELSE IF OPEN_PAREN expression CLOSE_PAREN LBRACE function_body RBRACE {
         printf("Else-If clause detected FROM BISON.\n");
     }
     ;
-
-condition:
-    expression EQUALS_EQUALS expression   
-    | expression NOT_EQUAL expression              
-    | expression LESS_THAN expression                
-    | expression LESS_THAN_EQUAL expression          
-    | expression GREATER_THAN expression              
-    | expression GREATER_THAN_EQUAL expression
 
 expression:
      INTEGER { 
@@ -446,6 +520,7 @@ expression:
                 case BOOL_TYPE:
                     $$.value.boolValue = var->value.boolValue;
                     $$.type = BOOL_TYPE;
+                    break;
     	        default:
     	            yyerror("Unsupported variable type");
     	            break;
@@ -455,6 +530,26 @@ expression:
     	    yyerror("Undefined variable");
     	}
 	}
+    | IDENTIFIER LBRACKET expression RBRACKET {
+        VarNode* var = findVarNode($1);
+        if (var && var->type == ARRAY_TYPE) {
+            int index;
+            if($3.type == INT_TYPE) {
+                index = $3.value.intValue;
+            } else {
+                fprintf(stderr, "Array index must be an integer\n");
+                return -1;
+            }
+            if (index >= 0 && index < var->value.array.size) {
+                $$.value.intValue = ((int*)var->value.array.elements)[index];
+                $$.type = INT_TYPE;
+            } else {
+                yyerror("Array index out of bounds");
+            }
+        } else {
+            yyerror("Variable is not an array");
+        }
+    }
     | IDENTIFIER OPEN_PAREN argument_list CLOSE_PAREN 
     | expression EQUALS expression    %prec EQUALS   
     | expression OR_OP expression {
@@ -473,10 +568,22 @@ expression:
         $$.value.intValue = ($1.value.intValue != $3.value.intValue) ? 1 : 0;
         $$.type = INT_TYPE;
     }                
-    | expression LESS_THAN expression               
-    | expression LESS_THAN_EQUAL expression        
-    | expression GREATER_THAN expression     
-    | expression GREATER_THAN_EQUAL expression        
+    | expression LESS_THAN expression {
+        $$.value.intValue = ($1.value.intValue < $3.value.intValue) ? 1 : 0;
+        $$.type = INT_TYPE;
+    }
+    | expression LESS_THAN_EQUAL expression {
+        $$.value.intValue = ($1.value.intValue <= $3.value.intValue) ? 1 : 0;
+        $$.type = INT_TYPE;
+    }
+    | expression GREATER_THAN expression {
+        $$.value.intValue = ($1.value.intValue > $3.value.intValue) ? 1 : 0;
+        $$.type = INT_TYPE;
+    }
+    | expression GREATER_THAN_EQUAL expression {
+        $$.value.intValue = ($1.value.intValue >= $3.value.intValue) ? 1 : 0;
+        $$.type = INT_TYPE;
+    }       
     | expression PLUS expression {
         if ($1.type == INT_TYPE && $3.type == INT_TYPE) {
             $$.value.intValue = $1.value.intValue + $3.value.intValue;
@@ -555,7 +662,7 @@ expression:
         $$.type = INT_TYPE;
     }
                              
-    | OPEN_PAREN expression CLOSE_PAREN              
+    | OPEN_PAREN expression CLOSE_PAREN { printf("open_paren detected for expression \n"); $$ = $2; }         
     | IDENTIFIER INCREMENT {
         printf("IDENTIFIER increment detected \n");
         VarNode* var = findVarNode($1);
@@ -648,7 +755,7 @@ for_init:
     ;
 
 for_condition:
-    condition SEMICOLON
+    expression SEMICOLON
     | SEMICOLON
     ;
 
@@ -660,7 +767,7 @@ for_increment:
     ;
 
 while_statement:
-    WHILE LESS_THAN condition GREATER_THAN LBRACE while_body RBRACE {
+    WHILE LESS_THAN expression GREATER_THAN LBRACE while_body RBRACE {
         printf("While loop detected FROM BISON.\n");
     }
     ;
@@ -865,6 +972,59 @@ VarType mapIntToVarType(int typeInt) {
         case 5: return BOOL_TYPE;
         default: return INT_TYPE;
     }
+}
+
+void* allocateArrayElements(VarType type, int size) {
+    void* elements = NULL;
+    switch (type) {
+        case INT_TYPE:
+            elements = malloc(size * sizeof(int));
+            break;
+        case FLOAT_TYPE:
+            elements = malloc(size * sizeof(float));
+            break;
+        // Add cases for other types...
+        default:
+            fprintf(stderr, "Unsupported array type.\n");
+    }
+    return elements;
+}
+
+void parseArrayLiteral(const char* literal, int** elements, int* size) {
+    // Initial size
+    int capacity = 10;
+    *elements = (int*)malloc(capacity * sizeof(int));
+    *size = 0;
+
+    if (!*elements) {
+        // Handle memory allocation failure
+        fprintf(stderr, "Memory allocation failed\n");
+        return;
+    }
+
+    // Tokenize the string
+    const char* delim = "<[],>";
+    char* copyLiteral = strdup(literal);
+    char* token = strtok(copyLiteral, delim);
+    while (token != NULL) {
+        if (*size >= capacity) {
+            capacity *= 2;
+            int* temp = (int*)realloc(*elements, capacity * sizeof(int));
+            if (!temp) {
+                // Handle memory allocation failure
+                fprintf(stderr, "Memory allocation failed during resizing\n");
+                free(*elements);
+                free(copyLiteral);
+                return;
+            }
+            *elements = temp;
+        }
+        (*elements)[*size] = atoi(token);
+        (*size)++;
+        token = strtok(NULL, delim);
+    }
+
+    free(copyLiteral); // Don't forget to free the copy
 }
 
 void yyerror(char *s) {

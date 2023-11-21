@@ -95,11 +95,12 @@
      IDENTIFIER = 311,
      PATH = 312,
      TYPE = 313,
-     SINGLE_LINE_COMMENT_START = 314,
-     MULTI_LINE_COMMENT_START = 315,
-     MULTI_LINE_COMMENT_END = 316,
-     ARRAY_INIT = 317,
-     END = 318
+     ARRAY_LITERAL = 314,
+     SINGLE_LINE_COMMENT_START = 315,
+     MULTI_LINE_COMMENT_START = 316,
+     MULTI_LINE_COMMENT_END = 317,
+     ARRAY_INIT = 318,
+     END = 319
    };
 #endif
 
@@ -110,7 +111,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 53 "echo.y"
+#line 59 "echo.y"
 
     char *str;
     int num;
@@ -127,6 +128,10 @@ typedef union YYSTYPE
             double doubleValue;
             char* stringValue;
             bool boolValue;
+            struct {
+                int size;
+                void* elements;
+            } array;
         } value;
         int type;
     } exprValue;
@@ -134,7 +139,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 138 "echo.tab.h"
+#line 143 "echo.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

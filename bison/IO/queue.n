@@ -1,0 +1,45 @@
+import alpha.h
+
+// Int handling started
+print("start of execution");
+var a : int = 8; print(a);
+var b : int;
+b = 2; print(b);
+var c = 2; print(c);
+var x = 45, y = 56, z = 89; print(x); print(y); print(z);
+z = a+b; // assigning int value
+
+print(a+x);
+print(y-b);
+print(a*z);
+print(y/c);
+// Int handling ended
+
+// float handling initiated
+var float1 : float = 2.75; print(float1);
+var float2 : float;
+float2 = float1; print(float1);
+var float3 : float;
+//assigning and operation of float
+float3 = float2 + float1; print(float3);
+float3 = float2 * float1; print(float3);
+float3 = float2 - float1; print(float3);
+float3 = float2 / float1; print(float3);
+//float handling ended
+
+//string handling initiated
+var string1 : string = "kola";
+print(string1);
+//string handling ended
+
+//char handling initiated
+var char1 : char = 'a';
+print(char1);
+
+// function handling initiated
+function area : int (<var length : int>, <var width : int>) {
+    print("kola");
+    var a : int = 2;
+    return a;
+}
+// function handling ended

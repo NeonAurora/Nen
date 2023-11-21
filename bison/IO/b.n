@@ -1,6 +1,121 @@
 import alpha.h
 
-function name : int ( <var a : int>, <var b : int> ) {
-    a = 5;
+// Int handling started
+print("start of execution");
+var a : int = 8; print(a);
+var b : int;
+b = 2; print(b);
+var c = 2; print(c);
+var x = 45, y = 56, z = 89; print(x); print(y); print(z);
+z = a+b; // assigning int value
+
+print(a+x);
+print(y-b);
+print(a*z);
+print(y/c);
+// Int handling ended
+
+// float handling initiated
+var float1 : float = 2.75; print(float1);
+var float2 : float;
+float2 = float1; print(float1);
+var float3 : float;
+//assigning and operation of float
+float3 = float2 + float1; print(float3);
+float3 = float2 * float1; print(float3);
+float3 = float2 - float1; print(float3);
+float3 = float2 / float1; print(float3);
+//float handling ended
+
+//string handling initiated
+var string1 : string = "kola";
+print(string1);
+//string handling ended
+
+// char handling initiated
+var char1 = 'a'; print(char1);
+char1 = 'b'; print(char1);
+// char handling terminated
+
+// bool handling initiated
+var bool1 : bool = 1; print(bool1);
+bool1 = (x > y); print(bool1);
+bool1 = (float1 == float2); print(bool1);
+bool1 = (z > y); print(bool1);
+bool1 = ((a + b) < x); print(bool1); var bool2 : bool;
+bool2 = !bool1; print(bool2); 
+bool2 = (!(float1 != float2)); print(bool2);
+bool2 = (!(float1 <= float2)); print(bool2);
+bool2 = ((float1 >= float2)); print(bool2);
+// bool handling ended
+
+// function handling initiated
+function area : int (<var length : int>, <var width : int>) {
+    print("kola");
+    var a : int = 2;
+    return a;
+}
+// function handling ended
+
+// IO handling initiated
+a =>> ("Enter value of a : ");
+// IO handling terminated
+
+//increment decrement initiated
+a = 0; print(a); // a = 0 initial
+a++; print(a); // a incremented once expecting 1
+a--; print(a); // a decremented once expecting 0
+b = a++; print(b); // b assigned value of incremented a expecting 1 cause a was 0
+b = a--; print(b); // b assigned value of decremented a expecting -1 cause a was 0
+print(b++); // b incremented once and printed expectd 0 cause b was -1
+// increment decrement terminated
+
+// conditional statement intitiated
+if(bool1) { //raw input
+    a++;
+}
+
+if(a > b) { //standard format with conditions
+    a++;
     print(a);
+} else if ( b > a ) { // standard else if
+    b++;
+    print(b);
+} else {
+    a--;
+    b--;
+    print(a+b);
+}
+
+//nested if else if else
+if(a > b) {
+    a++;
+    print(a);
+    if(bool1) { // nested block
+        c++; print(c);
+    } else {
+        x++; print(x);
+    }
+} else if ( float1 == float2) {
+    bool1 = 0;
+} else {
+    if(y <= z) { // nested block
+        print("z is ranged variable");
+    }
+    printf("log.e");
+}
+
+// conditional statement terminated
+
+// loop statment initiated
+// 3 kinds of loops can be used in this language
+
+for(var i : int = 1; i < x; i++) { // kind 1 defualt for loop with full parameters
+    print("for loop");
+}
+
+for(var j : int = 1; j < i;) { // type 2 without incrementer 
+    print("for loop");
+    j++;
+    j++; // custom increments
 }
