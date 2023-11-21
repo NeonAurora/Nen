@@ -39,7 +39,9 @@ char1 = 'b'; print(char1);
 
 // array handling initiated
 var arr : int[6]; // arr declared
-arr = <[1,2, 3, 4,5,6]>; // arr initalized
+arr = <[6,5,4,3,2,1]>; // arr initalized
+print(arr[0]); print(arr[1]); print(arr[2]); print(arr[3]); print(arr[4]); print(arr[5]); // accessing array elements
+sortArray(arr);
 print(arr[0]); print(arr[1]); print(arr[2]); print(arr[3]); print(arr[4]); print(arr[5]); // accessing array elements
 // array handling terminated
 
@@ -111,6 +113,22 @@ if(a > b) {
     printf("log.e");
 }
 
+// switch case
+
+switch (a) {
+    case 0:
+        a++;
+        break;
+    case 1:
+        a++;
+        break;
+    case 2:
+        a++;
+        break;
+    default:
+        a = a - 1;  
+}
+// switch case terminated
 // conditional statement terminated
 
 // loop statment initiated
@@ -206,3 +224,9 @@ while < (float1 == float2) > {
         print("loop running: "); print(cus); print("time");
     }
 }
+
+// error handling demonstration
+var gain : int = 5;
+var gain = 6;
+// error handling demonstration ends here
+

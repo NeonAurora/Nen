@@ -34,6 +34,10 @@
 "bool"       { yylval.str = strdup("bool"); return TYPE; }
 "break"      { return BREAK; }
 "continue"   { return CONTINUE; }
+"switch"     { return SWITCH; }
+"case"       { return CASE; }
+"default"    { return DEFAULT; }
+"sortArray"  { return SORT_ARRAY; }
 "{"          { return LBRACE; }  
 "}"          { return RBRACE; } 
 "("          { return OPEN_PAREN; }
@@ -66,7 +70,6 @@
 
 "//"[^"\n"]* { printf("Single-line comment detected:  FROM FLEX. COMMENTED LINE: %s\n", yytext); }
 "<<"[^">"]*">>" { printf("Multi-line comment detected:  FROM FLEX. %s\n", yytext); }
-"<-<-<>->->" { return END_PROGRAM; return END; }
 
 @[+-]?[0-9]+\.?[0-9]*([eE][+-]?[0-9]+)? { 
     char* numberPart = strdup(yytext + 1);

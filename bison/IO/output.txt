@@ -95,6 +95,16 @@ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // array handling init
 
    Single-line comment detected:  FROM FLEX. COMMENTED LINE: // arr initalized
 
+Print detected of TYPE INT and value 6
+ Print detected of TYPE INT and value 5
+ Print detected of TYPE INT and value 4
+ Print detected of TYPE INT and value 3
+ Print detected of TYPE INT and value 2
+ Print detected of TYPE INT and value 1
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // accessing array elements
+
+Array arr sorted.
+
 Print detected of TYPE INT and value 1
  Print detected of TYPE INT and value 2
  Print detected of TYPE INT and value 3
@@ -261,6 +271,35 @@ Function call detected FROM BISON: printf
 If with Else-If(s) and Else statement detected FROM BISON.
 
 
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // switch case
+
+
+  
+     
+        increament_statment detected 
+
+        Break Statement Detected. 
+
+    Case clause detected FROM BISON.
+ 
+        increament_statment detected 
+
+        Break Statement Detected. 
+
+    Case clause detected FROM BISON.
+ 
+        increament_statment detected 
+
+        Break Statement Detected. 
+
+    Case clause detected FROM BISON.
+
+            Variable a assigned value of 4 of type INT_TYPE 
+  
+Switch statement detected FROM BISON.
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // switch case terminated
+
 Single-line comment detected:  FROM FLEX. COMMENTED LINE: // conditional statement terminated
 
 
@@ -320,7 +359,7 @@ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // hybrid types of loo
 
        Single-line comment detected:  FROM FLEX. COMMENTED LINE: // some operation
 
-           Variable cus assigned value of 1 of type INT_TYPE 
+           Variable cus assigned value of 3 of type INT_TYPE 
 
    Function operation with return type int declared.
 
@@ -357,7 +396,7 @@ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // while loop with fle
 
           
         Print detected of TYPE BOOL and value 0
- Print detected of TYPE INT and value 3
+ Print detected of TYPE INT and value 5
 
     Body block detected FROM BISON.
 
@@ -429,15 +468,26 @@ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // nested looping:
 
      
         Print detected FROM BISON with message: "loop running: "
- Print detected of TYPE INT and value 1
+ Print detected of TYPE INT and value 3
  Print detected FROM BISON with message: "time"
 
     Always block detected FROM BISON.
 
 While loop detected FROM BISON.
 
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // error handling demonstration
+
+     Variable declaration with type int and Variable Name: gain
+
+   Variable collision detected for variable: gain
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // error handling demonstration ends here
+
+
+
 Counts:
-Variables: 21
-Statements: 151
+Variables: 22
+Statements: 165
 Functions: 2
 Arrays: 0

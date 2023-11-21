@@ -46,6 +46,8 @@ VarType mapIntToVarType(int typeInt);
 void freeVarValue(VarValue *value, VarType type);
 void* allocateArrayElements(VarType type, int size);
 void parseArrayLiteral(const char* literal, int** elements, int* size);
+VarType determineTypeFromArray(void* arrayElements);
+void bubbleSort(int arr[], int n);
 
 
 int variable_count = 0;
@@ -92,7 +94,7 @@ int array_count = 0;
 %left PLUS MINUS
 %left MULT DIV MOD
 
-%token IMPORT PRINT VAR RETURN FUNCTION IF ELSE WHILE MAIN END_PROGRAM FOR PRE POST BODY ALWAYS BREAK CONTINUE
+%token IMPORT PRINT VAR RETURN FUNCTION IF ELSE WHILE MAIN END_PROGRAM FOR PRE POST BODY ALWAYS BREAK CONTINUE SWITCH CASE DEFAULT
 %token INPUT_OP
 %token NOT_OP INCREMENT DECREMENT
 %token OPEN_PAREN CLOSE_PAREN LBRACKET RBRACKET LBRACE RBRACE SEMICOLON COMMA INVERTED_COMMA DOUBLE_QUOTE COLON BODY_START BODY_END
@@ -102,7 +104,7 @@ int array_count = 0;
 %token <boolValue> BOOL
 %token <charValue> CHAR_LITERAL
 %token <str> STRING_LITERAL IDENTIFIER PATH TYPE ARRAY_LITERAL
-%token SINGLE_LINE_COMMENT_START MULTI_LINE_COMMENT_START MULTI_LINE_COMMENT_END ARRAY_INIT END
+%token SINGLE_LINE_COMMENT_START MULTI_LINE_COMMENT_START MULTI_LINE_COMMENT_END ARRAY_INIT END SORT_ARRAY
 
 
 
@@ -111,8 +113,6 @@ int array_count = 0;
 // Grammar rules
 program:
     | program statement
-    /* | param_list { printf("Param detected \n"); } */
-	| end_of_the_line
     ;
 
 statement:
@@ -131,7 +131,23 @@ statement:
 	| decrement_statement { statement_count++; }
 	| function_call_statement { statement_count++; }
     | continue_statement { statement_count++; }
+    | sort_statement { statement_count++; }
     ;
+
+sort_statement:
+    SORT_ARRAY OPEN_PAREN IDENTIFIER CLOSE_PAREN SEMICOLON {
+        VarNode* var = findVarNode($3);
+        if (var && var->type == ARRAY_TYPE) {
+            if (determineTypeFromArray(var->value.array.elements) != INT_TYPE) {
+                yyerror("Only integer arrays can be sorted.");
+            } else {
+                bubbleSort((int*)var->value.array.elements, var->value.array.size);
+                printf("Array %s sorted.\n", $3);
+            }
+        } else {
+            yyerror("Variable is not an array or does not exist.");
+        }
+    }
 
 import_statement:
     IMPORT PATH { printf("Import detected FROM BISON with path: %s\n", $2); }
@@ -460,8 +476,33 @@ return_statement:
     }
 ;
 
-
 conditional_statement:
+    if_conditional_statement
+    | switch_conditional_statement
+
+switch_conditional_statement:
+    SWITCH OPEN_PAREN expression CLOSE_PAREN LBRACE case_clauses default_clause RBRACE {
+        printf("Switch statement detected FROM BISON.\n");
+    }
+    ;
+
+case_clauses:
+    | case_clauses case_clause
+    | case_clause
+    ;
+
+case_clause:
+    CASE expression COLON function_body break_statement {
+        printf("Case clause detected FROM BISON.\n");
+    }
+    ;
+
+default_clause:
+    | DEFAULT COLON function_body
+    | /* Empty, for when no default clause is provided */
+    ;
+
+if_conditional_statement:
     IF OPEN_PAREN expression CLOSE_PAREN LBRACE function_body RBRACE else_if_clauses {
         printf("If with Else-If(s) statement detected FROM BISON.\n");
     }
@@ -817,7 +858,7 @@ increment_statement:
                     int a;
                     a = var->value.intValue;
                     a = a + 1;
-                    var->value.intValue = a;
+                    var->value.intValue = a;        
                     break;
                 // You can add cases for other types if incrementing them makes sense in your language
                 default:
@@ -851,9 +892,6 @@ decrement_statement:
     ; 
 break_statement:
 	BREAK SEMICOLON { printf("Break Statement Detected. \n"); }
-
-end_of_the_line:
-	END { printf("program terminates here"); }
 
 %%
 
@@ -957,6 +995,26 @@ VarNode* findVarNode(const char* name) {
     }
     return NULL;
 }
+
+void bubbleSort(int arr[], int n) {
+    int i, j, temp;
+    for (i = 0; i < n - 1; i++) {
+        for (j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+VarType determineTypeFromArray(void* arrayElements) {
+    // This is a simplified check. In a real scenario, you would need to store type information for each array.
+    return INT_TYPE; // Assuming all arrays are integer arrays for this example.
+}
+
+
 
 
 VarType determineType(const char* typeStr) {
