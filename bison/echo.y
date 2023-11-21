@@ -92,7 +92,7 @@ int array_count = 0;
 %left PLUS MINUS
 %left MULT DIV MOD
 
-%token IMPORT PRINT VAR RETURN FUNCTION IF ELSE WHILE MAIN END_PROGRAM FOR PRE POST BODY ALWAYS BREAK
+%token IMPORT PRINT VAR RETURN FUNCTION IF ELSE WHILE MAIN END_PROGRAM FOR PRE POST BODY ALWAYS BREAK CONTINUE
 %token INPUT_OP
 %token NOT_OP INCREMENT DECREMENT
 %token OPEN_PAREN CLOSE_PAREN LBRACKET RBRACKET LBRACE RBRACE SEMICOLON COMMA INVERTED_COMMA DOUBLE_QUOTE COLON BODY_START BODY_END
@@ -130,11 +130,19 @@ statement:
 	| increment_statement { statement_count++; }
 	| decrement_statement { statement_count++; }
 	| function_call_statement { statement_count++; }
+    | continue_statement { statement_count++; }
     ;
 
 import_statement:
     IMPORT PATH { printf("Import detected FROM BISON with path: %s\n", $2); }
     ;
+
+continue_statement:
+    CONTINUE SEMICOLON {
+        printf("Continue statement detected.\n");
+    }
+    ;
+
 
 print_statement:
     PRINT OPEN_PAREN STRING_LITERAL CLOSE_PAREN SEMICOLON { printf("Print detected FROM BISON with message: %s\n", $3); }

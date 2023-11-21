@@ -33,6 +33,7 @@
 "string"     { yylval.str = strdup("string"); return TYPE; }
 "bool"       { yylval.str = strdup("bool"); return TYPE; }
 "break"      { return BREAK; }
+"continue"   { return CONTINUE; }
 "{"          { return LBRACE; }  
 "}"          { return RBRACE; } 
 "("          { return OPEN_PAREN; }
@@ -85,7 +86,7 @@
 
 [a-zA-Z0-9_\.]+ { yylval.str = strdup(yytext); return PATH; }
 
-"<["[0-9]+(","[0-9]+)*"]>"  { yylval.str = strdup(yytext); return ARRAY_LITERAL; }
+"<["[0-9]+(" ")?(","(" ")?[0-9]+)*"]>"  { yylval.str = strdup(yytext); return ARRAY_LITERAL; }
 
 %%
 

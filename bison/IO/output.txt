@@ -88,6 +88,24 @@ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // char handling initi
 Single-line comment detected:  FROM FLEX. COMMENTED LINE: // char handling terminated
 
 
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // array handling initiated
+
+   Array declaration detected FROM BISON: arr of type int with size 6
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // arr declared
+
+   Single-line comment detected:  FROM FLEX. COMMENTED LINE: // arr initalized
+
+Print detected of TYPE INT and value 1
+ Print detected of TYPE INT and value 2
+ Print detected of TYPE INT and value 3
+ Print detected of TYPE INT and value 4
+ Print detected of TYPE INT and value 5
+ Print detected of TYPE INT and value 6
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // accessing array elements
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // array handling terminated
+
+
 Single-line comment detected:  FROM FLEX. COMMENTED LINE: // bool handling initiated
 
      Variable declaration with type bool and Variable Name: bool1
@@ -248,7 +266,7 @@ Single-line comment detected:  FROM FLEX. COMMENTED LINE: // conditional stateme
 
 Single-line comment detected:  FROM FLEX. COMMENTED LINE: // loop statment initiated
 
-Single-line comment detected:  FROM FLEX. COMMENTED LINE: // 3 kinds of loops can be used in this language
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // 3 kinds of for loops can be used in this language
 
 
      Variable declaration with type int and Variable Name: i
@@ -271,8 +289,155 @@ For loop detected FROM BISON.
 
 For loop detected FROM BISON.
 
+
+     Variable declaration with type int and Variable Name: k
+  Single-line comment detected:  FROM FLEX. COMMENTED LINE: // type 3 without breaking confition and incrementer
+
+    Print detected FROM BISON with message: "for loop"
+
+    increament_statment detected 
+
+       
+        Print detected FROM BISON with message: "loop broken"
+
+        Break Statement Detected. 
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: //custom break
+
+      
+        Continue statement detected.
+
+    If with Else-If(s) and Else statement detected FROM BISON.
+
+For loop detected FROM BISON.
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // hybrid types of loop
+
+  Single-line comment detected:  FROM FLEX. COMMENTED LINE: // custom init for loop or empty start for loop
+
+           Variable declaration with type int and Variable Name: cus
+  Single-line comment detected:  FROM FLEX. COMMENTED LINE: // determines the state of initializer at every iteration very suitable at custom initializer data types
+
+       Single-line comment detected:  FROM FLEX. COMMENTED LINE: // some operation
+
+           Variable cus assigned value of 1 of type INT_TYPE 
+
+   Function operation with return type int declared.
+
+       
+       Break Statement Detected. 
+ Single-line comment detected:  FROM FLEX. COMMENTED LINE: //breaking statement
+
+     
+       Continue statement detected.
+
+   If with Else-If(s) and Else statement detected FROM BISON.
+
+For loop detected FROM BISON.
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // while loop with flexible code segments
+
+
+ 
+     Single-line comment detected:  FROM FLEX. COMMENTED LINE: // codes in this block will run before condition satisfied
+
+        Print detected FROM BISON with message: "pre block of code"
+
+          
+        Print detected of TYPE BOOL and value 1
+
+    Pre block detected FROM BISON.
+
+      Single-line comment detected:  FROM FLEX. COMMENTED LINE: // codes in this segments will always run if condition is satisfied
+
+        Print detected FROM BISON with message: "body block"
+
+        increament_statment detected 
+
+          
+        Print detected of TYPE BOOL and value 0
+ Print detected of TYPE INT and value 3
+
+    Body block detected FROM BISON.
+
+      Single-line comment detected:  FROM FLEX. COMMENTED LINE: // codes in this block will run once condition have been satisfied but not anymore
+
+        Print detected FROM BISON with message: "post block"
+
+          
+    Post block detected FROM BISON.
+
+      Single-line comment detected:  FROM FLEX. COMMENTED LINE: // codes in this segment will always run reagardless of the condition
+
+        Print detected FROM BISON with message: "always block"
+
+        increament_statment detected 
+
+        decrement_statement detected 
+
+        Print detected of TYPE INT and value 46
+
+    Always block detected FROM BISON.
+
+
+While loop detected FROM BISON.
+
+
+Single-line comment detected:  FROM FLEX. COMMENTED LINE: // nested looping:
+
+
+    open_paren detected for expression 
+  
+     
+        open_paren detected for expression 
+   
+              
+              Variable float1 assigned value of 2.750000 of type FLOAT_TYPE 
+
+          
+            Continue statement detected.
+
+        If with Else-If(s) and Else statement detected FROM BISON.
+
+    Pre block detected FROM BISON.
+
+     
+             Variable declaration with type int and Variable Name: grids
+     
+                  open_paren detected for expression 
+  
+                
+                        Variable grids assigned value of 2 of type INT_TYPE 
+
+                    Print detected of TYPE INT and value 2
+
+                Body block detected FROM BISON.
+
+            While loop detected FROM BISON.
+
+        For loop detected FROM BISON.
+
+    Body block detected FROM BISON.
+
+     
+          Variable float1 assigned value of 0.000000 of type FLOAT_TYPE 
+
+          Variable float2 assigned value of 0.000000 of type FLOAT_TYPE 
+
+    Post block detected FROM BISON.
+
+     
+        Print detected FROM BISON with message: "loop running: "
+ Print detected of TYPE INT and value 1
+ Print detected FROM BISON with message: "time"
+
+    Always block detected FROM BISON.
+
+While loop detected FROM BISON.
+
 Counts:
-Variables: 17
-Statements: 101
-Functions: 1
+Variables: 21
+Statements: 151
+Functions: 2
 Arrays: 0
